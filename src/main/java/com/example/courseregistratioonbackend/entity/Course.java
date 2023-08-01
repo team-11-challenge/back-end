@@ -2,6 +2,7 @@ package com.example.courseregistratioonbackend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Builder
@@ -29,10 +30,12 @@ public class Course {
     private Long limitation; // 수강정원
 
     @Column(nullable = false)
-    private Long basket; // 수강 예비신청 인원
+    @Builder.Default
+    private Long basket = 0L; // 수강 예비신청 인원
 
     @Column(nullable = false)
-    private Long current; // 수강 신청 인원
+    @Builder.Default
+    private Long current = 0L; // 수강 신청 인원
 
     @Column(nullable = false)
     private int yearCourse; // 연도
