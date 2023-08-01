@@ -2,7 +2,6 @@ package com.example.courseregistratioonbackend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 @Setter
 @Getter
@@ -44,17 +43,17 @@ public class Course {
     @Column(nullable = false)
     private int semester; // 학기
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "belong_id")
-    private Belong belong;
+    private Belong belong; // 소속
 
-    @ManyToOne
-    @JoinColumn(name = "subject_cd")
-    private Subject subject;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "subject_id")
+    private Subject subject; // 교과목
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "professor_id")
-    private Professor professor;
+    private Professor professor; // 교수
 }
 
 
