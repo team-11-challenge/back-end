@@ -5,6 +5,9 @@ import com.example.courseregistratioonbackend.entity.Major;
 import com.example.courseregistratioonbackend.entity.Professor;
 import com.example.courseregistratioonbackend.entity.Subject;
 
+import java.util.LinkedList;
+import java.util.Stack;
+
 public class CourseParser implements Parser<Course> {
 
     @Override
@@ -31,7 +34,7 @@ public class CourseParser implements Parser<Course> {
                 .sort(splitted[1])
                 .division(Integer.parseInt(splitted[3]))
                 .credit(Integer.parseInt(splitted[5].substring(0, 1)))
-                .timetable(strings[1])
+                .timetable(pretreatment(strings[1]))
                 .limitation(Long.valueOf(splitted[8]))
                 .yearCourse(2023)
                 .semester(2)
@@ -41,5 +44,48 @@ public class CourseParser implements Parser<Course> {
                 .build();
 
         return course;
+    }
+
+    public String pretreatment(String timetable){
+        String ans = "";
+
+        LinkedList<String> fList = new LinkedList<>();
+        String[] list = timetable.split(",");
+        for(int i = 0; i < list.length; i++){
+            // 공백 제거
+            list[i].trim();
+            // 장소 제거
+            if(list[i].contains("(")){
+                list[i] = list[i].substring(0, list[i].indexOf("("));
+            }
+            // 여러글자면 나눠주기
+            if(list[i].length() != 1 && !isInteger(list[i])){
+                fList.add(list[i].substring(0,1));
+                fList.add(list[i].substring(1));
+            }else if(list[i].length() == 1 || isInteger(list[i])){
+                fList.add(list[i]);
+            }
+        }
+
+        ans += fList.get(0);
+
+        for(int i = 1; i < fList.size(); i++){
+            if(isInteger(fList.get(i))){
+                ans += " " + fList.get(i);
+            }else{
+                ans += "," + fList.get(i);
+            }
+        }
+
+        return ans;
+    }
+
+    public boolean isInteger(String strValue){
+        try{
+            Integer.parseInt(strValue);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
+        }
     }
 }

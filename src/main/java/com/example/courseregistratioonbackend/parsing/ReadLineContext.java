@@ -28,7 +28,7 @@ public class ReadLineContext<T> {
             }catch (Exception e){
                 log.info("파싱 중 문제가 생겨 이 라인은 넘어갑니다. 순번: " + str.split(",")[0]);
             }
-            if(str.split(",")[0].equals("163")) break; // 여기서 부터 시간표 데이터가 이상함
+
         }
         reader.close();
         return result;
