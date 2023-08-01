@@ -11,6 +11,7 @@ import lombok.*;
 public class Professor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "professor_id")
     private Long id;
 
     @Column(nullable = false)

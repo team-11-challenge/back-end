@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+@Setter
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,11 +45,11 @@ public class Course {
     private int semester; // 학기
 
     @ManyToOne
-    @JoinColumn(name = "majorCD")
-    private Major major;
+    @JoinColumn(name = "belong_id")
+    private Belong belong;
 
     @ManyToOne
-    @JoinColumn(name = "subjectCD")
+    @JoinColumn(name = "subject_cd")
     private Subject subject;
 
     @ManyToOne

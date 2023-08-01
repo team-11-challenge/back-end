@@ -3,20 +3,23 @@ package com.example.courseregistratioonbackend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * 대학
+ **/
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Major {
+public class College {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "major_id")
+    @Column(name = "college_id")
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String majorNM;   // 학과명
+    private String collegeNM;   // 대학명
 
     @Column(nullable = false)
-    private Long majorCD;   // 학과코드
+    private Long collegeCD;   // 대학코드
 }

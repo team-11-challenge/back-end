@@ -1,11 +1,8 @@
 package com.example.courseregistratioonbackend.service;
 
-import com.example.courseregistratioonbackend.entity.Course;
+import com.example.courseregistratioonbackend.entity.*;
 import com.example.courseregistratioonbackend.parsing.ReadLineContext;
-import com.example.courseregistratioonbackend.repository.CourseRepository;
-import com.example.courseregistratioonbackend.repository.MajorRepository;
-import com.example.courseregistratioonbackend.repository.ProfessorRepository;
-import com.example.courseregistratioonbackend.repository.SubjectRepository;
+import com.example.courseregistratioonbackend.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,11 +18,13 @@ import java.util.Optional;
 public class CourseService {
     private final ReadLineContext<Course> courseReadLineContext;
     private final CourseRepository courseRepository;
+    private final BelongRepository belongRepository;
+    private final DepartmentRepository departmentRepository;
+    private final CollegeRepository collegeRepository;
     private final MajorRepository majorRepository;
     private final ProfessorRepository professorRepository;
     private final SubjectRepository subjectRepository;
 
-    @Transactional
     public int insertLargeVolumeCourseData(String filename){
         List<Course> courseList;
         try{
@@ -34,10 +33,51 @@ public class CourseService {
             courseList.stream()
                     .parallel()
                     .forEach(course -> {
-                        try{
-                            majorRepository.save(course.getMajor());
+                        try {
+                            College college = collegeRepository.findByCollegeNM(course.getBelong().getCollege().getCollegeNM());
+                            if(college != null){
+                                course.getBelong().setCollege(college);
+                            }else{
+                                collegeRepository.save(course.getBelong().getCollege());
+                            }
+
+                            if (course.getBelong().getDepartment() != null) {
+                                Department department = departmentRepository.findByDepartNM(course.getBelong().getDepartment().getDepartNM());
+                                if (department != null) {
+                                    course.getBelong().setDepartment(department);
+                                } else {
+                                    departmentRepository.save(course.getBelong().getDepartment());
+                                }
+                            }
+
+                            if (course.getBelong().getMajor() != null) {
+                                Major major = majorRepository.findByMajorNM(course.getBelong().getMajor().getMajorNM());
+                                if (major != null) {
+                                    course.getBelong().setMajor(major);
+                                } else {
+                                    majorRepository.save(course.getBelong().getMajor());
+                                }
+                            }
+
+                            Belong belong = belongRepository.findByCollegeAndDepartmentAndMajor(
+                                    course.getBelong().getCollege(),
+                                    course.getBelong().getDepartment(),
+                                    course.getBelong().getMajor());
+                            if (belong != null) {
+                                course.setBelong(belong);
+                            } else {
+                                belongRepository.save(course.getBelong());
+                            }
                             professorRepository.save(course.getProfessor());
-                            subjectRepository.save(course.getSubject());
+
+                            if(course.getSubject() != null){
+                                Subject subject = subjectRepository.findBySubjectCD(course.getSubject().getSubjectCD());
+                                if(subject != null){
+                                    course.setSubject(subject);
+                                }else{
+                                    subjectRepository.save(course.getSubject());
+                                }
+                            }
                             courseRepository.save(course);
 
                         } catch(Exception e){

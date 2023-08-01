@@ -1,24 +1,53 @@
 package com.example.courseregistratioonbackend.parsing;
 
-import com.example.courseregistratioonbackend.entity.Course;
-import com.example.courseregistratioonbackend.entity.Major;
-import com.example.courseregistratioonbackend.entity.Professor;
-import com.example.courseregistratioonbackend.entity.Subject;
+import com.example.courseregistratioonbackend.entity.*;
 
 import java.util.LinkedList;
 import java.util.Stack;
 
 public class CourseParser implements Parser<Course> {
-
+    public int cnt = 0;
     @Override
     public Course parse(String str) {
+        cnt++;
         // 연번0,구분1,과목코드2,분반3,교과목명4,시수5,부문6,대상학과및학년7,대상인원8,대학9,학과10,전공11,교번12,담당교수13,직종14,"강의실",비고,이러닝강좌,수강용과목,폐강여부
         String[] strings = str.split("\"");
-        String[] splitted = strings[0].split(",");
+        String[] splitted = str.split(",");
 
-        Major major = Major.builder()
-                .major(splitted[10])
-                .majorCD(0L)
+        String timetable;
+        if (strings.length == 1) {
+            timetable = splitted[15];
+        } else {
+            timetable = strings[1];
+        }
+
+        // 대학
+        College college = College.builder()
+                .collegeNM(splitted[9])
+                .collegeCD(0L)
+                .build();
+        // 학과
+        Department department = null;
+        if (!splitted[10].equals("")) {
+            department = Department.builder()
+                    .departNM(splitted[10])
+                    .departCD(0L)
+                    .build();
+        }
+
+        // 전공
+        Major major = null;
+        if (!splitted[11].equals("")) {
+            major = Major.builder()
+                    .majorNM(splitted[11])
+                    .majorCD(0L)
+                    .build();
+        }
+
+        Belong belong = Belong.builder()
+                .college(college)
+                .department(department)
+                .major(major)
                 .build();
 
         Subject subject = Subject.builder()
@@ -30,15 +59,19 @@ public class CourseParser implements Parser<Course> {
                 .name(splitted[13])
                 .build();
 
+        if(cnt == 157) {
+            System.out.println(cnt);
+        }
+
         Course course = Course.builder()
                 .sort(splitted[1])
                 .division(Integer.parseInt(splitted[3]))
                 .credit(Integer.parseInt(splitted[5].substring(0, 1)))
-                .timetable(pretreatment(strings[1]))
+                .timetable(pretreatment(timetable))
                 .limitation(Long.valueOf(splitted[8]))
                 .yearCourse(2023)
                 .semester(2)
-                .major(major)
+                .belong(belong)
                 .subject(subject)
                 .professor(professor)
                 .build();
@@ -47,8 +80,8 @@ public class CourseParser implements Parser<Course> {
     }
 
     public String pretreatment(String timetable){
+//        timetable = timetable.replaceAll("[^A-Za-z]", "");
         String ans = "";
-
         LinkedList<String> fList = new LinkedList<>();
         String[] list = timetable.split(",");
         for(int i = 0; i < list.length; i++){
