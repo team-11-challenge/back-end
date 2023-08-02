@@ -37,6 +37,7 @@ public class ParsingService {
     }
 
     public void parse(String[] nextLine) {
+        // 1학기, 2학기
         // 연번0,구분1,과목코드2,분반3,교과목명4,시수5,부문6,대상학과및학년7,대상인원8,대학9,학과10,전공11,교번12,담당교수13,직종14,강의실15,비고,이러닝강좌,수강용과목,폐강여부
 
         // 대학
@@ -164,7 +165,7 @@ public class ParsingService {
     }
 
     public void insertCourse(String[] nextLine, Belong belong, Subject subject, Professor professor) {
-        Course course = courseRepository.findByCourseYearAndSemesterAndSubject(COURSEYEAR, SEMESTER, subject);
+        Course course = courseRepository.findByCourseYearAndSemesterAndSubjectAndDivision(COURSEYEAR, SEMESTER, subject, Integer.parseInt(nextLine[3]));
         if (course == null) {
             course = Course.builder()
                     .sort(nextLine[1])
