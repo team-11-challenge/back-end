@@ -23,6 +23,8 @@ public class ParsingService {
     private final MajorRepository majorRepository;
     private final SubjectRepository subjectRepository;
 
+    private int COURSEYEAR = 2023;
+    private int SEMESTER = 2;
     public void insertData(String filename){
         List<String[]> lines;
         try{
@@ -162,24 +164,26 @@ public class ParsingService {
     }
 
     public void insertCourse(String[] nextLine, Belong belong, Subject subject, Professor professor) {
-        Course course = Course.builder()
-                .sort(nextLine[1])
-                .division(Integer.parseInt(nextLine[3]))
-                .credit(Integer.parseInt(nextLine[5].substring(0, 1)))
-                .timetable(pretreatment(nextLine[15]))
-                .limitation(Long.valueOf(nextLine[8]))
-                .courseYear(2023)
-                .semester(2)
-                .belong(belong)
-                .subject(subject)
-                .professor(professor)
-                .build();
-
-        try {
-            courseRepository.save(course);
-        } catch(Exception e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+        Course course = courseRepository.findByCourseYearAndSemesterAndSubject(COURSEYEAR, SEMESTER, subject);
+        if (course == null) {
+            course = Course.builder()
+                    .sort(nextLine[1])
+                    .division(Integer.parseInt(nextLine[3]))
+                    .credit(Integer.parseInt(nextLine[5].substring(0, 1)))
+                    .timetable(pretreatment(nextLine[15]))
+                    .limitation(Long.valueOf(nextLine[8]))
+                    .courseYear(COURSEYEAR)
+                    .semester(SEMESTER)
+                    .belong(belong)
+                    .subject(subject)
+                    .professor(professor)
+                    .build();
+            try {
+                courseRepository.save(course);
+            } catch(Exception e) {
+                log.error(e.getMessage());
+                throw new RuntimeException(e);
+            }
         }
     }
 
