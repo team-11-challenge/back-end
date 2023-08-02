@@ -135,7 +135,7 @@ public class ParsingService {
         Subject subject = subjectRepository.findBySubjectCD(subjectCD);
         if (subject == null) {
             subject = Subject.builder()
-                    .subject(subjectNM)
+                    .subjectNM(subjectNM)
                     .subjectCD(subjectCD)
                     .build();
             try {
@@ -150,7 +150,7 @@ public class ParsingService {
 
     public Professor insertProfessor(String name) {
         Professor professor = Professor.builder()
-                .name(name)
+                .professorNM(name)
                 .build();
         try {
             professorRepository.save(professor);
@@ -168,7 +168,7 @@ public class ParsingService {
                 .credit(Integer.parseInt(nextLine[5].substring(0, 1)))
                 .timetable(pretreatment(nextLine[15]))
                 .limitation(Long.valueOf(nextLine[8]))
-                .yearCourse(2023)
+                .courseYear(2023)
                 .semester(2)
                 .belong(belong)
                 .subject(subject)
