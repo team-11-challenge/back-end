@@ -17,10 +17,10 @@ public class Department {
     @Column(name = "depart_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "depart_nm")
     private String departNM;   // 학과명
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "depart_cd")
     private Long departCD;   // 학과코드
 }
 

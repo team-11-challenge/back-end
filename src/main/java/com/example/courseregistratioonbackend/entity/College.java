@@ -17,9 +17,9 @@ public class College {
     @Column(name = "college_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "college_nm")
     private String collegeNM;   // 대학명
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "college_cd")
     private Long collegeCD;   // 대학코드
 }
