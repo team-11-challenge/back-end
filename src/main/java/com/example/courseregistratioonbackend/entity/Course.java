@@ -3,7 +3,6 @@ package com.example.courseregistratioonbackend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Setter
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -12,6 +11,7 @@ import lombok.*;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "course_id")
     private Long id;
 
     @Column(nullable = false)
@@ -37,8 +37,8 @@ public class Course {
     @Builder.Default
     private Long current = 0L; // 수강 신청 인원
 
-    @Column(nullable = false)
-    private int yearCourse; // 연도
+    @Column(nullable = false, name = "course_year")
+    private int courseYear; // 연도
 
     @Column(nullable = false)
     private int semester; // 학기

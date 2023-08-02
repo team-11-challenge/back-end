@@ -14,9 +14,9 @@ public class Major {
     @Column(name = "major_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "major_nm")
     private String majorNM;   // 학과명
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "major_cd")
     private Long majorCD;   // 학과코드
 }

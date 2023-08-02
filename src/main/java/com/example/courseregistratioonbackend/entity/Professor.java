@@ -14,6 +14,6 @@ public class Professor {
     @Column(name = "professor_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String name;    // 교수명
+    @Column(nullable = false, name = "professor_nm")
+    private String professorNM;    // 교수명
 }
