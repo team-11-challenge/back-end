@@ -1,36 +1,32 @@
 package com.example.courseregistratioonbackend.parsing;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class ReadLineContext<T> {
-    Parser<T> parser;
+@Component
+public class ReadLineContext {
 
-    public ReadLineContext(Parser<T> parser){
-        this.parser = parser;
-    }
-
-    public List<T> readByLine(String filename) throws IOException{
-        List<T> result = new ArrayList<>();
-        BufferedReader reader = new BufferedReader(
-                new FileReader(filename)
-        );
-        String str;
-        while((str = reader.readLine()) != null){
+    public List<String[]> readByLine(String filename) throws IOException, CsvValidationException {
+        List<String[]> result = new ArrayList<>();
+        CSVReader csvReader = new CSVReader(new FileReader(filename));
+        String[] nextLine;
+        while((nextLine = csvReader.readNext()) != null){
             try{
-                result.add(parser.parse(str));
+                result.add(nextLine);
             }catch (Exception e){
-                log.info("파싱 중 문제가 생겨 이 라인은 넘어갑니다. 순번: " + str.split(",")[0]);
+                log.info(e.getMessage());
             }
 
         }
-        reader.close();
+        csvReader.close();
         return result;
     }
 }

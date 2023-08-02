@@ -18,15 +18,15 @@ public class Belong {
     @Column(name = "belong_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "college_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "college_id")
     private College college;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "depart_id")
     private Department department;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "major_id")
     private Major major;
 }
