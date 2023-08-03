@@ -23,20 +23,19 @@ public class ParsingService {
     private final MajorRepository majorRepository;
     private final SubjectRepository subjectRepository;
 
-    private int COURSEYEAR = 2023;
-    private int SEMESTER = 2;
-    public void insertData(String filename){
+
+    public void insertData(String filename, int COURSEYEAR, int SEMESTER){
         List<String[]> lines;
         try{
             lines = readLineContext.readByLine(filename);
-            lines.stream().forEach(this::parse);
+            lines.stream().forEach(line -> parse(line, COURSEYEAR, SEMESTER));
         } catch (Exception e){
             throw new RuntimeException(e);
         }
 
     }
 
-    public void parse(String[] nextLine) {
+    public void parse(String[] nextLine, int COURSEYEAR, int SEMESTER) {
         // 1학기, 2학기
         // 연번0,구분1,과목코드2,분반3,교과목명4,시수5,부문6,대상학과및학년7,대상인원8,대학9,학과10,전공11,교번12,담당교수13,직종14,강의실15,비고,이러닝강좌,수강용과목,폐강여부
 
@@ -56,7 +55,7 @@ public class ParsingService {
 
         Professor professor = insertProfessor(nextLine[13]);
 
-        insertCourse(nextLine, belong, subject, professor);
+        insertCourse(nextLine, belong, subject, professor, COURSEYEAR, SEMESTER);
     }
 
     public College insertCollege(String collegeNM) {
@@ -164,7 +163,7 @@ public class ParsingService {
         return professor;
     }
 
-    public void insertCourse(String[] nextLine, Belong belong, Subject subject, Professor professor) {
+    public void insertCourse(String[] nextLine, Belong belong, Subject subject, Professor professor, int COURSEYEAR, int SEMESTER) {
         Course course = courseRepository.findByCourseYearAndSemesterAndSubjectAndDivision(COURSEYEAR, SEMESTER, subject, Integer.parseInt(nextLine[3]));
         if (course == null) {
             course = Course.builder()
