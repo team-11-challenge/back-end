@@ -11,6 +11,7 @@ import lombok.*;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "course_id")
     private Long id;
 
     @Column(nullable = false)
@@ -29,28 +30,30 @@ public class Course {
     private Long limitation; // 수강정원
 
     @Column(nullable = false)
-    private Long basket; // 수강 예비신청 인원
+    @Builder.Default
+    private Long basket = 0L; // 수강 예비신청 인원
 
     @Column(nullable = false)
-    private Long current; // 수강 신청 인원
+    @Builder.Default
+    private Long current = 0L; // 수강 신청 인원
 
-    @Column(nullable = false)
-    private int yearCourse; // 연도
+    @Column(nullable = false, name = "course_year")
+    private int courseYear; // 연도
 
     @Column(nullable = false)
     private int semester; // 학기
 
-    @ManyToOne
-    @JoinColumn(name = "majorCD")
-    private Major major;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "belong_id")
+    private Belong belong; // 소속
 
-    @ManyToOne
-    @JoinColumn(name = "subjectCD")
-    private Subject subject;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "subject_id")
+    private Subject subject; // 교과목
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "professor_id")
-    private Professor professor;
+    private Professor professor; // 교수
 }
 
 

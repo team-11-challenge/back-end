@@ -4,20 +4,22 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Subject {
+public class Registration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "subject_id")
+    @Column(name = "registration_id")
     private Long id;
 
-    @Column(nullable = false, name = "subject_nm")
-    private String subjectNM; // 과목명
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    Student student;
 
-    @Column(nullable = false, name = "subject_cd")
-    private Long subjectCD; // 과목코드
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    Course course;
 }
+
