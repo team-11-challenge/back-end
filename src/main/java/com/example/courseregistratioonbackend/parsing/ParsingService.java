@@ -151,15 +151,19 @@ public class ParsingService {
     }
 
     public Professor insertProfessor(String name) {
-        Professor professor = Professor.builder()
-                .professorNM(name)
-                .build();
-        try {
-            professorRepository.save(professor);
-        } catch(Exception e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+        Professor professor = professorRepository.findByProfessorNM(name);
+        if(professor == null){
+            professor = Professor.builder()
+                    .professorNM(name)
+                    .build();
+            try {
+                professorRepository.save(professor);
+            } catch(Exception e) {
+                log.error(e.getMessage());
+                throw new RuntimeException(e);
+            }
         }
+
         return professor;
     }
 
