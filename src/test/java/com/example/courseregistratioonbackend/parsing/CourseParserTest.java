@@ -1,6 +1,7 @@
 package com.example.courseregistratioonbackend.parsing;
 
-import com.example.courseregistratioonbackend.repository.CourseRepository;
+import com.example.courseregistratioonbackend.global.parsing.service.ParsingService;
+import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
