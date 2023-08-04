@@ -15,7 +15,7 @@ public class Student {
     private Long id;
 
     @Column(name = "student_num", unique = true)
-    private Long studentNum;
+    private String studentNum;
 
     @Column(name = "student_nm")
     private String studentNM;
