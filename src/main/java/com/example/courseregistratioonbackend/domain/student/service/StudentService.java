@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.NOT_FOUND_STUDENT;
@@ -29,9 +31,17 @@ public class StudentService {
         List<Registration> registrationList = registrationRepository.findByStudent(student);
         List<TimetableResponseDto> timetableResponseDtoList = new ArrayList<>();
         for(int i = 0; i < registrationList.size(); i++){
+            List<String[]> timetable = new ArrayList<>();
+
             String courseNM = registrationList.get(i).getCourse().getSubject().getSubjectNM();
             String timetableStr = registrationList.get(i).getCourse().getTimetable();
-            List<String> timetable = List.of(timetableStr.split(","));
+            String[] timetableStrList = timetableStr.split(",");
+
+            for(String str : timetableStrList){
+                String[] oneCourse = str.split(" ");
+                timetable.add(oneCourse);
+            }
+
             TimetableResponseDto timetableResponseDto = new TimetableResponseDto(courseNM, timetable);
             timetableResponseDtoList.add(timetableResponseDto);
         }

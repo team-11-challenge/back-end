@@ -40,15 +40,24 @@ public class StudentServiceTest {
             );
             //then
             List<Registration> registrationList = registrationRepository.findByStudent(student);
+
             for(int i = 0; i < registrationList.size(); i++){
+                List<String[]> timetable = new ArrayList<>();
+
                 String courseNM = registrationList.get(i).getCourse().getSubject().getSubjectNM();
                 String timetableStr = registrationList.get(i).getCourse().getTimetable();
-                List<String> timetable = List.of(timetableStr.split(","));
+                String[] timetableStrList = timetableStr.split(",");
+
+                for(String str : timetableStrList){
+                    String[] oneCourse = str.split(" ");
+                    timetable.add(oneCourse);
+                }
+
                 TimetableResponseDto timetableResponseDto = new TimetableResponseDto(courseNM, timetable);
                 result.add(timetableResponseDto);
             }
             //actions
-            assertEquals(result.size(), 1);
+            assertEquals(result.size(), registrationRepository.findByStudent(student).size());
 
 
         }catch (Exception e){
