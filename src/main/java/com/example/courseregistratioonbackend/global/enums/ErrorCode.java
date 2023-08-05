@@ -1,15 +1,17 @@
 package com.example.courseregistratioonbackend.global.enums;
 
 import lombok.Getter;
+
 import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.*;
 
 @Getter
 public enum ErrorCode {
-    /* 400 BAD_REQUEST : 이 응답은 잘못된 문법으로 인해 서버가 요청을 이해할 수 없다는 의미입니다. */
-    INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다"),
-    MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
+	/* 400 BAD_REQUEST : 이 응답은 잘못된 문법으로 인해 서버가 요청을 이해할 수 없다는 의미입니다. */
+	USER_LOGIN_FAILURE(BAD_REQUEST, "로그인 실패"),
+	INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다"),
+	MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
 
     /* 401 UNAUTHORIZED : 인증되지 않았다는 의미입니다. */
     INVALID_ADMIN_NUMBER(UNAUTHORIZED, "관리자 번호가 유효하지 않습니다."),
