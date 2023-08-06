@@ -32,7 +32,7 @@ jobs:
       run: |
          cd ./src/main/resources
          touch ./application.yml
-         echo "${{ secrets.APPLICATION_YMAL }}" > ./application.yml
+         echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
       shell: bash
       
     # gradle을 통해 소스를 빌드
