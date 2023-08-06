@@ -1,4 +1,4 @@
-package com.example.courseregistratioonbackend.entity;
+package com.example.courseregistratioonbackend.global.parsing.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,11 +11,12 @@ import lombok.*;
 public class Major {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "major_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String major;   // 학과명
+    @Column(nullable = false, unique = true, name = "major_nm")
+    private String majorNM;   // 학과명
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "major_cd")
     private Long majorCD;   // 학과코드
 }
