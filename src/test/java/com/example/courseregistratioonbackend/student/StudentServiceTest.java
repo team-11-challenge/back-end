@@ -6,7 +6,6 @@ import com.example.courseregistratioonbackend.domain.student.dto.TimetableRespon
 import com.example.courseregistratioonbackend.domain.student.entity.Student;
 import com.example.courseregistratioonbackend.domain.student.execption.StudentNotFoundException;
 import com.example.courseregistratioonbackend.domain.student.repository.StudentRepository;
-import com.example.courseregistratioonbackend.domain.student.service.StudentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.NOT_FOUND_STUDENT;
-import static junit.framework.TestCase.fail;
-import static org.junit.Assert.assertEquals;
+
+import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -57,7 +56,7 @@ public class StudentServiceTest {
                 result.add(timetableResponseDto);
             }
             //actions
-            assertEquals(result.size(), registrationRepository.findByStudent(student).size());
+            assertThat(result.size()).isEqualTo(registrationRepository.findByStudent(student).size());
 
 
         }catch (Exception e){
