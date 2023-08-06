@@ -57,6 +57,11 @@ public class Course {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "professor_id")
     private Professor professor; // 교수
+
+    public void addRegistration() {
+        this.current++;
+    }
+
 }
 
 

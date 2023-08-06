@@ -14,7 +14,8 @@ public enum SuccessCode {
 //    EMAIL_SEND_SUCCESS(OK, "메일 전송 성공"),
 
     /* 201 CREATED : 요청이 성공적이었으며 그 결과로 새로운 리소스가 생성 되었다는 의미입니다. */
-    USER_SIGNUP_SUCCESS(CREATED, "회원가입 성공")
+    USER_SIGNUP_SUCCESS(CREATED, "회원가입 성공"),
+    REGISTRATION_SUCCESS(CREATED, "수강신청 성공")
 
     ;
 

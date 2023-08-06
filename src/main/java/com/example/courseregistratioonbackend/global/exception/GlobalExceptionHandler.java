@@ -30,6 +30,11 @@ public class GlobalExceptionHandler {
         return ResponseUtils.error(e.getMessage());
     }
 
+    @ExceptionHandler(GlobalException.class)
+    public ApiResponse<?> GlobalException(GlobalException e) {
+        return ResponseUtils.error(e.getErrorCode());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResponse<?> validationExceptionHandler(MethodArgumentNotValidException e) {
         Map<String, String> errors = new LinkedHashMap<>();

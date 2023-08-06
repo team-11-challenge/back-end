@@ -10,6 +10,7 @@ public enum ErrorCode {
     /* 400 BAD_REQUEST : 이 응답은 잘못된 문법으로 인해 서버가 요청을 이해할 수 없다는 의미입니다. */
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다"),
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
+    CREDIT_EXCEEDED(BAD_REQUEST, "이수 가능 학점이 초과되었습니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않았다는 의미입니다. */
     INVALID_ADMIN_NUMBER(UNAUTHORIZED, "관리자 번호가 유효하지 않습니다."),
@@ -23,9 +24,12 @@ public enum ErrorCode {
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
     NOT_FOUND_CLIENT(NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다"),
+    COURSE_NOT_FOUND(NOT_FOUND,"해당 강의를 찾을 수 없습니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
-
+    COURSE_ALREADY_FULLED(CONFLICT, "수강 정원이 다 찼습니다."),
+    SUBJECT_ALREADY_REGISTERED(CONFLICT, "이미 신청한 과목입니다."),
+    COURSE_TIME_CONFLICT(CONFLICT, "이미 신청한 강의와 시간이 겹칩니다.")
     ;
 
     private final HttpStatus httpStatus;
