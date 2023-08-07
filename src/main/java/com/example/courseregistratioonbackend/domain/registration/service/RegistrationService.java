@@ -42,8 +42,8 @@ public class RegistrationService {
             throw new SubjectAlreadyRegisteredException(SUBJECT_ALREADY_REGISTERED);
         }
 
-        // 수강 정원 이내 인지 확인
-        if (course.getCurrent() + 1 > course.getLimitation()) {
+        // 수강 정원 이내 인지 확인(-1인 경우는 확인 안함)
+        if ((course.getLimitation() != -1) && (course.getCurrent() + 1 > course.getLimitation())) {
             throw new CourseAlreadyFulledException(COURSE_ALREADY_FULLED);
         }
 
@@ -57,16 +57,17 @@ public class RegistrationService {
         if (student.getPossibleCredits() < currentCredit + course.getCredit()) {
             throw new CreditExceededException(CREDIT_EXCEEDED);
         }
-
-        // 강의 시간이 겹치는 지 확인
-        StringBuilder sb = new StringBuilder();
-        for (Registration r : registrations) {
-            sb.append(r.getCourse().getTimetable());
-            sb.append(",");
+        if (!registrations.isEmpty()) { // 수강신청 목록이 있다면
+            // 강의 시간이 겹치는 지 확인
+            StringBuilder sb = new StringBuilder();
+            for (Registration r : registrations) {
+                sb.append(r.getCourse().getTimetable());
+                sb.append(",");
+            }
+            int[] timetableOfCourse = makeBooleanTimetable(course.getTimetable());
+            int[] timetableOfStudent = makeBooleanTimetable(sb.toString());
+            compareTimetable(timetableOfCourse, timetableOfStudent);
         }
-        int[] timetableOfCourse = makeBooleanTimetable(course.getTimetable());
-        int[] timetableOfStudent = makeBooleanTimetable(sb.toString());
-        compareTimetable(timetableOfCourse, timetableOfStudent);
 
         // 수강신청 저장
         Registration registration = Registration.builder()
