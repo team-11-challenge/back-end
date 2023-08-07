@@ -2,6 +2,7 @@ package com.example.courseregistratioonbackend.domain.registration.service;
 
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
+import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationDto;
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
 import com.example.courseregistratioonbackend.domain.registration.exception.*;
 import com.example.courseregistratioonbackend.domain.registration.repository.RegistrationRepository;
@@ -35,16 +36,15 @@ public class RegistrationService {
         checkIfSubjectAlreadyRegistered(student.getId(), course.getSubject().getId());
         checkCourseLimitation(course);
 
-        List<Registration> registrations = registrationRepository.findAllByStudentId(student.getId());
+        List<Registration> registrations = getRegistrationList(student.getId());
         checkCreditLimit(student, course, registrations);
         checkTimetable(course.getTimetable(), registrations);
 
         // 수강신청 저장
-        Registration registration = Registration.builder()
+        registrationRepository.save(Registration.builder()
                 .student(student)
                 .course(course)
-                .build();
-        registrationRepository.save(registration);
+                .build());
 
         // 현재 수강 신청 인원 증가
         course.addRegistration();
@@ -65,6 +65,17 @@ public class RegistrationService {
         registration.getCourse().deleteRegistration();
 
         return REGISTRATION_DELETE_SUCCESS;
+    }
+
+    public List<RegistrationDto> getRegistration(long studentId) {
+        List<Registration> registrationList = getRegistrationList(studentId);
+        return registrationList.stream()
+                .map(RegistrationDto::new)
+                .toList();
+    }
+
+    private List<Registration> getRegistrationList(Long studentId) {
+        return registrationRepository.findAllByStudentId(studentId);
     }
 
     private Student findStudentById(Long studentId) {
@@ -141,5 +152,4 @@ public class RegistrationService {
             }
         }
     }
-
 }

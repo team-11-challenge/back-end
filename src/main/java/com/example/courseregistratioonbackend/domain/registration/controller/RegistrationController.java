@@ -24,4 +24,9 @@ public class RegistrationController {
         return ResponseUtils.ok(registrationService.cancel(registrationId, 1L));
     }
 
+    // TODO: @AuthenticationPrincipal UserDetailsImpl userDetails 추가
+    @GetMapping
+    public ApiResponse<?> getRegistration() {
+        return ResponseUtils.ok(registrationService.getRegistration(1L));
+    }
 }
