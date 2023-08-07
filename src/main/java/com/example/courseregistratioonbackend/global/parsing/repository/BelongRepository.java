@@ -10,4 +10,6 @@ import java.util.Optional;
 
 public interface BelongRepository extends JpaRepository<Belong, Long> {
     Belong findByCollegeAndDepartmentAndMajor(College college, Optional<Department> optionalDepartment, Optional<Major> optionalMajor);
+
+    Optional<Belong> findByDepartmentId(Long departmentId);
 }
