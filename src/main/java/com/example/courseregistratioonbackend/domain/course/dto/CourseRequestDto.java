@@ -2,7 +2,6 @@ package com.example.courseregistratioonbackend.domain.course.dto;
 
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Getter
 @ToString

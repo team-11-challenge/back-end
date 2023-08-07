@@ -2,7 +2,6 @@ package com.example.courseregistratioonbackend.domain.student.dto;
 
 import lombok.Getter;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Getter
