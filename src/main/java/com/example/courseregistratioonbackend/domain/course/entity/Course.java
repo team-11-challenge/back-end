@@ -62,6 +62,9 @@ public class Course {
         this.current++;
     }
 
+    public void deleteRegistration() {
+        this.current--;
+    }
 }
 
 
