@@ -6,11 +6,15 @@ import com.example.courseregistratioonbackend.domain.student.dto.TimetableRespon
 import com.example.courseregistratioonbackend.domain.student.entity.Student;
 import com.example.courseregistratioonbackend.domain.student.execption.StudentNotFoundException;
 import com.example.courseregistratioonbackend.domain.student.repository.StudentRepository;
+import com.example.courseregistratioonbackend.domain.student.service.StudentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,49 +22,26 @@ import java.util.List;
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.NOT_FOUND_STUDENT;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
 public class StudentServiceTest {
     @Autowired
     StudentRepository studentRepository;
 
     @Autowired
+    StudentService studentService;
+
+    @Autowired
     RegistrationRepository registrationRepository;
 
+
     @Test
-    @DisplayName("시간표 조회 테스트")
-    public void getTimetable(){
-        List<TimetableResponseDto> result = new ArrayList<>();
-        try{
-            //when
-            Student student = studentRepository.findById(1L).orElseThrow(
-                    () -> new StudentNotFoundException(NOT_FOUND_STUDENT)
-            );
-            //then
-            List<Registration> registrationList = registrationRepository.findByStudent(student);
-
-            for(int i = 0; i < registrationList.size(); i++){
-                List<String[]> timetable = new ArrayList<>();
-
-                String courseNM = registrationList.get(i).getCourse().getSubject().getSubjectNM();
-                String timetableStr = registrationList.get(i).getCourse().getTimetable();
-                String[] timetableStrList = timetableStr.split(",");
-
-                for(String str : timetableStrList){
-                    String[] oneCourse = str.split(" ");
-                    timetable.add(oneCourse);
-                }
-
-                TimetableResponseDto timetableResponseDto = new TimetableResponseDto(courseNM, timetable);
-                result.add(timetableResponseDto);
-            }
-            //actions
-            assertThat(result.size()).isEqualTo(registrationRepository.findByStudent(student).size());
-
-
-        }catch (Exception e){
-            fail("문제있음");
-        }
+    @DisplayName("시간표 조회 성공 테스트")
+    void getTimetable(){
+        Long studentId = 1L;
+        int timetableListSize = studentService.getTimetable(studentId).size();
+        assertEquals(2, timetableListSize);
     }
 }
