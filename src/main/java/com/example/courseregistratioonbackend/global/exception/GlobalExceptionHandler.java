@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -31,6 +32,12 @@ public class GlobalExceptionHandler {
         log.info(e.getMessage());
         return ResponseUtils.error(e.getMessage());
     }
+
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	public ApiResponse<?> missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException e) {
+		log.info(e.getMessage());
+		return ResponseUtils.error(e.getMessage());
+	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ApiResponse<?> validationExceptionHandler(MethodArgumentNotValidException e) {

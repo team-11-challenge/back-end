@@ -137,7 +137,7 @@ public class ParsingService {
     }
 
     public Subject insertSubject(String subjectNM, Long subjectCD) {
-        Subject subject = subjectRepository.findBySubjectCD(subjectCD);
+        Subject subject = subjectRepository.findBySubjectCD(subjectCD).orElseThrow();
         if (subject == null) {
             subject = Subject.builder()
                     .subjectNM(subjectNM)
