@@ -21,7 +21,7 @@ public class RegistrationController {
     // TODO: @AuthenticationPrincipal UserDetailsImpl userDetails 추가
     @DeleteMapping("/{registrationId}")
     public ApiResponse<?> cancel(@PathVariable Long registrationId) {
-        return ResponseUtils.ok(registrationService.cancel(registrationId, 2L));
+        return ResponseUtils.ok(registrationService.cancel(registrationId, 1L));
     }
 
 }
