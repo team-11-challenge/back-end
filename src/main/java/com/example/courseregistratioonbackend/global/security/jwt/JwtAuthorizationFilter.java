@@ -47,7 +47,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		Claims info = jwtUtil.getClaimsFromToken(tokenValue);
+		Claims info = jwtUtil.getClaimsFromToken(token);
 
 		try {
 			setAuthentication(info.getSubject());
