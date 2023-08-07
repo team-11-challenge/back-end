@@ -209,10 +209,10 @@ class RegistrationServiceTest {
                 .course(course2)
                 .build();
 
-        when(registrationRepository.findAllByStudentId(studentId)).thenReturn(Arrays.asList(registration, registration2));
+        when(registrationRepository.findByStudent(student)).thenReturn(Arrays.asList(registration, registration2));
 
         // when
-        List<RegistrationDto> registrations = registrationService.getRegistration(studentId);
+        List<RegistrationDto> registrations = registrationService.getRegistration(student.getId());
 
         // then
         assertThat(registrations).size().isEqualTo(2);

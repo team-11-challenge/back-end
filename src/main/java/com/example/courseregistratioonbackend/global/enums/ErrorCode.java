@@ -8,6 +8,7 @@ import static org.springframework.http.HttpStatus.*;
 @Getter
 public enum ErrorCode {
     /* 400 BAD_REQUEST : 이 응답은 잘못된 문법으로 인해 서버가 요청을 이해할 수 없다는 의미입니다. */
+    USER_LOGIN_FAILURE(BAD_REQUEST, "로그인 실패"),
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다"),
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
     CREDIT_EXCEEDED(BAD_REQUEST, "이수 가능 학점이 초과되었습니다."),
@@ -19,12 +20,14 @@ public enum ErrorCode {
 
     /* 403 FORBIDDEN : 클라이언트가 콘텐츠에 접근할 권리를 가지고 있지 않다는 의미입니다.*/
     NO_AUTHORITY_TO_DATA(FORBIDDEN, "해당 리소스에 대한 권한이 없습니다."),
+    NO_AUTHORITY_TO_REGISTRATION(FORBIDDEN, "해당 수강신청을 한 사용자가 아닙니다."),
 
     /* 404 NOT_FOUND : 서버는 요청 받은 리소스를 찾을 수 없다는 의미입니다. */
+    COURSE_NOT_FOUND(NOT_FOUND, "해당 강의를 찾을 수 없습니다."),
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
     NOT_FOUND_CLIENT(NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다"),
-    COURSE_NOT_FOUND(NOT_FOUND,"해당 강의를 찾을 수 없습니다."),
+    NOT_FOUND_STUDENT(NOT_FOUND, "존재하지 않는 학생입니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     COURSE_ALREADY_FULLED(CONFLICT, "수강 정원이 다 찼습니다."),

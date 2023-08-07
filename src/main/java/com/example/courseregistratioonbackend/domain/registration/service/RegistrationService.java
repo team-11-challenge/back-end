@@ -1,15 +1,16 @@
 package com.example.courseregistratioonbackend.domain.registration.service;
 
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
+import com.example.courseregistratioonbackend.domain.course.exception.CourseNotFoundException;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
 import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationDto;
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
 import com.example.courseregistratioonbackend.domain.registration.exception.*;
 import com.example.courseregistratioonbackend.domain.registration.repository.RegistrationRepository;
 import com.example.courseregistratioonbackend.domain.student.entity.Student;
+import com.example.courseregistratioonbackend.domain.student.execption.StudentNotFoundException;
 import com.example.courseregistratioonbackend.domain.student.repository.StudentRepository;
 import com.example.courseregistratioonbackend.global.enums.SuccessCode;
-import com.example.courseregistratioonbackend.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,7 @@ public class RegistrationService {
         checkIfSubjectAlreadyRegistered(student.getId(), course.getSubject().getId());
         checkCourseLimitation(course);
 
-        List<Registration> registrations = getRegistrationList(student.getId());
+        List<Registration> registrations = getRegistrationList(student);
         checkCreditLimit(student, course, registrations);
         checkTimetable(course.getTimetable(), registrations);
 
@@ -56,7 +57,7 @@ public class RegistrationService {
     public SuccessCode cancel(Long registrationId, Long studentId) {
         // 신청한 학생이 맞는지 확인
         Registration registration = registrationRepository.findByIdAndStudentId(registrationId, studentId)
-                .orElseThrow(() -> new GlobalException(NO_AUTHORITY_TO_DATA)); // TODO: 나중에 exception 만들기
+                .orElseThrow(() -> new NoAuthorityToRegistrationException(NO_AUTHORITY_TO_REGISTRATION));
 
         // 수강신청 삭제
         registrationRepository.delete(registration);
@@ -67,20 +68,21 @@ public class RegistrationService {
         return REGISTRATION_DELETE_SUCCESS;
     }
 
-    public List<RegistrationDto> getRegistration(long studentId) {
-        List<Registration> registrationList = getRegistrationList(studentId);
+    public List<RegistrationDto> getRegistration(Long studentId) {
+        Student student = findStudentById(studentId);
+        List<Registration> registrationList = getRegistrationList(student);
         return registrationList.stream()
                 .map(RegistrationDto::new)
                 .toList();
     }
 
-    private List<Registration> getRegistrationList(Long studentId) {
-        return registrationRepository.findAllByStudentId(studentId);
+    private List<Registration> getRegistrationList(Student student) {
+        return registrationRepository.findByStudent(student);
     }
 
     private Student findStudentById(Long studentId) {
         return studentRepository.findById(studentId)
-                .orElseThrow(() -> new GlobalException(USER_NOT_FOUND));
+                .orElseThrow(() -> new StudentNotFoundException(NOT_FOUND_STUDENT));
     }
 
     private Course findCourseById(Long courseId) {

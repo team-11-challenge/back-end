@@ -35,7 +35,7 @@ public class ResponseUtils {
         return new ApiResponse<>(false, httpStatus.value(), null, null, errors);
     }
 
-    public static <T> ApiResponse<?> error(T response) {
-        return new ApiResponse<>(false, 500, null, response, null);
+    public static <T> ApiResponse<?> error(T errors) {
+        return new ApiResponse<>(false, 500, null, null, errors);
     }
 }
