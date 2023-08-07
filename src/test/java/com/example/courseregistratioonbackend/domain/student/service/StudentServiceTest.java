@@ -1,4 +1,4 @@
-package com.example.courseregistratioonbackend.student;
+package com.example.courseregistratioonbackend.domain.student.service;
 
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
 import com.example.courseregistratioonbackend.domain.registration.repository.RegistrationRepository;
