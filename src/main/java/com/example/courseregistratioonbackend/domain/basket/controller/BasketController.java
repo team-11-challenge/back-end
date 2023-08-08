@@ -28,7 +28,7 @@ public class BasketController {
 
 	private final BasketService basketService;
 
-	@GetMapping("/")
+	@GetMapping()
 	public ApiResponse<?> getCourseListFromBasket(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		Long studentId = userDetails.getStudentUser().getId();
