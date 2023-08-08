@@ -25,9 +25,11 @@ public enum ErrorCode {
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
     NOT_FOUND_CLIENT(NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다"),
+    COURSE_NOT_FOUND(NOT_FOUND, "해당 강의를 찾을 수 없습니다."),
+    NOT_FOUND_DATA(NOT_FOUND, "해당 리소스를 찾을 수 없습니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
-
+    ALREADY_BASKET_EXISTED(CONFLICT, "이미 장바구니에 담은 과목입니다.")
     ;
 
     private final HttpStatus httpStatus;
