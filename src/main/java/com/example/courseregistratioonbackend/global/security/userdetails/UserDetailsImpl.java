@@ -1,14 +1,12 @@
 package com.example.courseregistratioonbackend.global.security.userdetails;
 
-import java.util.Collection;
-
+import com.example.courseregistratioonbackend.domain.student.entity.Student;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.courseregistratioonbackend.domain.student.entity.Student;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.util.Collection;
 
 @RequiredArgsConstructor
 @Getter

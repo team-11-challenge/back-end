@@ -27,8 +27,8 @@ public class ResponseUtils {
 
     public static ApiResponse<?> error(ErrorCode errorCode) {
         int statusCode = errorCode.getHttpStatus().value();
-        String msg = errorCode.getDetail();
-        return new ApiResponse<>(false, statusCode, msg, null, null);
+        String error = errorCode.getDetail();
+        return new ApiResponse<>(false, statusCode, null, null, error);
     }
 
     public static ApiResponse<?> error(HttpStatus httpStatus, Map<String, String> errors) {
