@@ -27,15 +27,15 @@ public class ResponseUtils {
 
     public static ApiResponse<?> error(ErrorCode errorCode) {
         int statusCode = errorCode.getHttpStatus().value();
-        String msg = errorCode.getDetail();
-        return new ApiResponse<>(false, statusCode, msg, null, null);
+        String error = errorCode.getDetail();
+        return new ApiResponse<>(false, statusCode, null, null, error);
     }
 
     public static ApiResponse<?> error(HttpStatus httpStatus, Map<String, String> errors) {
         return new ApiResponse<>(false, httpStatus.value(), null, null, errors);
     }
 
-    public static <T> ApiResponse<?> error(T response) {
-        return new ApiResponse<>(false, 500, null, response, null);
+    public static <T> ApiResponse<?> error(T errors) {
+        return new ApiResponse<>(false, 500, null, null, errors);
     }
 }

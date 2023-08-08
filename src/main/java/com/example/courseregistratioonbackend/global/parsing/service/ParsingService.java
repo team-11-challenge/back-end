@@ -2,9 +2,9 @@ package com.example.courseregistratioonbackend.global.parsing.service;
 
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
-import com.example.courseregistratioonbackend.global.parsing.utils.ReadLineContext;
 import com.example.courseregistratioonbackend.global.parsing.entity.*;
 import com.example.courseregistratioonbackend.global.parsing.repository.*;
+import com.example.courseregistratioonbackend.global.parsing.utils.ReadLineContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -137,7 +137,7 @@ public class ParsingService {
     }
 
     public Subject insertSubject(String subjectNM, Long subjectCD) {
-        Subject subject = subjectRepository.findBySubjectCD(subjectCD);
+        Subject subject = subjectRepository.findBySubjectCD(subjectCD).orElseThrow();
         if (subject == null) {
             subject = Subject.builder()
                     .subjectNM(subjectNM)

@@ -1,5 +1,11 @@
 package com.example.courseregistratioonbackend.global.config;
 
+import com.example.courseregistratioonbackend.global.security.jwt.JwtAuthenticationFilter;
+import com.example.courseregistratioonbackend.global.security.jwt.JwtAuthorizationFilter;
+import com.example.courseregistratioonbackend.global.security.jwt.JwtUtil;
+import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +19,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import com.example.courseregistratioonbackend.global.security.jwt.JwtAuthenticationFilter;
-import com.example.courseregistratioonbackend.global.security.jwt.JwtAuthorizationFilter;
-import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsServiceImpl;
-import com.example.courseregistratioonbackend.global.security.jwt.JwtUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
