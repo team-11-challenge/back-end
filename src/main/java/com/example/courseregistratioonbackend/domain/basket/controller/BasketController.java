@@ -19,7 +19,9 @@ import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "예비수강신청(장바구니) 관련 API", description = "예비수강신청(장바구니) 관련 API")
 @Slf4j(topic = "BasketController")
 @RequestMapping("/api/basket")
 @RestController

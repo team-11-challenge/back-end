@@ -8,9 +8,11 @@ import com.example.courseregistratioonbackend.domain.student.exception.UserNotFo
 import com.example.courseregistratioonbackend.domain.student.entity.Student;
 import com.example.courseregistratioonbackend.domain.student.repository.StudentRepository;
 import com.example.courseregistratioonbackend.global.enums.ErrorCode;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j(topic = "UserDetailsServiceImpl")

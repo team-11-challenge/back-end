@@ -15,9 +15,9 @@ public class Subject {
     @Column(name = "subject_id")
     private Long id;
 
-    @Column(nullable = false, name = "subject_nm")
+    @Column(nullable = false, name = "subject_nm", unique = true)
     private String subjectNM; // 과목명
 
-    @Column(nullable = false, name = "subject_cd")
+    @Column(nullable = false, name = "subject_cd", unique = true)
     private Long subjectCD; // 과목코드
 }
