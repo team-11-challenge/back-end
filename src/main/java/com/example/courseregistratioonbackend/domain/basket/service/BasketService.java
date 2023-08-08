@@ -56,12 +56,17 @@ public class BasketService {
 					Subject subject = course.getSubject();
 					Professor professor = course.getProfessor();
 
+					// null 값이 존재할 수 있는 항목 처리
+					String collegeName = belong.getCollege() != null ? belong.getCollege().getCollegeNM() : null;
+					String departmentName = belong.getDepartment() != null ? belong.getDepartment().getDepartNM() : null;
+					String majorName = belong.getMajor() != null ? belong.getMajor().getMajorNM() : null;
+
 					// 찾아온 강의와 다른 테이블 항목을 통해 빌더로 ResponseDto 생성
 					return CourseFromBasketResponseDto.builder()
 						.basketId(basketItem.getId())
-						.collegeName(belong.getCollege().getCollegeNM())
-						.departmentName(belong.getDepartment().getDepartNM())
-						.majorName(belong.getMajor().getMajorNM())
+						.collegeName(collegeName)
+						.departmentName(departmentName)
+						.majorName(majorName)
 						.sort(course.getSort())
 						.subjectCd(subject.getSubjectCD())
 						.division(course.getDivision())
