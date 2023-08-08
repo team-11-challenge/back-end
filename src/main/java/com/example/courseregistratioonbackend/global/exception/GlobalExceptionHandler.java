@@ -31,6 +31,11 @@ public class GlobalExceptionHandler {
         return ResponseUtils.error(e.getMessage());
     }
 
+    @ExceptionHandler(GlobalException.class)
+    public ApiResponse<?> handleGlobalException(GlobalException e) {
+        return ResponseUtils.error(e.getErrorCode());
+    }
+
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ApiResponse<?> missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException e) {
 		log.info(e.getMessage());
