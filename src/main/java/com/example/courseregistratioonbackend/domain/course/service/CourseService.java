@@ -4,29 +4,33 @@ import com.example.courseregistratioonbackend.domain.course.dto.CourseResponseDt
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.exception.CourseNotFoundException;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
-import com.example.courseregistratioonbackend.global.parsing.entity.Belong;
-import com.example.courseregistratioonbackend.global.parsing.entity.Department;
-import com.example.courseregistratioonbackend.global.parsing.entity.Subject;
-import com.example.courseregistratioonbackend.global.parsing.repository.BelongRepository;
-import com.example.courseregistratioonbackend.global.parsing.repository.DepartmentRepository;
-import com.example.courseregistratioonbackend.global.parsing.repository.SubjectRepository;
+import com.example.courseregistratioonbackend.global.parsing.entity.*;
+import com.example.courseregistratioonbackend.global.parsing.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.COURSE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CourseService {
 
     private final CourseRepository courseRepository;
     private final SubjectRepository subjectRepository;
     private final DepartmentRepository departmentRepository;
     private final BelongRepository belongRepository;
+    private final MajorRepository majorRepository;
+    private final CollegeRepository collegeRepository;
 
-    public List<CourseResponseDto> getCourseList(int courseYear, int semester, Long subjectCd) {
+    // 과목 코드로 검색
+    public List<CourseResponseDto> getCourseListBySubjectCode(int courseYear, int semester, Long subjectCd) {
         Subject subject = subjectRepository.findBySubjectCD(subjectCd).orElseThrow();
 
         List<Course> courses =
@@ -38,15 +42,60 @@ public class CourseService {
         return courses.stream().map(CourseResponseDto::new).toList();
     }
 
-    public List<CourseResponseDto> getCourseList(int courseYear, int semester, String depart, String sort) {
-        Department department = departmentRepository.findByDepartNM(depart);
-        Belong belong = belongRepository.findByDepartmentId(department.getId()).orElseThrow();
-        List<Course> courses =
-                courseRepository.findAllByCourseYearAndSemesterAndBelongIdAndSort(courseYear, semester, belong.getId(), sort)
-                        .orElseThrow(
-                                () -> new CourseNotFoundException(COURSE_NOT_FOUND)
-                        );
+    // 구분 으로 검색
+    public List<CourseResponseDto> getCourseListBySortName(int courseYear, int semester, String sortNm) {
+        return courseRepository.findAllByCourseYearAndSemesterAndSort(courseYear, semester, sortNm).orElseThrow(
+                        () -> new CourseNotFoundException(COURSE_NOT_FOUND)
+                )
+                .stream().map(CourseResponseDto::new).toList();
+    }
 
-        return courses.stream().map(CourseResponseDto::new).toList();
+    // 전공명 으로 검색 (학과는 없고 전공만 있는 소속이 있기 때문에 학과명을 입력 받는다 )
+    public List<CourseResponseDto> getCourseList(int courseYear, int semester, String collegeNm, String departNm, String majorNm, String sortNm) {
+        College college = collegeRepository.findByCollegeNM(collegeNm);
+        Department department = departmentRepository.findByDepartNM(departNm);
+        Major major = majorRepository.findByMajorNM(majorNm);
+
+        List<Belong> belongList = belongRepository.findAllByCollegeAndDepartmentAndMajor(college, department, major).orElseThrow();
+        Belong nullMajorBelong = belongRepository.findByCollegeAndDepartmentAndMajor(college, Optional.ofNullable(department), Optional.empty());
+        if (nullMajorBelong != null) belongList.add(nullMajorBelong);
+
+        return getCourseResponseDtoList(courseYear, semester, belongList, sortNm);
+    }
+
+    // 대학 으로 검색
+    public List<CourseResponseDto> getCourseListByCollegeName(int courseYear, int semester, String collegeNm, String sortNm) {
+        College college = collegeRepository.findByCollegeNM(collegeNm);
+
+        List<Belong> belongList = belongRepository.findAllByCollege(college).orElseThrow();
+
+        return getCourseResponseDtoList(courseYear, semester, belongList, sortNm);
+    }
+
+
+    // 학과명 으로 검색
+    public List<CourseResponseDto> getCourseListByDepartmentName(int courseYear, int semester, String collegeNm, String departNm, String sortNm) {
+        College college = collegeRepository.findByCollegeNM(collegeNm);
+        Department department = departmentRepository.findByDepartNM(departNm);
+
+        List<Belong> belongList = belongRepository.findAllByCollegeAndDepartment(college, department).orElseThrow();
+
+        return getCourseResponseDtoList(courseYear, semester, belongList, sortNm);
+    }
+
+    private List<CourseResponseDto> getCourseResponseDtoList(int courseYear, int semester, List<Belong> belongList, String sortNm) {
+        List<Course> courses = new ArrayList<>();
+        belongList.forEach(belong -> {
+            courses.addAll(courseRepository.findAllByCourseYearAndSemesterAndBelongId(courseYear, semester, belong.getId())
+                    .orElseThrow(
+                            () -> new CourseNotFoundException(COURSE_NOT_FOUND)
+                    ));
+        });
+
+        if (sortNm == null) {
+            return courses.stream().map(CourseResponseDto::new).toList();
+        } else {
+            return courses.stream().filter(course -> course.getSort().equals(sortNm)).map(CourseResponseDto::new).collect(Collectors.toList());
+        }
     }
 }
