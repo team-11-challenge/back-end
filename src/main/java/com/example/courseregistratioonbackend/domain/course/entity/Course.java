@@ -54,9 +54,18 @@ public class Course {
     @JoinColumn(name = "subject_id")
     private Subject subject; // 교과목
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "professor_id")
-    private Professor professor; // 교수
+
+	  @ManyToOne(cascade = CascadeType.MERGE)
+	  @JoinColumn(name = "professor_id")
+	  private Professor professor; // 교수
+
+	  public void addToBasketNumber() {
+		  this.basket = basket + 1;
+	  } 
+
+	  public void removeFromBasketNumber() {
+		  this.basket = basket - 1;
+	  }
 
     public void addRegistration() {
         this.current++;
@@ -65,6 +74,7 @@ public class Course {
     public void deleteRegistration() {
         this.current--;
     }
+
 }
 
 

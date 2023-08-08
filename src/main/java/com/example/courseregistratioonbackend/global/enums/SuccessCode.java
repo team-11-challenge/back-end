@@ -8,16 +8,20 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Getter
 public enum SuccessCode {
+  
     /* 200 OK : 요청이 성공적으로 완료되었다는 의미입니다. */
     USER_LOGIN_SUCCESS(OK, "로그인 성공"),
 //    USER_DATA_UPDATE_SUCCESS(OK, "유저 정보 변경 성공"),
 //    EMAIL_SEND_SUCCESS(OK, "메일 전송 성공"),
     TIMETABLE_GET_SUCCESS(OK, "시간표 조회 성공"),
+    DELETE_COURSE_FROM_BASKET_SUCCESS(OK, "예비수강과목 삭제 성공"),
     REGISTRATION_DELETE_SUCCESS(OK, "해당 신청이 성공적으로 취소되었습니다."),
 
     /* 201 CREATED : 요청이 성공적이었으며 그 결과로 새로운 리소스가 생성 되었다는 의미입니다. */
     USER_SIGNUP_SUCCESS(CREATED, "회원가입 성공"),
+    ADD_COURSE_TO_BASKET_SUCCESS(CREATED, "예비수강과목 담기 성공");
     REGISTRATION_SUCCESS(CREATED, "해당 강의가 성공적으로 신청되었습니다.")
+
 
     ;
 

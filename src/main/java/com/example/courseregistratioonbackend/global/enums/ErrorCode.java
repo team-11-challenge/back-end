@@ -1,3 +1,4 @@
+
 package com.example.courseregistratioonbackend.global.enums;
 
 import lombok.Getter;
@@ -33,6 +34,7 @@ public enum ErrorCode {
     COURSE_ALREADY_FULLED(CONFLICT, "수강 정원이 다 찼습니다."),
     SUBJECT_ALREADY_REGISTERED(CONFLICT, "이미 신청한 과목입니다."),
     COURSE_TIME_CONFLICT(CONFLICT, "이미 신청한 강의와 시간이 겹칩니다.")
+    ALREADY_BASKET_EXISTED(CONFLICT, "이미 장바구니에 담은 과목입니다.")
     ;
 
     private final HttpStatus httpStatus;
