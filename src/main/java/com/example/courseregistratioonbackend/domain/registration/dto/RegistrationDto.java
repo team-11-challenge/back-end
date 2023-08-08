@@ -13,15 +13,15 @@ import lombok.Getter;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class RegistrationDto {
     private Long registrationId;
-    private String collegeNM;   // 대학명
-    private String departNM;    // 학과명
-    private String majorNM;     // 학과명
+    private String collegeName;   // 대학명
+    private String departmentName;    // 학과명
+    private String majorName;     // 학과명
     private String sort;        // 구분
-    private Long subjectCD;     // 과목코드
+    private Long subjectCode;     // 과목코드
     private int division;       // 분반
-    private String subjectNM;   // 과목명
+    private String subjectName;   // 과목명
     private int credit;         // 학점
-    private String professorNM; // 교수명
+    private String professorName; // 교수명
     private String timetable;   // 시간표
     private Long limitation; // 수강정원
     private Long current; // 수강 신청 인원
@@ -34,15 +34,15 @@ public class RegistrationDto {
         Major major = belong.getMajor();
 
         this.registrationId = registration.getId();
-        this.collegeNM = belong.getCollege().getCollegeNM();
-        this.departNM = (department != null) ? department.getDepartNM() : null;
-        this.majorNM = (major != null) ? major.getMajorNM() : null;
+        this.collegeName = belong.getCollege().getCollegeNM();
+        this.departmentName = (department != null) ? department.getDepartNM() : null;
+        this.majorName = (major != null) ? major.getMajorNM() : null;
         this.sort = course.getSort();
-        this.subjectCD = subject.getSubjectCD();
+        this.subjectCode = subject.getSubjectCD();
         this.division = course.getDivision();
-        this.subjectNM = subject.getSubjectNM();
+        this.subjectName = subject.getSubjectNM();
         this.credit = course.getCredit();
-        this.professorNM = course.getProfessor().getProfessorNM();
+        this.professorName = course.getProfessor().getProfessorNM();
         this.timetable = course.getTimetable();
         this.limitation = course.getLimitation();
         this.current = course.getCurrent();
