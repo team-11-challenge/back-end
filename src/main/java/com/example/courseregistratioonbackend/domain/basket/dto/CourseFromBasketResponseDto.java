@@ -1,8 +1,11 @@
 package com.example.courseregistratioonbackend.domain.basket.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Builder;
 import lombok.Getter;
 
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
 public class CourseFromBasketResponseDto {
