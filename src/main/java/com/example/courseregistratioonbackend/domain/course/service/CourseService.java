@@ -50,19 +50,6 @@ public class CourseService {
                 .stream().map(CourseResponseDto::new).toList();
     }
 
-    // 전공명 으로 검색 (학과는 없고 전공만 있는 소속이 있기 때문에 학과명을 입력 받는다 )
-    public List<CourseResponseDto> getCourseList(int courseYear, int semester, String collegeNm, String departNm, String majorNm, String sortNm) {
-        College college = collegeRepository.findByCollegeNM(collegeNm);
-        Department department = departmentRepository.findByDepartNM(departNm);
-        Major major = majorRepository.findByMajorNM(majorNm);
-
-        List<Belong> belongList = belongRepository.findAllByCollegeAndDepartmentAndMajor(college, department, major).orElseThrow();
-        Belong nullMajorBelong = belongRepository.findByCollegeAndDepartmentAndMajor(college, Optional.ofNullable(department), Optional.empty());
-        if (nullMajorBelong != null) belongList.add(nullMajorBelong);
-
-        return getCourseResponseDtoList(courseYear, semester, belongList, sortNm);
-    }
-
     // 대학 으로 검색
     public List<CourseResponseDto> getCourseListByCollegeName(int courseYear, int semester, String collegeNm, String sortNm) {
         College college = collegeRepository.findByCollegeNM(collegeNm);
@@ -79,10 +66,26 @@ public class CourseService {
         Department department = departmentRepository.findByDepartNM(departNm);
 
         List<Belong> belongList = belongRepository.findAllByCollegeAndDepartment(college, department).orElseThrow();
+        Belong nullMajorBelong = belongRepository.findByCollegeAndDepartment(college, Optional.empty());
+        if (nullMajorBelong != null) belongList.add(nullMajorBelong);
 
         return getCourseResponseDtoList(courseYear, semester, belongList, sortNm);
     }
 
+    // 전공명 으로 검색 (학과는 없고 전공만 있는 소속이 있기 때문에 학과명을 입력 받는다 )
+    public List<CourseResponseDto> getCourseList(int courseYear, int semester, String collegeNm, String departNm, String majorNm, String sortNm) {
+        College college = collegeRepository.findByCollegeNM(collegeNm);
+        Department department = departmentRepository.findByDepartNM(departNm);
+        Major major = majorRepository.findByMajorNM(majorNm);
+
+        List<Belong> belongList = belongRepository.findAllByCollegeAndDepartmentAndMajor(college, department, major).orElseThrow();
+        Belong nullMajorBelong = belongRepository.findByCollegeAndDepartmentAndMajor(college, Optional.ofNullable(department), Optional.empty());
+        if (nullMajorBelong != null) belongList.add(nullMajorBelong);
+
+        return getCourseResponseDtoList(courseYear, semester, belongList, sortNm);
+    }
+
+    // Course -> DTO 변환
     private List<CourseResponseDto> getCourseResponseDtoList(int courseYear, int semester, List<Belong> belongList, String sortNm) {
         List<Course> courses = new ArrayList<>();
         belongList.forEach(belong -> {
