@@ -19,6 +19,7 @@ import com.example.courseregistratioonbackend.domain.basket.dto.CourseFromBasket
 import com.example.courseregistratioonbackend.domain.basket.entity.Basket;
 import com.example.courseregistratioonbackend.domain.basket.exception.AlreadyExistedInBasketException;
 import com.example.courseregistratioonbackend.domain.basket.exception.CourseNotFoundInBasketException;
+import com.example.courseregistratioonbackend.domain.basket.exception.NotMatchedOwnerException;
 import com.example.courseregistratioonbackend.domain.basket.repository.BasketRepository;
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
@@ -391,21 +392,64 @@ public class BasketServiceTest {
 	}
 
 	@Test
-	@DisplayName("장바구니에 삭제할 강의가 없으면 오류 발생 테스트")
-	void checkNotFoundDeleteCourseFromBasket() {
+	@DisplayName("장바구니에 삭제할 대상이 없으면 오류 발생 테스트")
+	void checkNotFoundFromBasketTest() {
 		// given
 		Long studentId = 1L;
-		Long courseId = 1L;
+
+		Course course = courses.get(0);
+		Student student = students.get(0);
+
+		Basket basket = Basket.builder()
+			.course(course)
+			.student(student)
+			.build();
+
+		baskets.add(basket);
+
+		Long basketId = basket.getId();
 
 		// when
 		// 해당 강의가 없다면 삭제 불가
-		when(basketRepository.findByCourseIdAndStudentId(courseId, studentId)).thenReturn(
+		when(basketRepository.findById(basketId)).thenReturn(
 			Optional.empty());
 
 		// then
-		assertThatThrownBy(() -> basketService.deleteCourseFromBasket(courseId, studentId))
+		assertThatThrownBy(() -> basketService.deleteCourseFromBasket(basketId, studentId))
 			.isInstanceOf(CourseNotFoundInBasketException.class)
 			.hasMessageContaining("해당 리소스를 찾을 수 없습니다.");
+	}
+
+	@Test
+	@DisplayName("장바구니의 소유자가 아니면 삭제 불가 테스트")
+	void checkNotMatchedOwnerTest() {
+		// given
+		Long studentId = 1L; // 소유자
+		Long studentId2 = 2L; // 미소유자
+		Long courseId = 1L;
+
+		Course course = courses.get(0);
+		Student student = students.get(0);
+
+		Basket basket = Basket.builder()
+			.course(course)
+			.student(student)
+			.build();
+
+		baskets.add(basket);
+
+		Long basketId = basket.getId();
+
+		// when
+		when(basketRepository.findById(basketId)).thenReturn(
+			Optional.of(basket));
+		when(courseRepository.findById(courseId)).thenReturn(
+			Optional.of(course));
+
+		// then
+		assertThatThrownBy(() -> basketService.deleteCourseFromBasket(basketId, studentId2))
+			.isInstanceOf(NotMatchedOwnerException.class)
+			.hasMessageContaining("해당 수강과목을 장바구니에 담은 사용자가 아닙니다.");
 	}
 
 	@Test
@@ -445,17 +489,18 @@ public class BasketServiceTest {
 		// when
 		when(studentRepository.findById(studentId)).thenReturn(Optional.of(student));
 		when(basketRepository.findByStudentId(studentId)).thenReturn(baskets);
-		when(basketRepository.findByCourseIdAndStudentId(courseId1, studentId)).thenReturn(
+		when(basketRepository.findById(basket1.getId())).thenReturn(
 			Optional.ofNullable(basket1));
-		when(basketRepository.findByCourseIdAndStudentId(courseId2, studentId)).thenReturn(
+		when(basketRepository.findById(basket2.getId())).thenReturn(
 			Optional.ofNullable(basket2));
-		when(basketRepository.findByCourseIdAndStudentId(courseId3, studentId)).thenReturn(
+		when(basketRepository.findById(basket3.getId())).thenReturn(
 			Optional.ofNullable(basket3));
+
 		when(courseRepository.findById(courseId1)).thenReturn(Optional.ofNullable(course1));
 		when(courseRepository.findById(courseId2)).thenReturn(Optional.ofNullable(course2));
 		when(courseRepository.findById(courseId3)).thenReturn(Optional.ofNullable(course3));
 
-		SuccessCode toBeSuccessCode = basketService.deleteCourseFromBasket(courseId3, studentId);
+		SuccessCode toBeSuccessCode = basketService.deleteCourseFromBasket(basket1.getId(), studentId);
 		baskets.remove(basket3);
 
 		List<CourseFromBasketResponseDto> result = basketService.getCourseListFromBasket(studentId);
@@ -490,13 +535,13 @@ public class BasketServiceTest {
 
 		// when
 		// 중복이 아니라고 가정
-		when(basketRepository.findByCourseIdAndStudentId(courseId, studentId)).thenReturn(
+		when(basketRepository.findById(basket.getId())).thenReturn(
 			Optional.ofNullable(basket));
 		when(basketRepository.findByStudentId(studentId)).thenReturn(baskets);
 		when(courseRepository.findById(courseId)).thenReturn(Optional.ofNullable(course));
 		when(studentRepository.findById(studentId)).thenReturn(Optional.ofNullable(student));
 
-		SuccessCode toBeSuccessCode = basketService.deleteCourseFromBasket(courseId, studentId);
+		SuccessCode toBeSuccessCode = basketService.deleteCourseFromBasket(basket.getId(), studentId);
 		baskets.remove(basket);
 
 		Long result = course.getBasket();
@@ -506,7 +551,7 @@ public class BasketServiceTest {
 		assertThat(result).isEqualTo(-1); // 감소만 확인, 실제로는 강의가 없다면 삭제할 수 없기 때문에 불가능한 값임.
 
 		// 검증
-		verify(basketRepository, times(1)).findByCourseIdAndStudentId(courseId, studentId);
+		verify(basketRepository, times(1)).findById(basket.getId());
 
 	}
 
