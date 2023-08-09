@@ -11,6 +11,7 @@ import lombok.Getter;
 public class CourseFromBasketResponseDto {
 
 	private final Long basketId;
+	private final Long courseId;
 	private final String collegeName;     // 대학
 	private final String departmentName;  // 학과
 	private final String majorName;       // 전공
