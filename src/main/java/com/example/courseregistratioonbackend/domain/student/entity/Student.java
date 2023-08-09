@@ -25,4 +25,8 @@ public class Student {
 
     @Column(name = "possible_credits")
     private Integer possibleCredits;
+
+    @Column(name = "applied_credits")
+    private Integer appliedCredits;
+
 }
