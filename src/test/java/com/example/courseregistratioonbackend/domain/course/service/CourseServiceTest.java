@@ -33,42 +33,42 @@ class CourseServiceTest {
     @Test
     @DisplayName("입력 조건 전체 입력")
     void getCourseList1() {
-        int courseListSize = courseService.getCourseList(2023, 1, "경영대학", "경영·회계학부", "경영학전공", "전공선택").size();
+        int courseListSize = courseService.getCourseList(2023, 1, 5L, 16L, 9L, "전공선택").size();
         assertEquals(29, courseListSize);
     }
 
     @Test
     @DisplayName("구분 외 입력 조건 전체 입력")
     void getCourseList2() {
-        int courseListSize = courseService.getCourseList(2023, 1, "경영대학", "경영·회계학부", "경영학전공", null).size();
+        int courseListSize = courseService.getCourseList(2023, 1, 5L, 16L, 9L, null).size();
         assertEquals(66, courseListSize);
     }
 
     @Test
     @DisplayName("대학 입력")
     void getCourseListByCollegeName1() {
-        int courseListSize = courseService.getCourseListByCollegeName(2023, 1, "경영대학", "전공선택").size();
+        int courseListSize = courseService.getCourseListByCollegeName(2023, 1, 5L, "전공선택").size();
         assertEquals(112, courseListSize);
     }
 
     @Test
     @DisplayName("대학 입력 구분 미입력")
     void getCourseListByCollegeName2() {
-        int courseListSize = courseService.getCourseListByCollegeName(2023, 1, "경영대학", null).size();
+        int courseListSize = courseService.getCourseListByCollegeName(2023, 1, 5L, null).size();
         assertEquals(201, courseListSize);
     }
 
     @Test
     @DisplayName("학과 입력")
     void getCourseListByDepartmentName1() {
-        int courseListSize = courseService.getCourseListByDepartmentName(2023, 1, "경영대학", "경영·회계학부", "전공선택").size();
+        int courseListSize = courseService.getCourseListByDepartmentName(2023, 1, 5L, 16L, "전공선택").size();
         assertEquals(50, courseListSize);
     }
 
     @Test
     @DisplayName("학과 입력 구분 미입력")
     void getCourseListByDepartmentName2() {
-        int courseListSize = courseService.getCourseListByDepartmentName(2023, 1, "경영대학", "경영·회계학부", null).size();
+        int courseListSize = courseService.getCourseListByDepartmentName(2023, 1, 5L, 16L, null).size();
         assertEquals(103, courseListSize);
     }
 }
