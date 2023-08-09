@@ -66,6 +66,7 @@ public class BasketService {
 					// 찾아온 강의와 다른 테이블 항목을 통해 빌더로 ResponseDto 생성
 					return CourseFromBasketResponseDto.builder()
 						.basketId(basketItem.getId())
+						.courseId(courseId)
 						.collegeName(collegeName)
 						.departmentName(departmentName)
 						.majorName(majorName)
