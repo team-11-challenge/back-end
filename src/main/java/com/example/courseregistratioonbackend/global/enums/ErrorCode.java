@@ -2,6 +2,7 @@
 package com.example.courseregistratioonbackend.global.enums;
 
 import lombok.Getter;
+
 import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.*;
@@ -19,23 +20,25 @@ public enum ErrorCode {
     INVALID_AUTH_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다"),
     UNAUTHORIZED_USER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),
 
-    /* 403 FORBIDDEN : 클라이언트가 콘텐츠에 접근할 권리를 가지고 있지 않다는 의미입니다.*/
-    NO_AUTHORITY_TO_DATA(FORBIDDEN, "해당 리소스에 대한 권한이 없습니다."),
-    NO_AUTHORITY_TO_REGISTRATION(FORBIDDEN, "해당 수강신청을 한 사용자가 아닙니다."),
+	/* 403 FORBIDDEN : 클라이언트가 콘텐츠에 접근할 권리를 가지고 있지 않다는 의미입니다.*/
+	NO_AUTHORITY_TO_DATA(FORBIDDEN, "해당 리소스에 대한 권한이 없습니다."),
+	NO_AUTHORITY_TO_REGISTRATION(FORBIDDEN, "해당 수강신청을 한 사용자가 아닙니다."),
+	NO_AUTHORITY_TO_BASKET(FORBIDDEN, "해당 수강과목을 장바구니에 담은 사용자가 아닙니다."),
 
-    /* 404 NOT_FOUND : 서버는 요청 받은 리소스를 찾을 수 없다는 의미입니다. */
-    COURSE_NOT_FOUND(NOT_FOUND, "해당 강의를 찾을 수 없습니다."),
-    USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
-    NOT_FOUND_CLIENT(NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
-    REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다"),
-    NOT_FOUND_STUDENT(NOT_FOUND, "존재하지 않는 학생입니다."),
+	/* 404 NOT_FOUND : 서버는 요청 받은 리소스를 찾을 수 없다는 의미입니다. */
+	COURSE_NOT_FOUND(NOT_FOUND, "해당 강의를 찾을 수 없습니다."),
+	USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
+	NOT_FOUND_CLIENT(NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
+	REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다"),
+	NOT_FOUND_STUDENT(NOT_FOUND, "존재하지 않는 학생입니다."),
+	NOT_FOUND_DATA(NOT_FOUND, "해당 리소스를 찾을 수 없습니다."),
 
-    /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
-    COURSE_ALREADY_FULLED(CONFLICT, "수강 정원이 다 찼습니다."),
-    SUBJECT_ALREADY_REGISTERED(CONFLICT, "이미 신청한 과목입니다."),
-    COURSE_TIME_CONFLICT(CONFLICT, "이미 신청한 강의와 시간이 겹칩니다.")
-    ALREADY_BASKET_EXISTED(CONFLICT, "이미 장바구니에 담은 과목입니다.")
-    ;
+	/* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
+	COURSE_ALREADY_FULLED(CONFLICT, "수강 정원이 다 찼습니다."),
+	SUBJECT_ALREADY_REGISTERED(CONFLICT, "이미 신청한 과목입니다."),
+	COURSE_TIME_CONFLICT(CONFLICT, "이미 신청한 강의와 시간이 겹칩니다."),
+	ALREADY_BASKET_EXISTED(CONFLICT, "이미 장바구니에 담은 과목입니다.")
+	;
 
     private final HttpStatus httpStatus;
     private final String detail;
