@@ -210,6 +210,7 @@ class RegistrationServiceTest {
                 .build();
 
         when(registrationRepository.findByStudent(student)).thenReturn(Arrays.asList(registration, registration2));
+        when(studentRepository.findById(studentId)).thenReturn(Optional.ofNullable(student));
 
         // when
         List<RegistrationDto> registrations = registrationService.getRegistration(student.getId());
