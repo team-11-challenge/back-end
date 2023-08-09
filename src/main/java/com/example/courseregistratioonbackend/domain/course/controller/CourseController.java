@@ -29,29 +29,29 @@ public class CourseController {
     public ApiResponse<?> getCourses(@RequestParam(value = "courseYear", defaultValue = "2023") int courseYear, // 년도
                                      @RequestParam(value = "semester", defaultValue = "1") int semester,        // 학기
                                      @RequestParam(value = "subjectCd", required = false) Long subjectCd,       // 과목코드
-                                     @RequestParam(value = "collegeNm", required = false) String collegeNm,     // 대학
+                                     @RequestParam(value = "collegeId", required = false) Long collegeId,       // 대학
                                      @RequestParam(value = "sortNm", required = false) String sortNm,           // 구분(전필, 전선, 교양 등)
-                                     @RequestParam(value = "departNm", required = false) String departNm,       // 학과
-                                     @RequestParam(value = "majorNm", required = false) String majorNm) {       // 전공
+                                     @RequestParam(value = "departId", required = false) Long departId,         // 학과
+                                     @RequestParam(value = "majorId", required = false) Long majorId) {         // 전공
 
         if (subjectCd != null) {
             return ResponseUtils.ok(courseService.getCourseListBySubjectCode(courseYear, semester, subjectCd));
         }
 
-        if (collegeNm == null) {
+        if (collegeId == null) {
             if (sortNm == null) {
                 throw new RequiredFieldException(COLLEGE_NAME_IS_REQUIRED);
             } else {
                 return ResponseUtils.ok(courseService.getCourseListBySortName(courseYear, semester, sortNm));
             }
-        } else if (majorNm == null) {
-            if (departNm == null) {
-                return ResponseUtils.ok(courseService.getCourseListByCollegeName(courseYear, semester, collegeNm, sortNm));
+        } else if (majorId == null) {
+            if (departId == null) {
+                return ResponseUtils.ok(courseService.getCourseListByCollegeName(courseYear, semester, collegeId, sortNm));
             } else {
-                return ResponseUtils.ok(courseService.getCourseListByDepartmentName(courseYear, semester, collegeNm, departNm, sortNm));
+                return ResponseUtils.ok(courseService.getCourseListByDepartmentName(courseYear, semester, collegeId, departId, sortNm));
             }
         } else {
-            return ResponseUtils.ok(courseService.getCourseList(courseYear, semester, collegeNm, departNm, majorNm, sortNm));
+            return ResponseUtils.ok(courseService.getCourseList(courseYear, semester, collegeId, departId, majorId, sortNm));
         }
     }
 }
