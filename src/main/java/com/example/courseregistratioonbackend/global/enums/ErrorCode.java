@@ -1,4 +1,3 @@
-
 package com.example.courseregistratioonbackend.global.enums;
 
 import lombok.Getter;
@@ -9,6 +8,7 @@ import static org.springframework.http.HttpStatus.*;
 @Getter
 public enum ErrorCode {
     /* 400 BAD_REQUEST : 이 응답은 잘못된 문법으로 인해 서버가 요청을 이해할 수 없다는 의미입니다. */
+    COLLEGE_NAME_IS_REQUIRED(BAD_REQUEST, "대학 입력은 필수 입니다."),
     USER_LOGIN_FAILURE(BAD_REQUEST, "로그인 실패"),
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다"),
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
@@ -36,7 +36,8 @@ public enum ErrorCode {
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     COURSE_ALREADY_FULLED(CONFLICT, "수강 정원이 다 찼습니다."),
     SUBJECT_ALREADY_REGISTERED(CONFLICT, "이미 신청한 과목입니다."),
-    COURSE_TIME_CONFLICT(CONFLICT, "이미 신청한 강의와 시간이 겹칩니다.")
+    COURSE_TIME_CONFLICT(CONFLICT, "이미 신청한 강의와 시간이 겹칩니다."),
+    ALREADY_BASKET_EXISTED(CONFLICT, "이미 장바구니에 담은 과목입니다.")
     ;
 
     private final HttpStatus httpStatus;
