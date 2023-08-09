@@ -1,4 +1,4 @@
-package com.example.courseregistratioonbackend.global.parsing.entity;
+package com.example.courseregistratioonbackend.domain.period.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

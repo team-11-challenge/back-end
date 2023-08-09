@@ -6,6 +6,8 @@ import com.example.courseregistratioonbackend.global.parsing.entity.Subject;
 import jakarta.persistence.*;
 import lombok.*;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -46,17 +48,24 @@ public class Course {
     @Column(nullable = false)
     private int semester; // 학기
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = LAZY)
     @JoinColumn(name = "belong_id")
     private Belong belong; // 소속
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = LAZY)
     @JoinColumn(name = "subject_id")
     private Subject subject; // 교과목
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = LAZY)
     @JoinColumn(name = "professor_id")
     private Professor professor; // 교수
+	  public void addToBasketNumber() {
+		  this.basket = basket + 1;
+	  }
+
+      public void removeFromBasketNumber() {
+		  this.basket = basket - 1;
+	  }
 
     public void addRegistration() {
         this.current++;
@@ -65,6 +74,7 @@ public class Course {
     public void deleteRegistration() {
         this.current--;
     }
+
 }
 
 

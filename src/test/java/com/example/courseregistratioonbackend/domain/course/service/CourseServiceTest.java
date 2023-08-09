@@ -1,8 +1,5 @@
 package com.example.courseregistratioonbackend.domain.course.service;
 
-import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
-import com.example.courseregistratioonbackend.global.parsing.repository.BelongRepository;
-import com.example.courseregistratioonbackend.global.parsing.repository.SubjectRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,26 +16,59 @@ class CourseServiceTest {
     @Autowired
     private CourseService courseService;
 
-    @Autowired
-    private CourseRepository courseRepository;
-
-    @Autowired
-    private SubjectRepository subjectRepository;
-
-    @Autowired
-    private BelongRepository belongRepository;
-
     @Test
     @DisplayName("과목코드로 조회")
-    public void getCoursesBySubjectCode() {
-        int courseListSize = courseService.getCourseList(2022, 1, 1110003L).size();
+    public void getCourseListBySubjectCode() {
+        int courseListSize = courseService.getCourseListBySubjectCode(2023, 1, 1110003L).size();
         assertEquals(21, courseListSize);
     }
 
     @Test
-    @DisplayName("과목코드로 조회")
-    public void getCoursesByOtherInfo() {
-        int courseListSize = courseService.getCourseList(2023, 1, "역사교육과", "전공선택").size();
-        assertEquals(14, courseListSize);
+    @DisplayName("구분만 입력")
+    void getCourseListBySortName() {
+        int courseListSize = courseService.getCourseListBySortName(2023, 1, "기초교양").size();
+        assertEquals(179, courseListSize);
+    }
+
+    @Test
+    @DisplayName("입력 조건 전체 입력")
+    void getCourseList1() {
+        int courseListSize = courseService.getCourseList(2023, 1, "경영대학", "경영·회계학부", "경영학전공", "전공선택").size();
+        assertEquals(29, courseListSize);
+    }
+
+    @Test
+    @DisplayName("구분 외 입력 조건 전체 입력")
+    void getCourseList2() {
+        int courseListSize = courseService.getCourseList(2023, 1, "경영대학", "경영·회계학부", "경영학전공", null).size();
+        assertEquals(66, courseListSize);
+    }
+
+    @Test
+    @DisplayName("대학 입력")
+    void getCourseListByCollegeName1() {
+        int courseListSize = courseService.getCourseListByCollegeName(2023, 1, "경영대학", "전공선택").size();
+        assertEquals(112, courseListSize);
+    }
+
+    @Test
+    @DisplayName("대학 입력 구분 미입력")
+    void getCourseListByCollegeName2() {
+        int courseListSize = courseService.getCourseListByCollegeName(2023, 1, "경영대학", null).size();
+        assertEquals(201, courseListSize);
+    }
+
+    @Test
+    @DisplayName("학과 입력")
+    void getCourseListByDepartmentName1() {
+        int courseListSize = courseService.getCourseListByDepartmentName(2023, 1, "경영대학", "경영·회계학부", "전공선택").size();
+        assertEquals(50, courseListSize);
+    }
+
+    @Test
+    @DisplayName("학과 입력 구분 미입력")
+    void getCourseListByDepartmentName2() {
+        int courseListSize = courseService.getCourseListByDepartmentName(2023, 1, "경영대학", "경영·회계학부", null).size();
+        assertEquals(103, courseListSize);
     }
 }
