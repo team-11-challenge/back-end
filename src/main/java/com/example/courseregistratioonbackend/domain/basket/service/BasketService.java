@@ -4,6 +4,7 @@ import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
 import static com.example.courseregistratioonbackend.global.enums.SuccessCode.*;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import com.example.courseregistratioonbackend.domain.basket.dto.CourseFromBasket
 import com.example.courseregistratioonbackend.domain.basket.entity.Basket;
 import com.example.courseregistratioonbackend.domain.basket.exception.AlreadyExistedInBasketException;
 import com.example.courseregistratioonbackend.domain.basket.exception.CourseNotFoundInBasketException;
+import com.example.courseregistratioonbackend.domain.basket.exception.NotMatchedOwnerException;
 import com.example.courseregistratioonbackend.domain.basket.repository.BasketRepository;
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.exception.CourseNotFoundException;
@@ -122,11 +124,19 @@ public class BasketService {
 
 	// 장바구니 수강과목 삭제 메서드
 	@Transactional
-	public SuccessCode deleteCourseFromBasket(Long courseId, Long studentId) {
+	public SuccessCode deleteCourseFromBasket(Long basketId, Long studentId) {
 
-		Basket basket = basketRepository.findByCourseIdAndStudentId(courseId, studentId).orElseThrow(
+		Basket basket = basketRepository.findById(basketId).orElseThrow(
 			() -> new CourseNotFoundInBasketException(NOT_FOUND_DATA)
 		);
+
+		Long studentIdFromBasket = basket.getStudent().getId();
+
+		if (!Objects.equals(studentIdFromBasket, studentId)) {
+			throw new NotMatchedOwnerException(NO_AUTHORITY_TO_BASKET);
+		}
+
+		Long courseId = basket.getCourse().getId();
 
 		Course course = courseRepository.findById(courseId).orElseThrow(
 			() -> new CourseNotFoundException(COURSE_NOT_FOUND)

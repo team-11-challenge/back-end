@@ -51,13 +51,13 @@ public class BasketController {
 		return ResponseUtils.ok(successCode);
 	}
 
-	@DeleteMapping("/{courseId}")
-	public ApiResponse<?> deleteCourseFromBasket(@PathVariable("courseId") Long courseId,
+	@DeleteMapping("/{basketId}")
+	public ApiResponse<?> deleteCourseFromBasket(@PathVariable("basketId") Long basketId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		Long studentId = userDetails.getStudentUser().getId();
 
-		SuccessCode successCode = basketService.deleteCourseFromBasket(courseId, studentId);
+		SuccessCode successCode = basketService.deleteCourseFromBasket(basketId, studentId);
 
 		return ResponseUtils.ok(successCode);
 	}
