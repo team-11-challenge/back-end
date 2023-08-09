@@ -66,8 +66,8 @@ public class CourseService {
         Department department = departmentRepository.findByDepartNM(departNm);
 
         List<Belong> belongList = belongRepository.findAllByCollegeAndDepartment(college, department).orElseThrow();
-        Belong nullMajorBelong = belongRepository.findByCollegeAndDepartment(college, Optional.empty());
-        if (nullMajorBelong != null) belongList.add(nullMajorBelong);
+        Belong nullDepartBelong = belongRepository.findByCollegeAndDepartment(college, Optional.empty());
+        if (nullDepartBelong != null) belongList.add(nullDepartBelong);
 
         return getCourseResponseDtoList(courseYear, semester, belongList, sortNm);
     }
@@ -79,7 +79,10 @@ public class CourseService {
         Major major = majorRepository.findByMajorNM(majorNm);
 
         List<Belong> belongList = belongRepository.findAllByCollegeAndDepartmentAndMajor(college, department, major).orElseThrow();
+
+        Belong nullDepartBelong = belongRepository.findByCollegeAndDepartment(college, Optional.empty());
         Belong nullMajorBelong = belongRepository.findByCollegeAndDepartmentAndMajor(college, Optional.ofNullable(department), Optional.empty());
+        if (nullDepartBelong != null) belongList.add(nullDepartBelong);
         if (nullMajorBelong != null) belongList.add(nullMajorBelong);
 
         return getCourseResponseDtoList(courseYear, semester, belongList, sortNm);
