@@ -86,11 +86,10 @@ public class CourseService {
     private List<CourseResponseDto> getCourseResponseDtoList(int courseYear, int semester, List<Belong> belongList, String sortNm) {
         List<Course> courses = new ArrayList<>();
         belongList.forEach(belong -> {
-            courses.addAll(courseRepository.findAllByCourseYearAndSemesterAndBelongId(courseYear, semester, belong.getId())
-                    .orElseThrow(
-                            () -> new CourseNotFoundException(COURSE_NOT_FOUND)
-                    ));
+            courseRepository.findAllByCourseYearAndSemesterAndBelongId(courseYear, semester, belong.getId()).ifPresent(courses::addAll);
         });
+
+        if (courses.size() < 1) throw new CourseNotFoundException(COURSE_NOT_FOUND);
 
         if (sortNm == null) {
             return courses.stream().map(CourseResponseDto::new).toList();
