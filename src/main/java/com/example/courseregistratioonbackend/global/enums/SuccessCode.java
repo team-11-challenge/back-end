@@ -19,7 +19,7 @@ public enum SuccessCode {
 
     /* 201 CREATED : 요청이 성공적이었으며 그 결과로 새로운 리소스가 생성 되었다는 의미입니다. */
     USER_SIGNUP_SUCCESS(CREATED, "회원가입 성공"),
-    ADD_COURSE_TO_BASKET_SUCCESS(CREATED, "예비수강과목 담기 성공");
+    ADD_COURSE_TO_BASKET_SUCCESS(CREATED, "예비수강과목 담기 성공"),
     REGISTRATION_SUCCESS(CREATED, "해당 강의가 성공적으로 신청되었습니다.")
 
 
