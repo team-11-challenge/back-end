@@ -2,6 +2,7 @@ package com.example.courseregistratioonbackend.domain.student.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Builder
@@ -27,6 +28,14 @@ public class Student {
     private Integer possibleCredits;
 
     @Column(name = "applied_credits")
+    @ColumnDefault("0")
     private Integer appliedCredits;
 
+    public void addRegistration(int credit) {
+        appliedCredits += credit;
+    }
+
+    public void deleteRegistration(int credit) {
+        appliedCredits -= credit;
+    }
 }

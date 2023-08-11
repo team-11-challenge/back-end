@@ -1,7 +1,6 @@
 package com.example.courseregistratioonbackend.domain.basket.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.Builder;
 import lombok.Getter;
 
