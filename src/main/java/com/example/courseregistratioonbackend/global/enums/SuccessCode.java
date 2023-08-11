@@ -13,6 +13,7 @@ public enum SuccessCode {
     USER_LOGIN_SUCCESS(OK, "로그인 성공"),
 //    USER_DATA_UPDATE_SUCCESS(OK, "유저 정보 변경 성공"),
 //    EMAIL_SEND_SUCCESS(OK, "메일 전송 성공"),
+    GET_USERINFO_SUCCESS(OK, "학생 정보 조회 성공"),
     TIMETABLE_GET_SUCCESS(OK, "시간표 조회 성공"),
     DELETE_COURSE_FROM_BASKET_SUCCESS(OK, "예비수강과목 삭제 성공"),
     REGISTRATION_DELETE_SUCCESS(OK, "해당 신청이 성공적으로 취소되었습니다."),
