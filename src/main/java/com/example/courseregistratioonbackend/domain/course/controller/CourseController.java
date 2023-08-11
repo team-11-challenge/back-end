@@ -46,9 +46,9 @@ public class CourseController {
             }
         } else if (majorId == null) {
             if (departId == null) {
-                return ResponseUtils.ok(courseService.getCourseListByCollegeName(courseYear, semester, collegeId, sortNm));
+                return ResponseUtils.ok(courseService.getCourseListByCollegeId(courseYear, semester, collegeId, sortNm));
             } else {
-                return ResponseUtils.ok(courseService.getCourseListByDepartmentName(courseYear, semester, collegeId, departId, sortNm));
+                return ResponseUtils.ok(courseService.getCourseListByDepartmentId(courseYear, semester, collegeId, departId, sortNm));
             }
         } else {
             return ResponseUtils.ok(courseService.getCourseList(courseYear, semester, collegeId, departId, majorId, sortNm));

@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.COURSE_NOT_FOUND;
 
@@ -51,7 +50,7 @@ public class CourseService {
     }
 
     // 대학 으로 검색
-    public List<CourseResponseDto> getCourseListByCollegeName(int courseYear, int semester, Long collegeId, String sortNm) {
+    public List<CourseResponseDto> getCourseListByCollegeId(int courseYear, int semester, Long collegeId, String sortNm) {
         College college = collegeRepository.findById(collegeId).orElseThrow();
 
         List<Belong> belongList = belongRepository.findAllByCollege(college).orElseThrow();
@@ -61,7 +60,7 @@ public class CourseService {
 
 
     // 학과명 으로 검색
-    public List<CourseResponseDto> getCourseListByDepartmentName(int courseYear, int semester, Long collegeId, Long departId, String sortNm) {
+    public List<CourseResponseDto> getCourseListByDepartmentId(int courseYear, int semester, Long collegeId, Long departId, String sortNm) {
         College college = collegeRepository.findById(collegeId).orElseThrow();
         Department department = departmentRepository.findById(departId).orElseThrow();
 
@@ -97,10 +96,10 @@ public class CourseService {
 
         if (courses.size() < 1) throw new CourseNotFoundException(COURSE_NOT_FOUND);
 
-        if (sortNm == null) {
+        if (sortNm.isEmpty()) {
             return courses.stream().map(CourseResponseDto::new).toList();
         } else {
-            return courses.stream().filter(course -> course.getSort().equals(sortNm)).map(CourseResponseDto::new).collect(Collectors.toList());
+            return courses.stream().filter(course -> course.getSort().equals(sortNm)).map(CourseResponseDto::new).toList();
         }
     }
 }

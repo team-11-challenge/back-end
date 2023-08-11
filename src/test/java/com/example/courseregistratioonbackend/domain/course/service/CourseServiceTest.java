@@ -47,28 +47,28 @@ class CourseServiceTest {
     @Test
     @DisplayName("대학 입력")
     void getCourseListByCollegeName1() {
-        int courseListSize = courseService.getCourseListByCollegeName(2023, 1, 5L, "전공선택").size();
+        int courseListSize = courseService.getCourseListByCollegeId(2023, 1, 5L, "전공선택").size();
         assertEquals(112, courseListSize);
     }
 
     @Test
     @DisplayName("대학 입력 구분 미입력")
     void getCourseListByCollegeName2() {
-        int courseListSize = courseService.getCourseListByCollegeName(2023, 1, 5L, null).size();
+        int courseListSize = courseService.getCourseListByCollegeId(2023, 1, 5L, null).size();
         assertEquals(201, courseListSize);
     }
 
     @Test
     @DisplayName("학과 입력")
     void getCourseListByDepartmentName1() {
-        int courseListSize = courseService.getCourseListByDepartmentName(2023, 1, 5L, 16L, "전공선택").size();
+        int courseListSize = courseService.getCourseListByDepartmentId(2023, 1, 5L, 16L, "전공선택").size();
         assertEquals(50, courseListSize);
     }
 
     @Test
     @DisplayName("학과 입력 구분 미입력")
     void getCourseListByDepartmentName2() {
-        int courseListSize = courseService.getCourseListByDepartmentName(2023, 1, 5L, 16L, null).size();
+        int courseListSize = courseService.getCourseListByDepartmentId(2023, 1, 5L, 16L, null).size();
         assertEquals(103, courseListSize);
     }
 }
