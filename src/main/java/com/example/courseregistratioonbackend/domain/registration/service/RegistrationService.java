@@ -50,6 +50,9 @@ public class RegistrationService {
         // 현재 수강 신청 인원 증가
         course.addRegistration();
 
+        // 신청 학점 증가
+        student.addRegistration(course.getCredit());
+
         return REGISTRATION_SUCCESS;
     }
 
@@ -64,6 +67,9 @@ public class RegistrationService {
 
         // 현재 수강 신청 인원 감소
         registration.getCourse().deleteRegistration();
+
+        // 신청 학점 감소
+        registration.getStudent().deleteRegistration(registration.getCourse().getCredit());
 
         return REGISTRATION_DELETE_SUCCESS;
     }
