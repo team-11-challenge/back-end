@@ -1,11 +1,7 @@
 package com.example.courseregistratioonbackend.global.security.userdetails;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
-
-import com.example.courseregistratioonbackend.domain.student.exception.UserNotFoundException;
 import com.example.courseregistratioonbackend.domain.student.entity.Student;
+import com.example.courseregistratioonbackend.domain.student.exception.UserNotFoundException;
 import com.example.courseregistratioonbackend.domain.student.repository.StudentRepository;
 import com.example.courseregistratioonbackend.global.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;

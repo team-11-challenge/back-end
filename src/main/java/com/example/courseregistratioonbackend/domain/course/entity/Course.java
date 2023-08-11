@@ -59,13 +59,13 @@ public class Course {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = LAZY)
     @JoinColumn(name = "professor_id")
     private Professor professor; // 교수
-	  public void addToBasketNumber() {
-		  this.basket = basket + 1;
-	  }
+    public void addToBasketNumber() {
+      this.basket = basket + 1;
+    }
 
-      public void removeFromBasketNumber() {
-		  this.basket = basket - 1;
-	  }
+    public void removeFromBasketNumber() {
+      this.basket = basket - 1;
+    }
 
     public void addRegistration() {
         this.current++;

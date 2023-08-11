@@ -5,7 +5,6 @@ import com.example.courseregistratioonbackend.domain.period.entity.Period;
 import com.example.courseregistratioonbackend.domain.period.exception.PeriodNotFoundException;
 import com.example.courseregistratioonbackend.domain.period.repository.PeriodRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

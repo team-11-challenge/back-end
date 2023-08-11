@@ -1,14 +1,5 @@
 package com.example.courseregistratioonbackend.domain.basket.service;
 
-import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
-import static com.example.courseregistratioonbackend.global.enums.SuccessCode.*;
-
-import java.util.List;
-import java.util.Objects;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.courseregistratioonbackend.domain.basket.dto.CourseFromBasketResponseDto;
 import com.example.courseregistratioonbackend.domain.basket.entity.Basket;
 import com.example.courseregistratioonbackend.domain.basket.exception.AlreadyExistedInBasketException;
@@ -25,9 +16,17 @@ import com.example.courseregistratioonbackend.global.enums.SuccessCode;
 import com.example.courseregistratioonbackend.global.parsing.entity.Belong;
 import com.example.courseregistratioonbackend.global.parsing.entity.Professor;
 import com.example.courseregistratioonbackend.global.parsing.entity.Subject;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
+
+import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
+import static com.example.courseregistratioonbackend.global.enums.SuccessCode.ADD_COURSE_TO_BASKET_SUCCESS;
+import static com.example.courseregistratioonbackend.global.enums.SuccessCode.DELETE_COURSE_FROM_BASKET_SUCCESS;
 
 @Slf4j(topic = "BasketService")
 @Service
