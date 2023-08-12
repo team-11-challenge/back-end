@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.courseregistratioonbackend.global.enums.ErrorCode.NOT_FOUND_PERIOD;
+import static com.example.courseregistratioonbackend.global.enums.ErrorCode.PERIOD_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class PeriodService {
                 .collect(Collectors.toList());
 
         if(filteredPeriods.isEmpty()) {
-            throw new PeriodNotFoundException(NOT_FOUND_PERIOD);
+            throw new PeriodNotFoundException(PERIOD_NOT_FOUND);
         }
         return new PeriodResponseDto(filteredPeriods.get(0));
     }

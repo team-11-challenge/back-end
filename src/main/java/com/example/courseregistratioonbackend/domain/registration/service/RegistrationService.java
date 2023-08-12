@@ -88,7 +88,7 @@ public class RegistrationService {
 
     private Student findStudentById(Long studentId) {
         return studentRepository.findById(studentId)
-                .orElseThrow(() -> new StudentNotFoundException(NOT_FOUND_STUDENT));
+                .orElseThrow(() -> new StudentNotFoundException(STUDENT_NOT_FOUND));
     }
 
     private Course findCourseById(Long courseId) {
