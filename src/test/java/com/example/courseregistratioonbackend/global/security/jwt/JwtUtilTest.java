@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.example.courseregistratioonbackend.global.security.exception.JwtExpirationException;
+
 import io.jsonwebtoken.security.Keys;
 
 class JwtUtilTest {
@@ -82,10 +84,11 @@ class JwtUtilTest {
 
 		// when
 		Thread.sleep(1000);
-		boolean result = testJwtUtil.validateToken(extractedJwt);
 
 		// then
-		assertThat(result).isFalse();
+		assertThatThrownBy(() -> testJwtUtil.validateToken(extractedJwt))
+			.isInstanceOf(JwtExpirationException.class)
+			.hasMessageContaining("유효시간 만료, 재인증이 필요합니다.");
 
 	}
 
