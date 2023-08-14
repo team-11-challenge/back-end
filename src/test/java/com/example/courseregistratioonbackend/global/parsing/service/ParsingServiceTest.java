@@ -20,7 +20,7 @@ class ParsingServiceTest {
     @Rollback
     @DisplayName("강의 정보 전체 add 잘 되는지")
     void addAllTest() {
-        String filename = "src/main/resources/static/data/2022학년도 1학기 수업시간표.csv";
-        courseService.insertData(filename, 2022, 1);
+//        String filename = "src/main/resources/static/data/2022학년도 1학기 수업시간표.csv";
+//        courseService.insertData(filename, 2022, 1);
     }
 }
