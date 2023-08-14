@@ -1,13 +1,9 @@
 package com.example.courseregistratioonbackend.global.security.jwt;
 
-import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsServiceImpl;
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
+
+import java.io.IOException;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -16,7 +12,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import com.example.courseregistratioonbackend.global.exception.GlobalException;
+import com.example.courseregistratioonbackend.global.security.exception.JwtPrefixException;
+import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsServiceImpl;
+
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j(topic = "JWT 검증 후 인가")
 @RequiredArgsConstructor
@@ -38,20 +44,24 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		String token = jwtUtil.substringToken(tokenValue);
-
-		if (!jwtUtil.validateToken(token)) { // 토큰 검증
-			log.error("토큰 에러");
-			return;
-		}
-
-		Claims info = jwtUtil.getClaimsFromToken(token);
-
 		try {
+			if(jwtUtil.isIllegalPrefix(tokenValue)) { // 토큰의 식별자가 유효하지 않을 때
+				log.error("토큰의 식별자가 유효하지 않습니다.");
+				throw new JwtPrefixException(JWT_PREFIX_EXPIRATION);
+			}
+
+			String token = jwtUtil.substringToken(tokenValue);
+
+			if (!jwtUtil.validateToken(token)) { // 토큰 검증
+				log.error("토큰 유효성 검증 실패");
+			}
+
+			Claims info = jwtUtil.getClaimsFromToken(token);
+
 			setAuthentication(info.getSubject());
-		} catch (Exception e) {
-			log.error("인증 처리 에러");
-			return;
+
+		} catch (GlobalException e) {
+			request.setAttribute("Exception", e.getErrorCode());
 		}
 
 		filterChain.doFilter(request, response);
