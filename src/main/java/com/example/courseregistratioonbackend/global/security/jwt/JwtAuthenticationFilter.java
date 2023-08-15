@@ -87,6 +87,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		// 없는 Username의 경우
 		if(failed instanceof UsernameNotFoundException) {
+			setStatusCode(response, SC_NOT_FOUND);
 			jsonValue = objectMapper.writeValueAsString(ResponseUtils.error(USER_NOT_FOUND));
 		}
 

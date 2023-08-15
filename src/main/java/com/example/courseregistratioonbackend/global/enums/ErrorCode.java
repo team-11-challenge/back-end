@@ -11,7 +11,7 @@ public enum ErrorCode {
     COLLEGE_NAME_IS_REQUIRED(BAD_REQUEST, "대학 입력은 필수 입니다."),
     USER_LOGIN_FAILURE(BAD_REQUEST, "로그인 실패하였습니다."),
     CREDIT_EXCEEDED(BAD_REQUEST, "이수 가능 학점이 초과되었습니다."),
-    JWT_PREFIX_EXPIRATION(BAD_REQUEST, "인증 식별자 형식이 잘못되었습니다."),
+    JWT_PREFIX_ERROR(BAD_REQUEST, "인증 식별자 형식이 잘못되었습니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않았다는 의미입니다. */
     UNAUTHORIZED_USER(UNAUTHORIZED, "인증에 실패하였습니다."),
