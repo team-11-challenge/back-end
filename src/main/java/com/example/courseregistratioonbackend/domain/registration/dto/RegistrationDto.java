@@ -13,6 +13,7 @@ import lombok.Getter;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class RegistrationDto {
     private Long registrationId;
+    private Long courseId;
     private String collegeName;   // 대학명
     private String departmentName;    // 학과명
     private String majorName;     // 학과명
@@ -34,6 +35,7 @@ public class RegistrationDto {
         Major major = belong.getMajor();
 
         this.registrationId = registration.getId();
+        this.courseId = course.getId();
         this.collegeName = belong.getCollege().getCollegeNM();
         this.departmentName = (department != null) ? department.getDepartNM() : null;
         this.majorName = (major != null) ? major.getMajorNM() : null;
