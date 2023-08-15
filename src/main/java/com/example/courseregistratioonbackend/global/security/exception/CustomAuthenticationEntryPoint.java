@@ -45,8 +45,9 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
 		// 해당하는 에러코드가 존재하면 해당 에러 출력
 		if (errorCode != null) {
-			if (errorCode.equals(JWT_PREFIX_EXPIRATION)) {
-				return objectMapper.writeValueAsString(ResponseUtils.error(JWT_PREFIX_EXPIRATION));
+			if (errorCode.equals(JWT_PREFIX_ERROR)) {
+				response.setStatus(SC_BAD_REQUEST);
+				return objectMapper.writeValueAsString(ResponseUtils.error(JWT_PREFIX_ERROR));
 			} else if (errorCode.equals(JWT_EXPIRATION)) {
 				return objectMapper.writeValueAsString(ResponseUtils.error(JWT_EXPIRATION));
 			}

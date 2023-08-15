@@ -47,7 +47,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		try {
 			if(jwtUtil.isIllegalPrefix(tokenValue)) { // 토큰의 식별자가 유효하지 않을 때
 				log.error("토큰의 식별자가 유효하지 않습니다.");
-				throw new JwtPrefixException(JWT_PREFIX_EXPIRATION);
+				throw new JwtPrefixException(JWT_PREFIX_ERROR);
 			}
 
 			String token = jwtUtil.substringToken(tokenValue);
