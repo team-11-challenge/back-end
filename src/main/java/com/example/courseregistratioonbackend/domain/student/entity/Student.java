@@ -28,8 +28,8 @@ public class Student {
     private Integer possibleCredits;
 
     @Column(name = "applied_credits")
-    @ColumnDefault("0")
-    private Integer appliedCredits;
+    @Builder.Default
+    private Integer appliedCredits = 0;
 
     public void addRegistration(int credit) {
         appliedCredits += credit;

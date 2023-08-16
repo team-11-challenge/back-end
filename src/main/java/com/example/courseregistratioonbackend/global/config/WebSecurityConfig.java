@@ -1,16 +1,11 @@
 package com.example.courseregistratioonbackend.global.config;
 
-import com.example.courseregistratioonbackend.global.security.jwt.JwtAuthenticationFilter;
-import com.example.courseregistratioonbackend.global.security.jwt.JwtAuthorizationFilter;
-import com.example.courseregistratioonbackend.global.security.jwt.JwtUtil;
-import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,6 +14,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.example.courseregistratioonbackend.global.security.exception.CustomAuthenticationEntryPoint;
+import com.example.courseregistratioonbackend.global.security.jwt.JwtAuthenticationFilter;
+import com.example.courseregistratioonbackend.global.security.jwt.JwtAuthorizationFilter;
+import com.example.courseregistratioonbackend.global.security.jwt.JwtUtil;
+import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +35,7 @@ public class WebSecurityConfig {
 	private final CorsConfig corsConfig;
 	private final UserDetailsServiceImpl userDetailsService;
 	private final AuthenticationConfiguration authenticationConfiguration;
+	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -39,6 +45,15 @@ public class WebSecurityConfig {
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 		return configuration.getAuthenticationManager();
+	}
+
+	@Bean
+	public DaoAuthenticationProvider daoAuthenticationProvider() {
+		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+		daoAuthenticationProvider.setHideUserNotFoundExceptions(false); // UsernameNotFoundException 활용을 위함.
+		return daoAuthenticationProvider;
 	}
 
 	@Bean
@@ -77,12 +92,17 @@ public class WebSecurityConfig {
 				.requestMatchers("/api/auth/**").permitAll() // api/auth/로 시작하는 요청 모두 접근 허가
 				.requestMatchers(HttpMethod.GET, "/api/courses/**").permitAll() // 강의 조회 접근 허가
 				.requestMatchers(HttpMethod.GET, "api/period/**").permitAll()
+				.requestMatchers("/swagger-ui/**").permitAll()
 				.anyRequest().authenticated() // 그외 모든 요청 인증 처리
 		);
 
 		// 필터 관리
 		http.addFilter(corsConfig.corsFilter());
 		http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
+		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+			.exceptionHandling((exception) -> // 인증 없는 접근 제한
+				exception
+					.authenticationEntryPoint(customAuthenticationEntryPoint));
 
 		return http.build();
 	}

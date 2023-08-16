@@ -10,7 +10,7 @@ import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.exception.CourseNotFoundException;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
 import com.example.courseregistratioonbackend.domain.student.entity.Student;
-import com.example.courseregistratioonbackend.domain.student.exception.UserNotFoundException;
+import com.example.courseregistratioonbackend.domain.student.execption.StudentNotFoundException;
 import com.example.courseregistratioonbackend.domain.student.repository.StudentRepository;
 import com.example.courseregistratioonbackend.global.enums.SuccessCode;
 import com.example.courseregistratioonbackend.global.parsing.entity.Belong;
@@ -94,7 +94,7 @@ public class BasketService {
 		}
 
 		Student student = studentRepository.findById(studentId).orElseThrow(
-			() -> new UserNotFoundException(USER_NOT_FOUND)
+			() -> new StudentNotFoundException(STUDENT_NOT_FOUND)
 		);
 
 		Course course = courseRepository.findById(courseId).orElseThrow(
@@ -127,7 +127,7 @@ public class BasketService {
 	public SuccessCode deleteCourseFromBasket(Long basketId, Long studentId) {
 
 		Basket basket = basketRepository.findById(basketId).orElseThrow(
-			() -> new CourseNotFoundInBasketException(NOT_FOUND_DATA)
+			() -> new CourseNotFoundInBasketException(BASKET_DATA_NOT_FOUND)
 		);
 
 		Long studentIdFromBasket = basket.getStudent().getId();

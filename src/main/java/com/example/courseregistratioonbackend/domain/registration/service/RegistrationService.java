@@ -36,9 +36,9 @@ public class RegistrationService {
         // 신청 가능한지 여러 조건 확인
         checkIfSubjectAlreadyRegistered(student.getId(), course.getSubject().getId());
         checkCourseLimitation(course);
+        checkCreditLimit(student, course);
 
         List<Registration> registrations = getRegistrationList(student);
-        checkCreditLimit(student, course, registrations);
         checkTimetable(course.getTimetable(), registrations);
 
         // 수강신청 저장
@@ -88,7 +88,7 @@ public class RegistrationService {
 
     private Student findStudentById(Long studentId) {
         return studentRepository.findById(studentId)
-                .orElseThrow(() -> new StudentNotFoundException(NOT_FOUND_STUDENT));
+                .orElseThrow(() -> new StudentNotFoundException(STUDENT_NOT_FOUND));
     }
 
     private Course findCourseById(Long courseId) {
@@ -105,11 +105,8 @@ public class RegistrationService {
     }
 
     // 이수가능학점이내 여부 확인
-    private static void checkCreditLimit(Student student, Course course, List<Registration> registrations) {
-        int currentCredit = registrations.stream()
-                .mapToInt(r -> r.getCourse().getCredit())
-                .sum();
-        if (student.getPossibleCredits() < currentCredit + course.getCredit()) {
+    private static void checkCreditLimit(Student student, Course course) {
+        if (student.getPossibleCredits() < student.getAppliedCredits() + course.getCredit()) {
             throw new CreditExceededException(CREDIT_EXCEEDED);
         }
     }

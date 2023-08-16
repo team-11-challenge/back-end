@@ -417,7 +417,7 @@ public class BasketServiceTest {
 		// then
 		assertThatThrownBy(() -> basketService.deleteCourseFromBasket(basketId, studentId))
 			.isInstanceOf(CourseNotFoundInBasketException.class)
-			.hasMessageContaining("해당 리소스를 찾을 수 없습니다.");
+			.hasMessageContaining("해당 장바구니의 내역을 찾을 수 없습니다.");
 	}
 
 	@Test
