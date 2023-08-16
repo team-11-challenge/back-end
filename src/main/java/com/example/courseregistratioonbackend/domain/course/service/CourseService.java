@@ -96,7 +96,7 @@ public class CourseService {
 
         if (courses.size() < 1) throw new CourseNotFoundException(COURSE_NOT_FOUND);
 
-        if (sortNm.isEmpty()) {
+        if (sortNm == null) {
             return courses.stream().map(CourseResponseDto::new).toList();
         } else {
             return courses.stream().filter(course -> course.getSort().equals(sortNm)).map(CourseResponseDto::new).toList();
