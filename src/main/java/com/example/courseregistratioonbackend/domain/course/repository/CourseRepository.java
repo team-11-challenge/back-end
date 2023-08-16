@@ -15,4 +15,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<List<Course>> findAllByCourseYearAndSemesterAndBelongId(int courseYear, int semester, Long belongId);
 
     Optional<List<Course>> findAllByCourseYearAndSemesterAndSort(int courseYear, int semester, String sort);
+
+    Optional<List<Course>> findAllByCourseYearAndSemester(int courseYear, int semester);
 }
