@@ -4,6 +4,8 @@ import com.example.courseregistratioonbackend.domain.course.service.CourseServic
 import com.example.courseregistratioonbackend.global.exception.RequiredFieldException;
 import com.example.courseregistratioonbackend.global.responsedto.ApiResponse;
 import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.COLLEGE_NAME_IS_REQUIRED;
 
-@Tag(name = "강의 관련 API", description = "강의 관련 API")
+@Tag(name = "강의 조회", description = "조건별 강의 조회 API")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -25,6 +27,14 @@ public class CourseController {
         과목코드 미입력시 대학 필수, 구분 학과 전공 선택
         전공 입력시 학과 공통 과목 포함
      */
+    @Operation(summary = "강의 조회", description = "여러 조건을 입력하여 해당하는 강의를 조회 합니다.")
+    @Parameter(name = "courseYear", description = "년도")
+    @Parameter(name = "semester", description = "학기")
+    @Parameter(name = "subjectCd", description = "과목코드")
+    @Parameter(name = "collegeId", description = "대학")
+    @Parameter(name = "sortNm", description = "구분(전필, 전선, 교양 등)")
+    @Parameter(name = "departId", description = "학과")
+    @Parameter(name = "majorId", description = "전공")
     @GetMapping("/courses")
     public ApiResponse<?> getCourses(@RequestParam(value = "courseYear", defaultValue = "2023") int courseYear, // 년도
                                      @RequestParam(value = "semester", defaultValue = "1") int semester,        // 학기
