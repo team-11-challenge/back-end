@@ -29,6 +29,12 @@ public class CourseController {
      */
     @Operation(summary = "강의 조회", description = "여러 조건을 입력하여 해당하는 강의를 조회 합니다.")
     @Parameter(name = "courseYear", description = "년도")
+    @Parameter(name = "semester", description = "학기")
+    @Parameter(name = "subjectCd", description = "과목코드")
+    @Parameter(name = "collegeId", description = "대학")
+    @Parameter(name = "sortNm", description = "구분(전필, 전선, 교양 등)")
+    @Parameter(name = "departId", description = "학과")
+    @Parameter(name = "majorId", description = "전공")
     @GetMapping("/courses")
     public ApiResponse<?> getCourses(@RequestParam(value = "courseYear", defaultValue = "2023") int courseYear, // 년도
                                      @RequestParam(value = "semester", defaultValue = "1") int semester,        // 학기
