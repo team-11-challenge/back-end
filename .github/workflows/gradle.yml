@@ -28,11 +28,13 @@ jobs:
         distribution: 'temurin'
         
     # Github secrets로부터 데이터를 받아서, 워크 플로우에 파일을 생성
-    - name: Make application.yml
+    - name: Make application.yml & logback-spring.xml
       run: |
          cd ./src/main/resources
          touch ./application.yml
+         touch ./logback-spring.xml
          echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
+         echo "${{ secrets.LOGBACK_XML }}" > ./logback-spring.xml
       shell: bash
       
     # gradle을 통해 소스를 빌드
