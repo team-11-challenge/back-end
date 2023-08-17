@@ -2,6 +2,7 @@ package com.example.courseregistratioonbackend.domain.student.service;
 
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
 import com.example.courseregistratioonbackend.domain.registration.repository.RegistrationRepository;
+import com.example.courseregistratioonbackend.domain.student.dto.StudentInfoDto;
 import com.example.courseregistratioonbackend.domain.student.dto.TimetableResponseDto;
 import com.example.courseregistratioonbackend.domain.student.entity.Student;
 import com.example.courseregistratioonbackend.domain.student.execption.StudentNotFoundException;
@@ -10,11 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
-import static com.example.courseregistratioonbackend.global.enums.ErrorCode.NOT_FOUND_STUDENT;
+import static com.example.courseregistratioonbackend.global.enums.ErrorCode.STUDENT_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Service
@@ -25,7 +24,7 @@ public class StudentService {
     // 시간표 조회
     public List<TimetableResponseDto> getTimetable(Long studentId) {
         Student student = studentRepository.findById(studentId).orElseThrow(
-                () -> new StudentNotFoundException(NOT_FOUND_STUDENT)
+                () -> new StudentNotFoundException(STUDENT_NOT_FOUND)
         );
 
         List<Registration> registrationList = registrationRepository.findByStudent(student);
@@ -46,5 +45,12 @@ public class StudentService {
             timetableResponseDtoList.add(timetableResponseDto);
         }
         return timetableResponseDtoList;
+    }
+
+    public StudentInfoDto getStudentInfo(Long studentId) {
+        Student student = studentRepository.findById(studentId).orElseThrow(
+                () -> new StudentNotFoundException(STUDENT_NOT_FOUND)
+        );
+        return new StudentInfoDto(student);
     }
 }

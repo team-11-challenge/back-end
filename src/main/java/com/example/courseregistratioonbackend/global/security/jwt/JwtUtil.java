@@ -1,12 +1,15 @@
 package com.example.courseregistratioonbackend.global.security.jwt;
 
+import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
+
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
+
+import com.example.courseregistratioonbackend.global.security.exception.JwtExpirationException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -51,16 +54,12 @@ public class JwtUtil {
 	}
 
 	// jwt check
-	private boolean isIllegalJwt(String tokenValue) {
-		return !StringUtils.hasText(tokenValue) || !tokenValue.startsWith(tokenPrefix);
+	public boolean isIllegalPrefix(String tokenValue) {
+		return !tokenValue.startsWith(tokenPrefix);
 	}
 
 	// jwt parsing
 	public String substringToken(String tokenValue) {
-		if (isIllegalJwt(tokenValue)) {
-			log.error("토큰이 존재하지 않거나 식별자가 유효하지 않습니다.");
-			throw new IllegalArgumentException("토큰이 존재하지 않거나 식별자가 유효하지 않습니다.");
-		}
 		return tokenValue.substring(7);
 	}
 
@@ -69,12 +68,11 @@ public class JwtUtil {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token); // key로 token 검증
 			return true;
-		} catch (SignatureException e) {
-			log.error("키가 일치하지 않습니다.");
-		} catch (SecurityException | MalformedJwtException e) {
+		} catch (SecurityException | MalformedJwtException | SignatureException e) {
 			log.error("유효하지 않는 JWT 서명 입니다.");
 		} catch (ExpiredJwtException e) {
-			log.error("만료된 JWT token 입니다.");
+			// 유효시간 만료의 경우에는 따로 처리
+			throw new JwtExpirationException(JWT_EXPIRATION);
 		} catch (UnsupportedJwtException e) {
 			log.error("지원되지 않는 JWT 토큰 입니다.");
 		} catch (IllegalArgumentException e) {

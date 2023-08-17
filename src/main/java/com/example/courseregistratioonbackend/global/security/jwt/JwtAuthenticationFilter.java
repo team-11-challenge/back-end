@@ -1,16 +1,18 @@
 package com.example.courseregistratioonbackend.global.security.jwt;
 
+import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
 import static com.example.courseregistratioonbackend.global.enums.SuccessCode.*;
+import static jakarta.servlet.http.HttpServletResponse.*;
 
 import java.io.IOException;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.courseregistratioonbackend.domain.student.dto.LoginRequestDto;
-import com.example.courseregistratioonbackend.global.enums.ErrorCode;
 import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsImpl;
 import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,7 +63,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String token = jwtUtil.createToken(userNumber);
 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 
-		setStatusCode(response, HttpServletResponse.SC_OK);
+		setStatusCode(response, SC_OK);
 		setContentApplicationJson(response);
 		setCharEncoding(response);
 
@@ -76,11 +78,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		AuthenticationException failed) throws IOException {
 		log.info("로그인 실패");
 
-		setStatusCode(response, HttpServletResponse.SC_BAD_REQUEST);
+		setStatusCode(response, SC_BAD_REQUEST);
 		setContentApplicationJson(response);
 		setCharEncoding(response);
 
-		String jsonValue = objectMapper.writeValueAsString(ResponseUtils.error(ErrorCode.USER_LOGIN_FAILURE));
+		// 기본적인 로그인 실패일 경우
+		String jsonValue = objectMapper.writeValueAsString(ResponseUtils.error(USER_LOGIN_FAILURE));
+
+		// 없는 Username의 경우
+		if(failed instanceof UsernameNotFoundException) {
+			setStatusCode(response, SC_NOT_FOUND);
+			jsonValue = objectMapper.writeValueAsString(ResponseUtils.error(USER_NOT_FOUND));
+		}
 
 		response.getWriter().write(jsonValue);
 	}
