@@ -1,11 +1,14 @@
 package com.example.courseregistratioonbackend.domain.course.controller;
 
+import com.example.courseregistratioonbackend.domain.course.dto.CourseResponseDto;
 import com.example.courseregistratioonbackend.domain.course.service.CourseService;
 import com.example.courseregistratioonbackend.global.exception.RequiredFieldException;
 import com.example.courseregistratioonbackend.global.responsedto.ApiResponse;
 import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +35,10 @@ public class CourseController {
     @Parameter(name = "semester", description = "학기")
     @Parameter(name = "subjectCd", description = "과목코드")
     @Parameter(name = "collegeId", description = "대학")
-    @Parameter(name = "sortNm", description = "구분(전필, 전선, 교양 등)")
+    @Parameter(name = "sortNm", description = "구분(기초교양, 균형교양, 학문기초, 교직, 자유선택, 전공선택, 전공필수)")
     @Parameter(name = "departId", description = "학과")
     @Parameter(name = "majorId", description = "전공")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = CourseResponseDto.class)))
     @GetMapping("/courses")
     public ApiResponse<?> getCourses(@RequestParam(value = "courseYear", defaultValue = "2023") int courseYear, // 년도
                                      @RequestParam(value = "semester", defaultValue = "1") int semester,        // 학기
