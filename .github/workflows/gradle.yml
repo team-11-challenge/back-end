@@ -32,7 +32,9 @@ jobs:
       run: |
          cd ./src/main/resources
          touch ./application.yml
+         touch ./keystore.p12
          echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
+         echo "${{ secrets.SSL }}" > ./keystore.p12
          cd ./static
          mkdir .well-known; cd .well-known
          mkdir pki-validation; cd pki-validation
