@@ -32,14 +32,7 @@ jobs:
       run: |
          cd ./src/main/resources
          touch ./application.yml
-         touch ./keystore.p12
          echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
-         echo "${{ secrets.SSL }}" > ./keystore.p12
-         cd ./static
-         mkdir .well-known; cd .well-known
-         mkdir pki-validation; cd pki-validation
-         touch ./D0716648A2FA355072030AA68FB0EE02.txt
-         echo "${{ secrets.SSL_VALIDATION }}" > ./D0716648A2FA355072030AA68FB0EE02.txt
       shell: bash
       
     # gradle을 통해 소스를 빌드
