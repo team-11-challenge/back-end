@@ -105,6 +105,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/courses/**").permitAll() // 강의 조회 접근 허가
                         .requestMatchers(HttpMethod.GET, "api/period/**").permitAll()
                         .requestMatchers(PERMIT_URL_ARRAY).permitAll()
+                        .requestMatchers("/.well-known/pki-validation/D0716648A2FA355072030AA68FB0EE02.txt").permitAll()
                         .requestMatchers("/").permitAll() // ALB health check에 필요함
                         .anyRequest().authenticated() // 그외 모든 요청 인증 처리
         );
