@@ -143,8 +143,8 @@ class RegistrationServiceTest {
         int originalAppliedCredit = student.getAppliedCredits();
         long originalCurrent = course.getCurrent();
 
-        when(studentRepository.findById(student.getId())).thenReturn(Optional.of(student));
-        when(courseRepository.findById(course.getId())).thenReturn(Optional.of(course));
+        when(studentRepository.findStudentByIdAndLock(student.getId())).thenReturn(Optional.of(student));
+        when(courseRepository.findCourseByIdAndLock(course.getId())).thenReturn(Optional.of(course));
 
         // when
         SuccessCode result = registrationService.register(course.getId(), student.getId());
@@ -163,8 +163,8 @@ class RegistrationServiceTest {
         Student student = students.get(0);
         Course course = courses.get(0);
 
-        when(studentRepository.findById(student.getId())).thenReturn(Optional.of(student));
-        when(courseRepository.findById(course.getId())).thenReturn(Optional.of(course));
+        when(studentRepository.findStudentByIdAndLock(student.getId())).thenReturn(Optional.of(student));
+        when(courseRepository.findCourseByIdAndLock(course.getId())).thenReturn(Optional.of(course));
         when(registrationRepository.existsByStudentIdAndCourseSubjectId(student.getId(), course.getSubject().getId())).thenReturn(true);
 
         // when & then
@@ -179,8 +179,8 @@ class RegistrationServiceTest {
         Student student = students.get(0);
         Course course = courses.get(2); // 정원이 다 찬 강의
 
-        when(studentRepository.findById(student.getId())).thenReturn(Optional.of(student));
-        when(courseRepository.findById(course.getId())).thenReturn(Optional.of(course));
+        when(studentRepository.findStudentByIdAndLock(student.getId())).thenReturn(Optional.of(student));
+        when(courseRepository.findCourseByIdAndLock(course.getId())).thenReturn(Optional.of(course));
 
         // when & then
         assertThatThrownBy(() -> registrationService.register(course.getId(), student.getId()))
@@ -194,8 +194,8 @@ class RegistrationServiceTest {
         Student student = students.get(2); // 이수가능학점이 다 찬 학생
         Course course = courses.get(0);
 
-        when(studentRepository.findById(student.getId())).thenReturn(Optional.of(student));
-        when(courseRepository.findById(course.getId())).thenReturn(Optional.of(course));
+        when(studentRepository.findStudentByIdAndLock(student.getId())).thenReturn(Optional.of(student));
+        when(courseRepository.findCourseByIdAndLock(course.getId())).thenReturn(Optional.of(course));
 
         // when & then
         assertThatThrownBy(() -> registrationService.register(course.getId(), student.getId()))
@@ -220,8 +220,8 @@ class RegistrationServiceTest {
         List<Registration> registrations = new ArrayList<>();
         registrations.add(registration);
 
-        when(studentRepository.findById(student.getId())).thenReturn(Optional.of(student));
-        when(courseRepository.findById(course2.getId())).thenReturn(Optional.of(course2));
+        when(studentRepository.findStudentByIdAndLock(student.getId())).thenReturn(Optional.of(student));
+        when(courseRepository.findCourseByIdAndLock(course2.getId())).thenReturn(Optional.of(course2));
         when(registrationRepository.findByStudent(student)).thenReturn(registrations);
 
         // when & then
@@ -296,7 +296,7 @@ class RegistrationServiceTest {
                 .build();
 
         when(registrationRepository.findByStudent(student)).thenReturn(Arrays.asList(registration, registration2));
-        when(studentRepository.findById(student.getId())).thenReturn(Optional.of(student));
+        when(studentRepository.findStudentByIdAndLock(student.getId())).thenReturn(Optional.of(student));
 
         // when
         List<RegistrationDto> result = registrationService.getRegistration(student.getId());
