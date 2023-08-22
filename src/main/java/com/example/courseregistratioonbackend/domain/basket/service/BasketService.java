@@ -93,11 +93,11 @@ public class BasketService {
 			throw new AlreadyExistedInBasketException(ALREADY_BASKET_EXISTED);
 		}
 
-		Student student = studentRepository.findById(studentId).orElseThrow(
+		Student student = studentRepository.findStudentByIdAndLock(studentId).orElseThrow(
 			() -> new StudentNotFoundException(STUDENT_NOT_FOUND)
 		);
 
-		Course course = courseRepository.findById(courseId).orElseThrow(
+		Course course = courseRepository.findCourseByIdAndLock(courseId).orElseThrow(
 			() -> new CourseNotFoundException(COURSE_NOT_FOUND)
 		);
 

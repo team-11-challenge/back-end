@@ -87,12 +87,12 @@ public class RegistrationService {
     }
 
     private Student findStudentById(Long studentId) {
-        return studentRepository.findById(studentId)
+        return studentRepository.findStudentByIdAndLock(studentId)
                 .orElseThrow(() -> new StudentNotFoundException(STUDENT_NOT_FOUND));
     }
 
     private Course findCourseById(Long courseId) {
-        return courseRepository.findById(courseId)
+        return courseRepository.findCourseByIdAndLock(courseId)
                 .orElseThrow(() -> new CourseNotFoundException(COURSE_NOT_FOUND));
     }
 
