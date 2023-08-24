@@ -330,8 +330,11 @@ public class BasketServiceTest {
 		// 장바구니 강의 3번은 아직 추가전이라 가정(중복 검증)
 		when(basketRepository.findByCourseIdAndStudentId(courseId3, studentId)).thenReturn(
 			Optional.empty());
-		when(studentRepository.findById(studentId)).thenReturn(Optional.of(student));
+		when(studentRepository.findStudentByIdAndLock(studentId)).thenReturn(Optional.of(student));
 		when(basketRepository.findByStudentId(studentId)).thenReturn(baskets);
+		when(courseRepository.findCourseByIdAndLock(courseId1)).thenReturn(Optional.ofNullable(course1));
+		when(courseRepository.findCourseByIdAndLock(courseId2)).thenReturn(Optional.ofNullable(course2));
+		when(courseRepository.findCourseByIdAndLock(courseId3)).thenReturn(Optional.ofNullable(course3));
 		when(courseRepository.findById(courseId1)).thenReturn(Optional.ofNullable(course1));
 		when(courseRepository.findById(courseId2)).thenReturn(Optional.ofNullable(course2));
 		when(courseRepository.findById(courseId3)).thenReturn(Optional.ofNullable(course3));
@@ -375,8 +378,8 @@ public class BasketServiceTest {
 		when(basketRepository.findByCourseIdAndStudentId(courseId, studentId)).thenReturn(
 			Optional.empty());
 		when(basketRepository.findByStudentId(studentId)).thenReturn(baskets);
-		when(courseRepository.findById(courseId)).thenReturn(Optional.ofNullable(course));
-		when(studentRepository.findById(studentId)).thenReturn(Optional.ofNullable(student));
+		when(courseRepository.findCourseByIdAndLock(courseId)).thenReturn(Optional.ofNullable(course));
+		when(studentRepository.findStudentByIdAndLock(studentId)).thenReturn(Optional.ofNullable(student));
 
 		SuccessCode toBeSuccessCode = basketService.addCourseToBasket(courseId, studentId);
 
