@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.STUDENT_NOT_FOUND;
 
@@ -28,24 +29,19 @@ public class StudentService {
         );
 
         List<Registration> registrationList = registrationRepository.findByStudent(student);
-        List<TimetableResponseDto> timetableResponseDtoList = new ArrayList<>();
-        for(int i = 0; i < registrationList.size(); i++){
-            List<String[]> timetable = new ArrayList<>();
-
-            String courseNM = registrationList.get(i).getCourse().getSubject().getSubjectNM();
-            String timetableStr = registrationList.get(i).getCourse().getTimetable();
-            String[] timetableStrList = timetableStr.split(",");
-
-            for(String str : timetableStrList){
-                String[] oneCourse = str.split(" ");
-                timetable.add(oneCourse);
-            }
-
-            TimetableResponseDto timetableResponseDto = new TimetableResponseDto(courseNM, timetable);
-            timetableResponseDtoList.add(timetableResponseDto);
-        }
-        return timetableResponseDtoList;
+        return registrationList.stream()
+                .map(registration -> {
+                    String courseNM = registration.getCourse().getSubject().getSubjectNM();
+                    String[] timetableStrList = registration.getCourse().getTimetable().split(",");
+                    List<String[]> timetable = new ArrayList<>();
+                    for (String str : timetableStrList) {
+                        timetable.add(str.split(" "));
+                    }
+                    return new TimetableResponseDto(courseNM, timetable);
+                })
+                .collect(Collectors.toList());
     }
+
 
     public StudentInfoDto getStudentInfo(Long studentId) {
         Student student = studentRepository.findById(studentId).orElseThrow(
