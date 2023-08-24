@@ -101,11 +101,6 @@ public class BasketService {
 			() -> new CourseNotFoundException(COURSE_NOT_FOUND)
 		);
 
-		// 장바구니 인원 추가
-		course.addToBasketNumber();
-
-		courseRepository.save(course);
-
 		// 장바구니에 내역 저장
 		Basket basket = Basket.builder()
 			.course(course)
@@ -113,6 +108,9 @@ public class BasketService {
 			.build();
 
 		basketRepository.save(basket);
+
+		// 장바구니 인원 추가
+		course.addToBasketNumber();
 
 		log.info("studentId: {}, courseId: {} 장바구니 추가 완료", studentId, courseId);
 		return ADD_COURSE_TO_BASKET_SUCCESS;
@@ -142,13 +140,11 @@ public class BasketService {
 			() -> new CourseNotFoundException(COURSE_NOT_FOUND)
 		);
 
-		// 장바구니 인원 제거
-		course.removeFromBasketNumber();
-
-		courseRepository.save(course);
-
 		// 장바구니 내역 제거
 		basketRepository.delete(basket);
+
+		// 장바구니 인원 제거
+		course.removeFromBasketNumber();
 
 		log.info("studentId: {}, courseId: {} 장바구니 제거 완료", studentId, courseId);
 		return DELETE_COURSE_FROM_BASKET_SUCCESS;
