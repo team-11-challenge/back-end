@@ -81,8 +81,8 @@ public class StudentRepositoryQueryTest {
 
         List<TimetableResponseDto> timetableResponseDtoList =  registrationList.stream()
                 .map(registration -> {
-                    String courseNM = qSubject.subjectNM.toString();
-                    String[] timetableStrList = qCourse.timetable.toString().split(",");
+                    String courseNM = registration.getCourse().getSubject().getSubjectNM();
+                    String[] timetableStrList = registration.getCourse().getTimetable().split(",");
                     List<String[]> timetable = new ArrayList<>();
                     for (String str : timetableStrList) {
                         timetable.add(str.split(" "));

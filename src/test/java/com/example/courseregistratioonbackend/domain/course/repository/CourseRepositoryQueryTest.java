@@ -64,6 +64,7 @@ public class CourseRepositoryQueryTest {
         courses.stream().map(CourseResponseDto::new).toList();
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
+        System.out.println("size = " + courses.stream().map(CourseResponseDto::new).toList().size());
         System.out.println("Query execution time: " + executionTime + " ms");
     }
 
@@ -90,8 +91,12 @@ public class CourseRepositoryQueryTest {
                 .stream()
                 .map(CourseResponseDto::new)
                 .toList();
+        if(courseResponseDtoList.isEmpty()){
+            throw new CourseNotFoundException(COURSE_NOT_FOUND);
+        }
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
+        System.out.println("size = " + courseResponseDtoList.size());
         System.out.println("Query execution time: " + executionTime + " ms");
     }
     /**
@@ -104,12 +109,13 @@ public class CourseRepositoryQueryTest {
         int semester = 1;
         String sortNm = "기초교양";
         long startTime = System.currentTimeMillis();
-        List<CourseResponseDto> courseResponseDtoListist = courseRepository.findAllByCourseYearAndSemesterAndSort(courseYear, semester, sortNm).orElseThrow(
+        List<CourseResponseDto> courseResponseDtoList = courseRepository.findAllByCourseYearAndSemesterAndSort(courseYear, semester, sortNm).orElseThrow(
                         () -> new CourseNotFoundException(COURSE_NOT_FOUND)
                 )
                 .stream().map(CourseResponseDto::new).toList();
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
+        System.out.println("size = " + courseResponseDtoList.size());
         System.out.println("Query execution time: " + executionTime + " ms");
     }
 
@@ -137,6 +143,7 @@ public class CourseRepositoryQueryTest {
                 .toList();
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
+        System.out.println("size = " + courseResponseDtoList.size());
         System.out.println("Query execution time: " + executionTime + " ms");
     }
     /**
@@ -147,16 +154,18 @@ public class CourseRepositoryQueryTest {
     void getCourseListByCollegeId_JPA(){
         int courseYear = 2023;
         int semester = 1;
-        Long collegeId = 1L;
-        String sortNm = "기초교양";
+        Long collegeId = 3L;
+        String sortNm = "학문기초";
         long startTime = System.currentTimeMillis();
         College college = collegeRepository.findById(collegeId).orElseThrow();
 
         List<Belong> belongList = belongRepository.findAllByCollege(college).orElseThrow();
 
         getCourseResponseDtoList(courseYear, semester, belongList, sortNm);
+
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
+        System.out.println("size = " + getCourseResponseDtoList(courseYear, semester, belongList, sortNm).size());
         System.out.println("Query execution time: " + executionTime + " ms");
     }
 
@@ -165,8 +174,8 @@ public class CourseRepositoryQueryTest {
     void getCourseListByCollegeId_QueryDSL(){
         int courseYear = 2023;
         int semester = 1;
-        Long collegeId = 1L;
-        String sortNm = "기초교양";
+        Long collegeId = 3L;
+        String sortNm = "학문기초";
 
         long startTime = System.currentTimeMillis();
 
@@ -191,7 +200,7 @@ public class CourseRepositoryQueryTest {
 
         if (courseResponseDtoList.size() < 1) throw new CourseNotFoundException(COURSE_NOT_FOUND);
 
-        if (sortNm != null) {
+        if (!sortNm.isBlank()) {
             courseResponseDtoList = courseResponseDtoList.stream()
                     .filter(course -> course.getSort().equals(sortNm))
                     .collect(Collectors.toList());
@@ -199,6 +208,7 @@ public class CourseRepositoryQueryTest {
 
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
+        System.out.println("size = " + courseResponseDtoList.size());
         System.out.println("Query execution time: " + executionTime + " ms");
     }
 
@@ -210,9 +220,9 @@ public class CourseRepositoryQueryTest {
     void getCourseListByDepartmentId_JPA(){
         int courseYear = 2023;
         int semester = 1;
-        String sortNm = "균형교양";
+        String sortNm = "전공선택";
         Long collegeId = 3L;
-        Long departId = 8L;
+        Long departId = 2L;
 
         long startTime = System.currentTimeMillis();
 
@@ -227,7 +237,7 @@ public class CourseRepositoryQueryTest {
 
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
-
+        System.out.println("size = " + getCourseResponseDtoList(courseYear, semester, belongList, sortNm).size());
         System.out.println("Query execution time: " + executionTime + " ms");
     }
 
@@ -236,9 +246,9 @@ public class CourseRepositoryQueryTest {
     void getCourseListByDepartmentId_QueryDSL(){
         int courseYear = 2023;
         int semester = 1;
-        String sortNm = "균형교양";
+        String sortNm = "전공선택";
         Long collegeId = 3L;
-        Long departId = 8L;
+        Long departId = 2L;
 
         QCourse qCourse = QCourse.course;
         QBelong qBelong = QBelong.belong;
@@ -246,32 +256,37 @@ public class CourseRepositoryQueryTest {
         QDepartment qDepartment = QDepartment.department;
         QProfessor qProfessor = QProfessor.professor;
         QSubject qSubject = QSubject.subject;
-        QMajor qMajor = QMajor.major;
 
         long startTime = System.currentTimeMillis();
 
-        List<CourseResponseDto> courseList = queryFactory.select(qCourse)
+        List<CourseResponseDto> courseResponseDtoList = queryFactory.select(qCourse)
                 .from(qCourse)
-                .join(qCourse.belong, qBelong).fetchJoin()
-                .join(qBelong.college, qCollege).fetchJoin()
-                .join(qBelong.department,qDepartment).fetchJoin()
-                .join(qBelong.major, qMajor).fetchJoin()
-                .join(qCourse.professor, qProfessor).fetchJoin()
-                .join(qCourse.subject, qSubject).fetchJoin()
+                .join(qCourse.belong, qBelong)
+                .join(qBelong.college, qCollege)
+                .join(qBelong.department, qDepartment)
+                .join(qCourse.professor, qProfessor)
+                .join(qCourse.subject, qSubject)
                 .where(qCourse.courseYear.eq(courseYear)
                         .and(qCourse.semester.eq(semester))
-                        .and(qCourse.sort.eq(sortNm))
                         .and(qBelong.college.id.eq(collegeId))
-                        .and(qBelong.department.isNull().or(qBelong.department.id.eq(departId))))
+                        .and(qBelong.department.id.eq(departId)))
                 .fetch()
                 .stream()
                 .map(CourseResponseDto::new)
-                .toList();;
+                .toList();
 
+        if (!sortNm.isBlank()) {
+            courseResponseDtoList = courseResponseDtoList.stream()
+                    .filter(course -> course.getSort().equals(sortNm))
+                    .collect(Collectors.toList());
+        }
+
+        System.out.println("courseResponseDtoList.size() = " + courseResponseDtoList.size());
 
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
 
+        System.out.println("size = " + courseResponseDtoList.size());
         System.out.println("Query execution time: " + executionTime + " ms");
     }
 
@@ -283,7 +298,7 @@ public class CourseRepositoryQueryTest {
     void getCourseList_JPA(){
         int courseYear = 2023;
         int semester = 1;
-        String sortNm = "균형교양";
+        String sortNm = "";
         Long collegeId = 3L;
         Long departId = 8L;
         Long majorId = 3L;
@@ -291,13 +306,16 @@ public class CourseRepositoryQueryTest {
         long startTime = System.currentTimeMillis();
 
         College college = collegeRepository.findById(collegeId).orElseThrow();
-        Department department = departmentRepository.findById(departId).orElseThrow();
+
+        Department department = departmentRepository.findById(departId).orElse(null);
+
+
         Major major = majorRepository.findById(majorId).orElseThrow();
 
         List<Belong> belongList = belongRepository.findAllByCollegeAndDepartmentAndMajor(college, department, major).orElseThrow();
 
         Belong nullDepartBelong = belongRepository.findByCollegeAndDepartment(college, Optional.empty());
-        Belong nullMajorBelong = belongRepository.findByCollegeAndDepartmentAndMajor(college, Optional.of(department), Optional.empty());
+        Belong nullMajorBelong = belongRepository.findByCollegeAndDepartmentAndMajor(college, Optional.ofNullable(department), Optional.empty());
         if (nullDepartBelong != null) belongList.add(nullDepartBelong);
         if (nullMajorBelong != null) belongList.add(nullMajorBelong);
 
@@ -305,7 +323,7 @@ public class CourseRepositoryQueryTest {
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
 
-
+        System.out.println("size = " + getCourseResponseDtoList(courseYear, semester, belongList, sortNm).size());
         System.out.println("Query execution time: " + executionTime + " ms");
     }
 
@@ -314,7 +332,7 @@ public class CourseRepositoryQueryTest {
     void getCourseList_QueryDSL(){
         int courseYear = 2023;
         int semester = 1;
-        String sortNm = "균형교양";
+        String sortNm = "";
         Long collegeId = 3L;
         Long departId = 8L;
         Long majorId = 3L;
@@ -324,35 +342,34 @@ public class CourseRepositoryQueryTest {
         QCourse qCourse = QCourse.course;
         QBelong qBelong = QBelong.belong;
         QCollege qCollege = QCollege.college;
-        QDepartment qDepartment = QDepartment.department;
         QProfessor qProfessor = QProfessor.professor;
         QSubject qSubject = QSubject.subject;
-        QMajor qMajor = QMajor.major;
 
-        List<CourseResponseDto> courseList = queryFactory
+        List<CourseResponseDto> courseResponseDtoList = queryFactory
                 .select(qCourse)
                 .from(qCourse)
                 .join(qCourse.belong, qBelong).fetchJoin()
                 .join(qBelong.college, qCollege).fetchJoin()
-                .join(qBelong.department,qDepartment).fetchJoin()
-                .join(qBelong.major, qMajor).fetchJoin()
                 .join(qCourse.professor, qProfessor).fetchJoin()
                 .join(qCourse.subject, qSubject).fetchJoin()
-                .where(qBelong.college.id.eq(collegeId)
-                        .and(qCourse.courseYear.eq(courseYear))
+                .where(qCourse.courseYear.eq(courseYear)
                         .and(qCourse.semester.eq(semester))
-                        .and(qCourse.sort.eq(sortNm))
+                        .and(qBelong.college.id.eq(collegeId))
                         .and(qBelong.department.id.eq(departId).or(qBelong.department.isNull()))
                         .and(qBelong.major.id.eq(majorId).or(qBelong.major.isNull())))
                 .fetch()
                 .stream()
                 .map(CourseResponseDto::new)
                 .toList();
-
+        if (!sortNm.isBlank()) {
+            courseResponseDtoList = courseResponseDtoList.stream()
+                    .filter(course -> course.getSort().equals(sortNm))
+                    .collect(Collectors.toList());
+        }
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
+        System.out.println("size = " + courseResponseDtoList.size());
         System.out.println("Query execution time: " + executionTime + " ms");
-//        System.out.println("size = " + courseList.size());
     }
 
     private List<CourseResponseDto> getCourseResponseDtoList(int courseYear, int semester, List<Belong> belongList, String sortNm) {
@@ -363,7 +380,7 @@ public class CourseRepositoryQueryTest {
 
         if (courses.size() < 1) throw new CourseNotFoundException(COURSE_NOT_FOUND);
 
-        if (sortNm == null) {
+        if (sortNm.isBlank()) {
             return courses.stream().map(CourseResponseDto::new).toList();
         } else {
             return courses.stream().filter(course -> course.getSort().equals(sortNm)).map(CourseResponseDto::new).toList();
