@@ -75,7 +75,9 @@ public class RegistrationService {
     }
 
     public List<RegistrationDto> getRegistration(Long studentId) {
-        Student student = findStudentById(studentId);
+        Student student = studentRepository.findById(studentId).orElseThrow(
+                ()-> new StudentNotFoundException(STUDENT_NOT_FOUND)
+        );
         List<Registration> registrationList = getRegistrationList(student);
         return registrationList.stream()
                 .map(RegistrationDto::new)
