@@ -40,7 +40,7 @@ class CourseServiceTest {
     @Test
     @DisplayName("구분 외 입력 조건 전체 입력")
     void getCourseList2() {
-        int courseListSize = courseService.getCourseList(2023, 1, 5L, 16L, 9L, null).size();
+        int courseListSize = courseService.getCourseList(2023, 1, 5L, 16L, 9L, "").size();
         assertEquals(66, courseListSize);
     }
 
@@ -54,7 +54,7 @@ class CourseServiceTest {
     @Test
     @DisplayName("대학 입력 구분 미입력")
     void getCourseListByCollegeName2() {
-        int courseListSize = courseService.getCourseListByCollegeId(2023, 1, 5L, null).size();
+        int courseListSize = courseService.getCourseListByCollegeId(2023, 1, 5L, "").size();
         assertEquals(201, courseListSize);
     }
 
@@ -68,7 +68,7 @@ class CourseServiceTest {
     @Test
     @DisplayName("학과 입력 구분 미입력")
     void getCourseListByDepartmentName2() {
-        int courseListSize = courseService.getCourseListByDepartmentId(2023, 1, 5L, 16L, null).size();
+        int courseListSize = courseService.getCourseListByDepartmentId(2023, 1, 5L, 16L, "").size();
         assertEquals(103, courseListSize);
     }
 }
