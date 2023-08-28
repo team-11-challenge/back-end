@@ -1,25 +1,30 @@
 package com.example.courseregistratioonbackend.domain.registration.service;
 
+import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
+import static com.example.courseregistratioonbackend.global.enums.SuccessCode.*;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.exception.CourseNotFoundException;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
 import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationDto;
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
-import com.example.courseregistratioonbackend.domain.registration.exception.*;
+import com.example.courseregistratioonbackend.domain.registration.exception.CourseAlreadyFulledException;
+import com.example.courseregistratioonbackend.domain.registration.exception.CourseTimeConflictException;
+import com.example.courseregistratioonbackend.domain.registration.exception.CreditExceededException;
+import com.example.courseregistratioonbackend.domain.registration.exception.NoAuthorityToRegistrationException;
+import com.example.courseregistratioonbackend.domain.registration.exception.SubjectAlreadyRegisteredException;
 import com.example.courseregistratioonbackend.domain.registration.repository.RegistrationRepository;
 import com.example.courseregistratioonbackend.domain.student.entity.Student;
 import com.example.courseregistratioonbackend.domain.student.execption.StudentNotFoundException;
 import com.example.courseregistratioonbackend.domain.student.repository.StudentRepository;
 import com.example.courseregistratioonbackend.global.enums.SuccessCode;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
-import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_DELETE_SUCCESS;
-import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_SUCCESS;
 
 @RequiredArgsConstructor
 @Service
@@ -30,8 +35,8 @@ public class RegistrationService {
 
     @Transactional
     public SuccessCode register(Long courseId, Long studentId) {
-        Student student = findStudentById(studentId);
         Course course = findCourseById(courseId);
+        Student student = findStudentById(studentId);
 
         // 신청 가능한지 여러 조건 확인
         checkIfSubjectAlreadyRegistered(student.getId(), course.getSubject().getId());
@@ -89,12 +94,12 @@ public class RegistrationService {
     }
 
     private Student findStudentById(Long studentId) {
-        return studentRepository.findStudentByIdAndLock(studentId)
+        return studentRepository.findById(studentId)
                 .orElseThrow(() -> new StudentNotFoundException(STUDENT_NOT_FOUND));
     }
 
     private Course findCourseById(Long courseId) {
-        return courseRepository.findCourseByIdAndLock(courseId)
+        return courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException(COURSE_NOT_FOUND));
     }
 
