@@ -4,6 +4,7 @@ import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.exception.CourseNotFoundException;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
 import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationDto;
+import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationRequestDto;
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
 import com.example.courseregistratioonbackend.domain.registration.exception.*;
 import com.example.courseregistratioonbackend.domain.registration.repository.RegistrationRepository;
@@ -29,9 +30,9 @@ public class RegistrationService {
     private final StudentRepository studentRepository;
 
     @Transactional
-    public SuccessCode register(Long courseId, Long studentId) {
-        Student student = findStudentById(studentId);
-        Course course = findCourseById(courseId);
+    public SuccessCode register(RegistrationRequestDto requestDto) {
+        Student student = findStudentById(requestDto.getStudentId());
+        Course course = findCourseById(requestDto.getCourseId());
 
         // 신청 가능한지 여러 조건 확인
         checkIfSubjectAlreadyRegistered(student.getId(), course.getSubject().getId());
@@ -75,9 +76,7 @@ public class RegistrationService {
     }
 
     public List<RegistrationDto> getRegistration(Long studentId) {
-        Student student = studentRepository.findById(studentId).orElseThrow(
-                ()-> new StudentNotFoundException(STUDENT_NOT_FOUND)
-        );
+        Student student = findStudentById(studentId);
         List<Registration> registrationList = getRegistrationList(student);
         return registrationList.stream()
                 .map(RegistrationDto::new)

@@ -1,9 +1,13 @@
 package com.example.courseregistratioonbackend.domain.registration.controller;
 
+import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationRequestDto;
+import com.example.courseregistratioonbackend.domain.registration.event.Event;
+import com.example.courseregistratioonbackend.domain.registration.service.QueueService;
 import com.example.courseregistratioonbackend.domain.registration.service.RegistrationService;
 import com.example.courseregistratioonbackend.global.responsedto.ApiResponse;
 import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsImpl;
 import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,11 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/registration")
 public class RegistrationController {
     private final RegistrationService registrationService;
+    private final QueueService queueService;
 
     @PostMapping("/{courseId}")
     public ApiResponse<?> register(@PathVariable Long courseId,
-                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseUtils.ok(registrationService.register(courseId, userDetails.getStudentUser().getId()));
+                                   @AuthenticationPrincipal UserDetailsImpl userDetails) throws JsonProcessingException {
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(userDetails.getStudentUser().getId(), courseId);
+        queueService.addQueue(Event.REGISTRATION, requestDto);
+        return ResponseUtils.ok("수강신청 요청 성공");
     }
 
     @DeleteMapping("/{registrationId}")

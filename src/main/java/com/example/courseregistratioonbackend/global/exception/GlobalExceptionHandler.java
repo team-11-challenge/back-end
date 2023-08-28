@@ -9,6 +9,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -27,13 +28,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ApiResponse<?> handleRuntimeException(RuntimeException e) {
-        log.info(e.getMessage());
-        return ResponseUtils.error(e.getMessage());
-    }
-
-    @ExceptionHandler(GlobalException.class)
-    public ApiResponse<?> handleGlobalException(GlobalException e) {
-        return ResponseUtils.error(e.getErrorCode());
+        log.error(Arrays.toString(e.getStackTrace()));
+        return ResponseUtils.error(e.getStackTrace());
     }
 
 	@ExceptionHandler(MissingServletRequestParameterException.class)

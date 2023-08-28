@@ -4,6 +4,7 @@ import com.example.courseregistratioonbackend.domain.basket.entity.Basket;
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
 import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationDto;
+import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationRequestDto;
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
 import com.example.courseregistratioonbackend.domain.registration.exception.*;
 import com.example.courseregistratioonbackend.domain.registration.repository.RegistrationRepository;
@@ -147,7 +148,8 @@ class RegistrationServiceTest {
         when(courseRepository.findCourseByIdAndLock(course.getId())).thenReturn(Optional.of(course));
 
         // when
-        SuccessCode result = registrationService.register(course.getId(), student.getId());
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), course.getId());
+        SuccessCode result = registrationService.register(requestDto);
 
         // then
         assertThat(result).isEqualTo(REGISTRATION_SUCCESS);
@@ -168,7 +170,8 @@ class RegistrationServiceTest {
         when(registrationRepository.existsByStudentIdAndCourseSubjectId(student.getId(), course.getSubject().getId())).thenReturn(true);
 
         // when & then
-        assertThatThrownBy(() -> registrationService.register(course.getId(), student.getId()))
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), course.getId());
+        assertThatThrownBy(() -> registrationService.register(requestDto))
                 .isInstanceOf(SubjectAlreadyRegisteredException.class)
                 .hasMessageContaining(SUBJECT_ALREADY_REGISTERED.getDetail());
     }
@@ -183,7 +186,8 @@ class RegistrationServiceTest {
         when(courseRepository.findCourseByIdAndLock(course.getId())).thenReturn(Optional.of(course));
 
         // when & then
-        assertThatThrownBy(() -> registrationService.register(course.getId(), student.getId()))
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), course.getId());
+        assertThatThrownBy(() -> registrationService.register(requestDto))
                 .isInstanceOf(CourseAlreadyFulledException.class)
                 .hasMessageContaining(COURSE_ALREADY_FULLED.getDetail());
     }
@@ -198,7 +202,8 @@ class RegistrationServiceTest {
         when(courseRepository.findCourseByIdAndLock(course.getId())).thenReturn(Optional.of(course));
 
         // when & then
-        assertThatThrownBy(() -> registrationService.register(course.getId(), student.getId()))
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), course.getId());
+        assertThatThrownBy(() -> registrationService.register(requestDto))
                 .isInstanceOf(CreditExceededException.class)
                 .hasMessageContaining(CREDIT_EXCEEDED.getDetail());
     }
@@ -225,7 +230,8 @@ class RegistrationServiceTest {
         when(registrationRepository.findByStudent(student)).thenReturn(registrations);
 
         // when & then
-        assertThatThrownBy(() -> registrationService.register(course2.getId(), student.getId()))
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), course2.getId());
+        assertThatThrownBy(() -> registrationService.register(requestDto))
                 .isInstanceOf(CourseTimeConflictException.class)
                 .hasMessageContaining(COURSE_TIME_CONFLICT.getDetail());
     }
