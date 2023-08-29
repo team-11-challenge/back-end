@@ -4,6 +4,7 @@ import com.example.courseregistratioonbackend.domain.registration.dto.Registrati
 import com.example.courseregistratioonbackend.domain.registration.event.Event;
 import com.example.courseregistratioonbackend.domain.registration.service.QueueService;
 import com.example.courseregistratioonbackend.domain.registration.service.RegistrationService;
+import com.example.courseregistratioonbackend.domain.student.entity.Student;
 import com.example.courseregistratioonbackend.global.responsedto.ApiResponse;
 import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsImpl;
 import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
@@ -24,7 +25,8 @@ public class RegistrationController {
     @PostMapping("/{courseId}")
     public ApiResponse<?> register(@PathVariable Long courseId,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) throws JsonProcessingException {
-        RegistrationRequestDto requestDto = new RegistrationRequestDto(userDetails.getStudentUser().getId(), courseId);
+        Student student = userDetails.getStudentUser();
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), courseId, student.getStudentNM());
         queueService.addQueue(Event.REGISTRATION, requestDto);
         return ResponseUtils.ok("수강신청 요청 성공");
     }
