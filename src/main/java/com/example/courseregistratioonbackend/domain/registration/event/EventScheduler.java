@@ -16,6 +16,7 @@ public class EventScheduler {
 
     @Scheduled(fixedDelay = 1000) // 1초 마다
     private void registrationEventScheduler() throws JsonProcessingException {
+        queueService.getOrder(Event.REGISTRATION);
         queueService.publish(Event.REGISTRATION);
     }
 }
