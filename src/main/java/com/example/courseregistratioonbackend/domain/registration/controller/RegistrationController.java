@@ -1,5 +1,6 @@
 package com.example.courseregistratioonbackend.domain.registration.controller;
 
+import com.example.courseregistratioonbackend.domain.registration.facade.RedisLockRegistrationFacade;
 import com.example.courseregistratioonbackend.domain.registration.service.RegistrationService;
 import com.example.courseregistratioonbackend.global.responsedto.ApiResponse;
 import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsImpl;
@@ -15,11 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/registration")
 public class RegistrationController {
     private final RegistrationService registrationService;
+    private final RedisLockRegistrationFacade redisLockRegistrationFacade;
 
     @PostMapping("/{courseId}")
     public ApiResponse<?> register(@PathVariable Long courseId,
-                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseUtils.ok(registrationService.register(courseId, userDetails.getStudentUser().getId()));
+                                   @AuthenticationPrincipal UserDetailsImpl userDetails) throws InterruptedException {
+        return ResponseUtils.ok(redisLockRegistrationFacade.registerByRedisLock(courseId, userDetails.getStudentUser().getId()));
     }
 
     @DeleteMapping("/{registrationId}")

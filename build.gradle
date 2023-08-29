@@ -25,6 +25,13 @@ dependencies {
     //slack log
     implementation 'com.github.maricn:logback-slack-appender:1.6.1'
 
+    // logstash
+//    implementation 'net.logstash.logback:logstash-logback-encoder:6.6'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.17.4'
+
     //security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'junit:junit:4.13.1'
