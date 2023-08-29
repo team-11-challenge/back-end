@@ -3,7 +3,6 @@ package com.example.courseregistratioonbackend.domain.registration.service;
 import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationRequestDto;
 import com.example.courseregistratioonbackend.domain.registration.event.Event;
 import com.example.courseregistratioonbackend.global.enums.SuccessCode;
-import com.example.courseregistratioonbackend.global.exception.GlobalException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

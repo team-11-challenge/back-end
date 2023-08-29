@@ -1,6 +1,5 @@
 package com.example.courseregistratioonbackend.domain.registration.service;
 
-import com.example.courseregistratioonbackend.domain.basket.entity.Basket;
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
 import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationDto;
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
