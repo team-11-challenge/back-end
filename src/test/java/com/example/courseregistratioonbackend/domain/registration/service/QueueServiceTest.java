@@ -13,7 +13,7 @@ public class QueueServiceTest {
 
     @Test
     void test() throws JsonProcessingException {
-        RegistrationRequestDto requestDto = new RegistrationRequestDto(1, 1);
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(1, 1, "abc");
         queueService.addQueue(Event.REGISTRATION, requestDto);
         queueService.publish(Event.REGISTRATION);
     }

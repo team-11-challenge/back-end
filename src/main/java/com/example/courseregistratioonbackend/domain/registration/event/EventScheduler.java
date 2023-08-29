@@ -1,6 +1,5 @@
-package com.example.courseregistratioonbackend.domain.registration.scheduler;
+package com.example.courseregistratioonbackend.domain.registration.event;
 
-import com.example.courseregistratioonbackend.domain.registration.event.Event;
 import com.example.courseregistratioonbackend.domain.registration.service.QueueService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
