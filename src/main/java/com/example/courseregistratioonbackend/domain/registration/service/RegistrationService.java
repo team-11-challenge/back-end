@@ -1,30 +1,27 @@
 package com.example.courseregistratioonbackend.domain.registration.service;
 
-import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
-import static com.example.courseregistratioonbackend.global.enums.SuccessCode.*;
-
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.exception.CourseNotFoundException;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
 import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationDto;
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
-import com.example.courseregistratioonbackend.domain.registration.exception.CourseAlreadyFulledException;
-import com.example.courseregistratioonbackend.domain.registration.exception.CourseTimeConflictException;
-import com.example.courseregistratioonbackend.domain.registration.exception.CreditExceededException;
-import com.example.courseregistratioonbackend.domain.registration.exception.NoAuthorityToRegistrationException;
-import com.example.courseregistratioonbackend.domain.registration.exception.SubjectAlreadyRegisteredException;
+import com.example.courseregistratioonbackend.domain.registration.exception.*;
+import com.example.courseregistratioonbackend.domain.registration.repository.RedisRepository;
 import com.example.courseregistratioonbackend.domain.registration.repository.RegistrationRepository;
 import com.example.courseregistratioonbackend.domain.student.entity.Student;
 import com.example.courseregistratioonbackend.domain.student.execption.StudentNotFoundException;
 import com.example.courseregistratioonbackend.domain.student.repository.StudentRepository;
 import com.example.courseregistratioonbackend.global.enums.SuccessCode;
-
+import com.example.courseregistratioonbackend.global.exception.RequiredFieldException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
+import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_DELETE_SUCCESS;
+import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_SUCCESS;
 
 @RequiredArgsConstructor
 @Service
@@ -32,11 +29,28 @@ public class RegistrationService {
     private final CourseRepository courseRepository;
     private final RegistrationRepository registrationRepository;
     private final StudentRepository studentRepository;
+    private final RedisRepository redisRepository;
+
 
     @Transactional
     public SuccessCode register(Long courseId, Long studentId) {
-        Course course = findCourseById(courseId);
+        // 서버 확인
+        if(false){
+            redisRepository.refreshLeftSeats();
+        }
+
         Student student = findStudentById(studentId);
+        Course course = findCourseById(courseId);
+
+        // 만약 캐시에 없다면 캐시에 저장해줌
+        if(!redisRepository.hasLeftSeatsInRedis(courseId)){
+            redisRepository.saveCourseToRedis(course);
+        }
+
+        // 만약 캐시에 인원이 0이라면
+        if(!redisRepository.checkLeftSeatInRedis(courseId)){
+            throw new RequiredFieldException(COURSE_ALREADY_FULLED);
+        }
 
         // 신청 가능한지 여러 조건 확인
         checkIfSubjectAlreadyRegistered(student.getId(), course.getSubject().getId());
@@ -58,6 +72,9 @@ public class RegistrationService {
         // 신청 학점 증가
         student.addRegistration(course.getCredit());
 
+        //redis 값 변경
+        redisRepository.decrementLeftSeatInRedis(courseId);
+
         return REGISTRATION_SUCCESS;
     }
 
@@ -75,6 +92,10 @@ public class RegistrationService {
 
         // 신청 학점 감소
         registration.getStudent().deleteRegistration(registration.getCourse().getCredit());
+
+
+        // redis 해당 과목 인원 감소
+        redisRepository.incrementLeftSeatInRedis(registration.getCourse().getId());
 
         return REGISTRATION_DELETE_SUCCESS;
     }
