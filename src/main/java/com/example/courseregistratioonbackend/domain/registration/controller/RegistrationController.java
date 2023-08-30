@@ -27,8 +27,7 @@ public class RegistrationController {
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) throws JsonProcessingException {
         Student student = userDetails.getStudentUser();
         RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), courseId, student.getStudentNM());
-        queueService.addQueue(Event.REGISTRATION, requestDto);
-        return ResponseUtils.ok("수강신청 요청 성공");
+        return ResponseUtils.ok(queueService.addQueue(Event.REGISTRATION, requestDto));
     }
 
     @DeleteMapping("/{registrationId}")

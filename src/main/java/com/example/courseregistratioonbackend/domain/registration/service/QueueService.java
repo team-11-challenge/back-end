@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_REQUEST_SUCCESS;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -27,11 +29,13 @@ public class QueueService {
     private static final long PUBLISH_SIZE = 10; // 1초마다 처리할 양
     private static final long LAST_INDEX = 1;
 
-    public void addQueue(Event event, RegistrationRequestDto requestDto) throws JsonProcessingException {
+    public SuccessCode addQueue(Event event, RegistrationRequestDto requestDto) throws JsonProcessingException {
         final String member = objectMapper.writeValueAsString(requestDto);
         final long now = System.currentTimeMillis();
         redisTemplate.opsForZSet().add(event.toString(), member, now);
         log.info("대기열에 추가 - {} ({}초)", requestDto.getStudentId(), now);
+
+        return REGISTRATION_REQUEST_SUCCESS;
     }
 
     public void publish(Event event) throws JsonProcessingException {

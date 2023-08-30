@@ -2,6 +2,7 @@ package com.example.courseregistratioonbackend.global.exception;
 
 import com.example.courseregistratioonbackend.global.responsedto.ApiResponse;
 import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -52,8 +53,8 @@ public class GlobalExceptionHandler {
         return ResponseUtils.error(HttpStatus.BAD_REQUEST, errors);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ApiResponse<?> handleIllegalArgumentException(IllegalArgumentException e) {
+    @ExceptionHandler(JsonProcessingException.class)
+    public ApiResponse<?> handleJsonProcessingException(JsonProcessingException e) {
         return ResponseUtils.error(e.getMessage());
     }
 }
