@@ -35,7 +35,7 @@ public class RegistrationService {
     @Transactional
     public SuccessCode register(Long courseId, Long studentId) {
         // 서버 확인
-        if(false){
+        if(redisRepository.isRedisDown()){
             redisRepository.refreshLeftSeats();
         }
 
