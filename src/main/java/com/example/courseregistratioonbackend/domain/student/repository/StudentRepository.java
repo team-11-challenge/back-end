@@ -8,13 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 import jakarta.persistence.LockModeType;
+import org.springframework.data.repository.query.Param;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
 	Optional<Student> findByStudentNum(String studentNum);
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@Query("SELECT s FROM Student s WHERE s.id = :studentId")
-	Optional<Student> findStudentByIdAndLock(Long studentId);
+	Optional<Student> findStudentByIdAndLock(@Param("studentId")Long studentId);
 
 
 }

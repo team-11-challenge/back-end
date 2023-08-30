@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import jakarta.persistence.LockModeType;
+import org.springframework.data.repository.query.Param;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
     Course findByCourseYearAndSemesterAndSubjectAndDivision(int courseYear, int semester, Subject subject, int i);
@@ -24,6 +25,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT c FROM Course c WHERE c.id = :courseId")
-	Optional<Course> findCourseByIdAndLock(Long courseId);
+	Optional<Course> findCourseByIdAndLock(@Param("courseId") Long courseId);
 
 }
