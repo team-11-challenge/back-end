@@ -5,6 +5,7 @@ import com.example.courseregistratioonbackend.domain.course.repository.CourseRep
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
 import com.example.courseregistratioonbackend.global.exception.RequiredFieldException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RedisRepository {
@@ -94,6 +96,7 @@ public class RedisRepository {
 
     //Redis랑 DB 정합성 검사
     public void refreshLeftSeats(){
+        log.error("redis 서버가 닫혔습니다.");
         List<Registration> registrations = registrationRepository.findAll();
         Set<Long> courseIdList = null;
         registrations.forEach(registration -> {
