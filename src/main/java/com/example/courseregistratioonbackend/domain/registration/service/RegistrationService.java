@@ -40,7 +40,7 @@ public class RegistrationService {
         }
 
         // 만약 캐시에 인원이 0이라면
-        if(!redisRepository.checkLeftSeatInRedis(courseId)){
+        if(redisRepository.hasLeftSeatsInRedis(courseId) && !redisRepository.checkLeftSeatInRedis(courseId)){
             throw new RequiredFieldException(COURSE_ALREADY_FULLED);
         }
 
