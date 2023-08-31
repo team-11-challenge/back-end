@@ -1,5 +1,6 @@
 package com.example.courseregistratioonbackend.domain.registration.controller;
 
+import com.example.courseregistratioonbackend.domain.registration.facade.RegistrationCacheFacade;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +23,12 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/registration")
 public class RegistrationController {
     private final RegistrationService registrationService;
+    private final RegistrationCacheFacade registrationCacheFacade;
 
     @PostMapping("/{courseId}")
     public ApiResponse<?> register(@PathVariable Long courseId,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseUtils.ok(registrationService.register(courseId, userDetails.getStudentUser().getId()));
+        return ResponseUtils.ok(registrationCacheFacade.registerByCache(courseId, userDetails.getStudentUser().getId()));
     }
 
     @DeleteMapping("/{registrationId}")
