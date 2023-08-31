@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +23,17 @@ public class RedisRepository {
     private final RedisTemplate<String, Long> redisTemplateCache;
     private final CourseRepository courseRepository;
     private final RegistrationRepository registrationRepository;
+    private final RedisScript<Boolean> decrementLeftSeatRedisScript = new DefaultRedisScript<>(
+            DECREMENT_LEFT_SEAT_SCRIPT, Boolean.class);
+    // Lua Script
+    private static final String DECREMENT_LEFT_SEAT_SCRIPT =
+            "local leftSeats = tonumber(redis.call('get', KEYS[1])) " +
+                    "if leftSeats - ARGV[1] >= 0 then " +
+                    "  redis.call('decrby', KEYS[1], ARGV[1]) " +
+                    "  return true " +
+                    "else " +
+                    "  return false " +
+                    "end";
 
     //redis 서버확인
     public boolean isRedisDown() {
@@ -58,9 +72,16 @@ public class RedisRepository {
     }
 
     //수강 신청 시 남은 인원 -1
-    public void decrementLeftSeatInRedis(Long courseId){
+//    public void decrementLeftSeatInRedis(Long courseId){
+//        String key = "c" + courseId;
+//        redisTemplateCache.opsForValue().decrement(key);
+//    }
+
+    // count만큼 남은좌석수 차감
+    public Boolean decrementLeftSeatInRedis(Long courseId) {
         String key = "c" + courseId;
-        redisTemplateCache.opsForValue().decrement(key);
+        // Lua Script 실행
+        return redisTemplateCache.execute(decrementLeftSeatRedisScript, Collections.singletonList(key), 1);
     }
 
     //수강 신청 취소 시 남은 인원 +1
