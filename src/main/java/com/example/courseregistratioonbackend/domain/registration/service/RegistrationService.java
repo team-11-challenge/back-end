@@ -39,17 +39,17 @@ public class RegistrationService {
             redisRepository.refreshLeftSeats();
         }
 
+        // 만약 캐시에 인원이 0이라면
+        if(!redisRepository.checkLeftSeatInRedis(courseId)){
+            throw new RequiredFieldException(COURSE_ALREADY_FULLED);
+        }
+
         Student student = findStudentById(studentId);
         Course course = findCourseById(courseId);
 
         // 만약 캐시에 없다면 캐시에 저장해줌
         if(!redisRepository.hasLeftSeatsInRedis(courseId)){
             redisRepository.saveCourseToRedis(course);
-        }
-
-        // 만약 캐시에 인원이 0이라면
-        if(!redisRepository.checkLeftSeatInRedis(courseId)){
-            throw new RequiredFieldException(COURSE_ALREADY_FULLED);
         }
 
         // 신청 가능한지 여러 조건 확인
