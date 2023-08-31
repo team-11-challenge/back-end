@@ -67,16 +67,7 @@ public class RegistrationService {
         // 신청 학점 증가
         student.addRegistration(course.getCredit());
 
-
-        // 만약 캐시에 없다면 캐시에 저장해줌
-        if(!redisRepository.hasLeftSeatsInRedis(courseId)){
-            redisRepository.saveCourseToRedis(course);
-        }
-
-        //redis 값 변경
-        redisRepository.decrementLeftSeatInRedis(courseId);
-
-        return REGISTRATION_SUCCESS;
+        return course;
     }
 
     @Transactional

@@ -73,12 +73,6 @@ public class RedisRepository {
         }
     }
 
-    //수강 신청 시 남은 인원 -1
-//    public void decrementLeftSeatInRedis(Long courseId){
-//        String key = "c" + courseId;
-//        redisTemplateCache.opsForValue().decrement(key);
-//    }
-
     // count만큼 남은좌석수 차감
     public Boolean decrementLeftSeatInRedis(Long courseId) {
         String key = "c" + courseId;
