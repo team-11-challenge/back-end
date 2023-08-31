@@ -31,19 +31,8 @@ public class RegistrationService {
     private final StudentRepository studentRepository;
     private final RedisRepository redisRepository;
 
-
     @Transactional
-    public SuccessCode register(Long courseId, Long studentId) {
-        // 서버 확인
-        if(redisRepository.isRedisDown()){
-            redisRepository.refreshLeftSeats();
-        }
-
-        // 만약 캐시에 인원이 0이라면
-        if(redisRepository.hasLeftSeatsInRedis(courseId) && !redisRepository.checkLeftSeatInRedis(courseId)){
-            throw new RequiredFieldException(COURSE_ALREADY_FULLED);
-        }
-
+    public Course register(Long courseId, Long studentId) {
         Student student = findStudentById(studentId);
         Course course = findCourseById(courseId);
 
