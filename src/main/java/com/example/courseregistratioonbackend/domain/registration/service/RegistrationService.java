@@ -47,11 +47,6 @@ public class RegistrationService {
         Student student = findStudentById(studentId);
         Course course = findCourseById(courseId);
 
-        // 만약 캐시에 없다면 캐시에 저장해줌
-        if(!redisRepository.hasLeftSeatsInRedis(courseId)){
-            redisRepository.saveCourseToRedis(course);
-        }
-
         // 신청 가능한지 여러 조건 확인
         checkIfSubjectAlreadyRegistered(student.getId(), course.getSubject().getId());
         checkCourseLimitation(course);
@@ -71,6 +66,12 @@ public class RegistrationService {
 
         // 신청 학점 증가
         student.addRegistration(course.getCredit());
+
+
+        // 만약 캐시에 없다면 캐시에 저장해줌
+        if(!redisRepository.hasLeftSeatsInRedis(courseId)){
+            redisRepository.saveCourseToRedis(course);
+        }
 
         //redis 값 변경
         redisRepository.decrementLeftSeatInRedis(courseId);
