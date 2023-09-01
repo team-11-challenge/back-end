@@ -13,9 +13,13 @@ import org.springframework.stereotype.Component;
 public class EventScheduler {
     private final QueueService queueService;
 
-    @Scheduled(fixedDelay = 1000) // 1초 마다
-    private void registrationEventScheduler() throws JsonProcessingException {
+    @Scheduled(fixedDelay = 100)
+    private void getOrder() throws JsonProcessingException {
         queueService.getOrder(Event.REGISTRATION);
+    }
+
+    @Scheduled(fixedDelay = 1000)
+    private void register() throws JsonProcessingException {
         queueService.publish(Event.REGISTRATION);
     }
 }
