@@ -75,6 +75,10 @@ public class Course {
         this.current--;
     }
 
+    public void setCurrent(Long leftSeatsInReds){
+        this.current = leftSeatsInReds;
+    }
+
 }
 
 

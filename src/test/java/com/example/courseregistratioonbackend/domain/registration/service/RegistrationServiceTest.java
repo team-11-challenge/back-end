@@ -2,7 +2,7 @@ package com.example.courseregistratioonbackend.domain.registration.service;
 
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
-import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationDto;
+import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationResponseDto;
 import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationRequestDto;
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
 import com.example.courseregistratioonbackend.domain.registration.exception.*;
@@ -26,7 +26,6 @@ import java.util.Optional;
 
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
 import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_DELETE_SUCCESS;
-import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_SUCCESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -147,10 +146,9 @@ class RegistrationServiceTest {
 
         // when
         RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), course.getId(), student.getStudentNM());
-        SuccessCode result = registrationService.register(requestDto);
+        registrationService.register(requestDto);
 
         // then
-        assertThat(result).isEqualTo(REGISTRATION_SUCCESS);
         assertThat(course.getCurrent()).isEqualTo(originalCurrent + 1); // 현재 수강 신청 인원 증가
         assertThat(student.getAppliedCredits() - originalAppliedCredit).isEqualTo(course.getCredit()); // 신청 학점 증가
         verify(registrationRepository, times(1)).save(any(Registration.class));
@@ -303,7 +301,7 @@ class RegistrationServiceTest {
         when(studentRepository.findStudentByIdAndLock(student.getId())).thenReturn(Optional.of(student));
 
         // when
-        List<RegistrationDto> result = registrationService.getRegistration(student.getId());
+        List<RegistrationResponseDto> result = registrationService.getRegistration(student.getId());
 
         // then
         assertThat(result).size().isEqualTo(2);

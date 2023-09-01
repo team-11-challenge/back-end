@@ -1,12 +1,14 @@
 package com.example.courseregistratioonbackend.domain.registration.service;
 
+
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.exception.CourseNotFoundException;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
-import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationDto;
+import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationResponseDto;
 import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationRequestDto;
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
 import com.example.courseregistratioonbackend.domain.registration.exception.*;
+import com.example.courseregistratioonbackend.domain.registration.repository.RedisRepository;
 import com.example.courseregistratioonbackend.domain.registration.repository.RegistrationRepository;
 import com.example.courseregistratioonbackend.domain.student.entity.Student;
 import com.example.courseregistratioonbackend.domain.student.execption.StudentNotFoundException;
@@ -20,7 +22,6 @@ import java.util.List;
 
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
 import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_DELETE_SUCCESS;
-import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_SUCCESS;
 
 @RequiredArgsConstructor
 @Service
@@ -28,9 +29,10 @@ public class RegistrationService {
     private final CourseRepository courseRepository;
     private final RegistrationRepository registrationRepository;
     private final StudentRepository studentRepository;
+    private final RedisRepository redisRepository;
 
     @Transactional
-    public SuccessCode register(RegistrationRequestDto requestDto) {
+    public Course register(RegistrationRequestDto requestDto) {
         Student student = findStudentById(requestDto.getStudentId());
         Course course = findCourseById(requestDto.getCourseId());
 
@@ -54,7 +56,7 @@ public class RegistrationService {
         // 신청 학점 증가
         student.addRegistration(course.getCredit());
 
-        return REGISTRATION_SUCCESS;
+        return course;
     }
 
     @Transactional
@@ -72,15 +74,19 @@ public class RegistrationService {
         // 신청 학점 감소
         registration.getStudent().deleteRegistration(registration.getCourse().getCredit());
 
+
+        // redis 해당 과목 인원 감소
+        redisRepository.incrementLeftSeatInRedis(registration.getCourse().getId());
+
         return REGISTRATION_DELETE_SUCCESS;
     }
 
-    public List<RegistrationDto> getRegistration(Long studentId) {
+    public List<RegistrationResponseDto> getRegistration(Long studentId) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new StudentNotFoundException(STUDENT_NOT_FOUND));
         List<Registration> registrationList = getRegistrationList(student);
         return registrationList.stream()
-                .map(RegistrationDto::new)
+                .map(RegistrationResponseDto::new)
                 .toList();
     }
 

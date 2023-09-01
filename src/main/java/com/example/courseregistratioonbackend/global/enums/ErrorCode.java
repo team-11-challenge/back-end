@@ -27,13 +27,14 @@ public enum ErrorCode {
     STUDENT_NOT_FOUND(NOT_FOUND, "존재하지 않는 학생입니다."),
     PERIOD_NOT_FOUND(NOT_FOUND, "기간이 존재하지 않습니다."),
     BASKET_DATA_NOT_FOUND(NOT_FOUND, "해당 장바구니의 내역을 찾을 수 없습니다."),
+    REGISTRATION_NOT_FOUND(NOT_FOUND, "해당 신청을 찾을 수 없습니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     COURSE_ALREADY_FULLED(CONFLICT, "수강 정원이 다 찼습니다."),
     SUBJECT_ALREADY_REGISTERED(CONFLICT, "이미 신청한 과목입니다.\n(동일한 과목의 다른 분반을 다수 신청할 수 없습니다.)"),
     COURSE_TIME_CONFLICT(CONFLICT, "이미 신청한 강의와 시간이 겹칩니다."),
-    ALREADY_BASKET_EXISTED(CONFLICT, "이미 장바구니에 담은 과목입니다.")
-    ;
+    ALREADY_BASKET_EXISTED(CONFLICT, "이미 장바구니에 담은 과목입니다."),
+    EXISTED_CACHE_EXCEPTION(CONFLICT, "캐시에 이미 있는 과목입니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;

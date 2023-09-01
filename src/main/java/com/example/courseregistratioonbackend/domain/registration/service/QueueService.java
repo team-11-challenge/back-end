@@ -2,6 +2,7 @@ package com.example.courseregistratioonbackend.domain.registration.service;
 
 import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationRequestDto;
 import com.example.courseregistratioonbackend.domain.registration.event.Event;
+import com.example.courseregistratioonbackend.domain.registration.facade.RegistrationCacheFacade;
 import com.example.courseregistratioonbackend.global.enums.SuccessCode;
 import com.example.courseregistratioonbackend.global.exception.GlobalException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,11 +23,11 @@ import static com.example.courseregistratioonbackend.global.enums.SuccessCode.RE
 public class QueueService {
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
-    private final RegistrationService registrationService;
+    private final RegistrationCacheFacade registrationCacheFacade;
     private final SimpMessageSendingOperations simpMessageSendingOperations;
     private static final long FIRST_ELEMENT = 0;
     private static final long LAST_ELEMENT = -1;
-    private static final long PUBLISH_SIZE = 10; // 1초마다 처리할 양
+    private static final long PUBLISH_SIZE = 100; // 1초마다 처리할 양
     private static final long LAST_INDEX = 1;
 
     public SuccessCode addQueue(Event event, RegistrationRequestDto requestDto) throws JsonProcessingException {
@@ -44,11 +45,9 @@ public class QueueService {
         Set<String> queue = redisTemplate.opsForZSet().range(event.toString(), start, end);
         for (String member : queue) {
             RegistrationRequestDto requestDto = objectMapper.readValue(member, RegistrationRequestDto.class);
-            // TODO: cache 적용
             String result;
             try {
-                // TODO: 분산락 적용
-                SuccessCode code = registrationService.register(requestDto);
+                SuccessCode code = registrationCacheFacade.registerByCache(requestDto);
                 result = code.getDetail();
             } catch (GlobalException e) {
                 result = e.getMessage();
