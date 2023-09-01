@@ -70,9 +70,11 @@ public class QueueService {
 
         for (String member : queue) {
             Long rank = redisTemplate.opsForZSet().rank(event.toString(), member);
-            RegistrationRequestDto requestDto = objectMapper.readValue(member, RegistrationRequestDto.class);
-            log.info("'{}'님의 현재 대기열은 {}명 남았습니다.", requestDto, rank);
-            simpMessageSendingOperations.convertAndSend("/sub/order/" + requestDto.getStudentNM(), rank);
+            if (rank != null) {
+                RegistrationRequestDto requestDto = objectMapper.readValue(member, RegistrationRequestDto.class);
+                log.info("'{}'님의 현재 대기열은 {}명 남았습니다.", requestDto, rank);
+                simpMessageSendingOperations.convertAndSend("/sub/order/" + requestDto.getStudentNM(), rank);
+            }
         }
     }
 
