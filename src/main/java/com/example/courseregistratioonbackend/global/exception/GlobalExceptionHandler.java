@@ -28,23 +28,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ApiResponse<?> handleRuntimeException(RuntimeException e) {
-        log.info(e.getMessage());
+        log.error(e.getMessage());
         return ResponseUtils.error(e.getMessage());
     }
 
     @ExceptionHandler(GlobalException.class)
     public ApiResponse<?> handleGlobalException(GlobalException e) {
+        log.error(e.getErrorCode().getDetail());
         return ResponseUtils.error(e.getErrorCode());
     }
 
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ApiResponse<?> missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException e) {
-		log.info(e.getMessage());
+        log.error(e.getMessage());
 		return ResponseUtils.error(e.getMessage());
 	}
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResponse<?> validationExceptionHandler(MethodArgumentNotValidException e) {
+        log.error(e.getMessage());
         Map<String, String> errors = new LinkedHashMap<>();
         e.getBindingResult().getFieldErrors()
                 .forEach(error -> errors.put(
@@ -55,6 +57,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(JsonProcessingException.class)
     public ApiResponse<?> handleJsonProcessingException(JsonProcessingException e) {
+        log.error(e.getMessage());
         return ResponseUtils.error(e.getMessage());
     }
 }
