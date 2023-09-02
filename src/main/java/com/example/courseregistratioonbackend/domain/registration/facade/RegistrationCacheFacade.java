@@ -43,7 +43,6 @@ public class RegistrationCacheFacade {
             redisRepository.decrementLeftSeatInRedis(requestDto.getCourseId());
         }
 
-
         return REGISTRATION_SUCCESS;
     }
 
