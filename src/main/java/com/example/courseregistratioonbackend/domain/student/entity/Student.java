@@ -2,7 +2,6 @@ package com.example.courseregistratioonbackend.domain.student.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Builder
