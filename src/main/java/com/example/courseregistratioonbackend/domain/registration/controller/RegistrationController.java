@@ -1,21 +1,18 @@
 package com.example.courseregistratioonbackend.domain.registration.controller;
 
-import com.example.courseregistratioonbackend.domain.registration.facade.RegistrationCacheFacade;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationRequestDto;
+import com.example.courseregistratioonbackend.domain.registration.event.Event;
+import com.example.courseregistratioonbackend.domain.registration.service.QueueService;
 import com.example.courseregistratioonbackend.domain.registration.service.RegistrationService;
+import com.example.courseregistratioonbackend.domain.student.entity.Student;
 import com.example.courseregistratioonbackend.global.responsedto.ApiResponse;
 import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsImpl;
 import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "수강신청 관련 API", description = "수강신청 관련 API")
 @RestController
@@ -23,12 +20,14 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/registration")
 public class RegistrationController {
     private final RegistrationService registrationService;
-    private final RegistrationCacheFacade registrationCacheFacade;
+    private final QueueService queueService;
 
     @PostMapping("/{courseId}")
     public ApiResponse<?> register(@PathVariable Long courseId,
-                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseUtils.ok(registrationCacheFacade.registerByCache(courseId, userDetails.getStudentUser().getId()));
+                                   @AuthenticationPrincipal UserDetailsImpl userDetails) throws JsonProcessingException {
+        Student student = userDetails.getStudentUser();
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), courseId, student.getStudentNM());
+        return ResponseUtils.ok(queueService.addQueue(Event.REGISTRATION, requestDto));
     }
 
     @DeleteMapping("/{registrationId}")

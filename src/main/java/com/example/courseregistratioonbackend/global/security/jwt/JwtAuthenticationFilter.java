@@ -1,27 +1,26 @@
 package com.example.courseregistratioonbackend.global.security.jwt;
 
-import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
-import static com.example.courseregistratioonbackend.global.enums.SuccessCode.*;
-import static jakarta.servlet.http.HttpServletResponse.*;
-
-import java.io.IOException;
-
+import com.example.courseregistratioonbackend.domain.student.dto.LoginRequestDto;
+import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsImpl;
+import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.courseregistratioonbackend.domain.student.dto.LoginRequestDto;
-import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsImpl;
-import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static com.example.courseregistratioonbackend.global.enums.ErrorCode.USER_LOGIN_FAILURE;
+import static com.example.courseregistratioonbackend.global.enums.ErrorCode.USER_NOT_FOUND;
+import static com.example.courseregistratioonbackend.global.enums.SuccessCode.USER_LOGIN_SUCCESS;
+import static jakarta.servlet.http.HttpServletResponse.*;
 
 @Slf4j(topic = "로그인 및 JWT 발급")
 @RequiredArgsConstructor

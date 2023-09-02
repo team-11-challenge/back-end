@@ -1,17 +1,16 @@
 package com.example.courseregistratioonbackend.global.security.jwt;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.security.Key;
-import java.util.Base64;
-
+import com.example.courseregistratioonbackend.global.security.exception.JwtExpirationException;
+import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.example.courseregistratioonbackend.global.security.exception.JwtExpirationException;
+import java.security.Key;
+import java.util.Base64;
 
-import io.jsonwebtoken.security.Keys;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class JwtUtilTest {
 
