@@ -107,7 +107,8 @@ public class WebSecurityConfig {
                         .requestMatchers(PERMIT_URL_ARRAY).permitAll()
                         .requestMatchers("/.well-known/pki-validation/D0716648A2FA355072030AA68FB0EE02.txt").permitAll()
                         .requestMatchers(HttpMethod.GET, "/health-check").permitAll() // ALB health check에 필요함
-                        .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll() // 모니터링 도구
+                        .requestMatchers(HttpMethod.GET, "/actuator/prometheus").permitAll() // 모니터링 도구
+                        .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated() // 그외 모든 요청 인증 처리
         );
 

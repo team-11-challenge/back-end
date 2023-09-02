@@ -15,6 +15,7 @@ public enum SuccessCode {
     TIMETABLE_GET_SUCCESS(OK, "시간표 조회 성공했습니다."),
     DELETE_COURSE_FROM_BASKET_SUCCESS(OK, "예비수강과목 삭제 성공했습니다."),
     REGISTRATION_DELETE_SUCCESS(OK, "해당 신청이 성공적으로 취소되었습니다."),
+    REGISTRATION_REQUEST_SUCCESS(OK, "수강 신청 요청이 성공적으로 수행되었습니다."),
 
     /* 201 CREATED : 요청이 성공적이었으며 그 결과로 새로운 리소스가 생성 되었다는 의미입니다. */
     ADD_COURSE_TO_BASKET_SUCCESS(CREATED, "예비수강과목 담기 성공했습니다."),

@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
-import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +37,7 @@ public class RedisRepository {
                     "  return false " +
                     "end";
 
-    //redis 서버확인
+    // redis 서버확인
     public boolean isRedisDown() {
         try {
             redisTemplateCache.execute((RedisCallback<Object>) connection -> connection.info());
@@ -47,7 +47,7 @@ public class RedisRepository {
         }
     }
 
-    //강의를 Redis에 저장
+    // 강의를 Redis에 저장
     public void saveCourseToRedis(Course course){
         String key = "c" + course.getId();
         if(redisTemplateCache.hasKey(key)){
@@ -57,13 +57,13 @@ public class RedisRepository {
         redisTemplateCache.opsForValue().set(key, course.getLimitation()-course.getCurrent());
     }
 
-    //key로 redis에 캐시가 있는지 조회하고 Boolean 반환
+    // key로 redis에 캐시가 있는지 조회하고 Boolean 반환
     public Boolean hasLeftSeatsInRedis(Long courseId){
         String key = "c" + courseId;
         return redisTemplateCache.hasKey(key);
     }
 
-    //수강 신청 가능한지 확인
+    // 수강 신청 가능한지 확인
     public Boolean checkLeftSeatInRedis(Long courseId){
         String key = "c" + courseId;
         if(redisTemplateCache.opsForValue().get(key) <= 0){
@@ -80,7 +80,7 @@ public class RedisRepository {
         return redisTemplateCache.execute(decrementLeftSeatRedisScript, Collections.singletonList(key), 1);
     }
 
-    //수강 신청 취소 시 남은 인원 +1
+    // 수강 신청 취소 시 남은 인원 +1
     public void incrementLeftSeatInRedis(Long courseId){
         String key = "c" + courseId;
         if(hasLeftSeatsInRedis(courseId)){
@@ -88,7 +88,7 @@ public class RedisRepository {
         }
     }
 
-    //Redis랑 DB 정합성 검사
+    // Redis랑 DB 정합성 검사
     public void refreshLeftSeats(){
         log.error("redis 서버가 닫혔습니다.");
         List<Registration> registrations = registrationRepository.findAll();

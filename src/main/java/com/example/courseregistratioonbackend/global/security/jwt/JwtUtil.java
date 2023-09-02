@@ -1,26 +1,19 @@
 package com.example.courseregistratioonbackend.global.security.jwt;
 
-import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
+import com.example.courseregistratioonbackend.global.security.exception.JwtExpirationException;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import com.example.courseregistratioonbackend.global.security.exception.JwtExpirationException;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
+import static com.example.courseregistratioonbackend.global.enums.ErrorCode.JWT_EXPIRATION;
 
 @Slf4j(topic = "jwtUtil 관련 로그")
 @Component

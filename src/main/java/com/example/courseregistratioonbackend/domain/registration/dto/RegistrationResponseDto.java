@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @Getter
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-public class RegistrationDto {
+public class RegistrationResponseDto {
     private Long registrationId;
     private Long courseId;
     private String collegeName;   // 대학명
@@ -27,7 +27,7 @@ public class RegistrationDto {
     private Long limitation; // 수강정원
     private Long current; // 수강 신청 인원
 
-    public RegistrationDto(Registration registration) {
+    public RegistrationResponseDto(Registration registration) {
         Course course = registration.getCourse();
         Belong belong = course.getBelong();
         Subject subject = course.getSubject();

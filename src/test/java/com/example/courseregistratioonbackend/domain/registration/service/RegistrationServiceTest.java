@@ -1,9 +1,9 @@
 package com.example.courseregistratioonbackend.domain.registration.service;
 
-import com.example.courseregistratioonbackend.domain.basket.entity.Basket;
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
-import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationDto;
+import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationResponseDto;
+import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationRequestDto;
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
 import com.example.courseregistratioonbackend.domain.registration.exception.*;
 import com.example.courseregistratioonbackend.domain.registration.repository.RegistrationRepository;
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import java.util.Optional;
 
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
 import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_DELETE_SUCCESS;
-import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_SUCCESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -147,10 +145,10 @@ class RegistrationServiceTest {
         when(courseRepository.findCourseByIdAndLock(course.getId())).thenReturn(Optional.of(course));
 
         // when
-        SuccessCode result = registrationService.register(course.getId(), student.getId());
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), course.getId(), student.getStudentNM());
+        registrationService.register(requestDto);
 
         // then
-        assertThat(result).isEqualTo(REGISTRATION_SUCCESS);
         assertThat(course.getCurrent()).isEqualTo(originalCurrent + 1); // 현재 수강 신청 인원 증가
         assertThat(student.getAppliedCredits() - originalAppliedCredit).isEqualTo(course.getCredit()); // 신청 학점 증가
         verify(registrationRepository, times(1)).save(any(Registration.class));
@@ -168,7 +166,8 @@ class RegistrationServiceTest {
         when(registrationRepository.existsByStudentIdAndCourseSubjectId(student.getId(), course.getSubject().getId())).thenReturn(true);
 
         // when & then
-        assertThatThrownBy(() -> registrationService.register(course.getId(), student.getId()))
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), course.getId(), student.getStudentNM());
+        assertThatThrownBy(() -> registrationService.register(requestDto))
                 .isInstanceOf(SubjectAlreadyRegisteredException.class)
                 .hasMessageContaining(SUBJECT_ALREADY_REGISTERED.getDetail());
     }
@@ -183,7 +182,8 @@ class RegistrationServiceTest {
         when(courseRepository.findCourseByIdAndLock(course.getId())).thenReturn(Optional.of(course));
 
         // when & then
-        assertThatThrownBy(() -> registrationService.register(course.getId(), student.getId()))
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), course.getId(), student.getStudentNM());
+        assertThatThrownBy(() -> registrationService.register(requestDto))
                 .isInstanceOf(CourseAlreadyFulledException.class)
                 .hasMessageContaining(COURSE_ALREADY_FULLED.getDetail());
     }
@@ -198,7 +198,8 @@ class RegistrationServiceTest {
         when(courseRepository.findCourseByIdAndLock(course.getId())).thenReturn(Optional.of(course));
 
         // when & then
-        assertThatThrownBy(() -> registrationService.register(course.getId(), student.getId()))
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), course.getId(), student.getStudentNM());
+        assertThatThrownBy(() -> registrationService.register(requestDto))
                 .isInstanceOf(CreditExceededException.class)
                 .hasMessageContaining(CREDIT_EXCEEDED.getDetail());
     }
@@ -225,7 +226,8 @@ class RegistrationServiceTest {
         when(registrationRepository.findByStudent(student)).thenReturn(registrations);
 
         // when & then
-        assertThatThrownBy(() -> registrationService.register(course2.getId(), student.getId()))
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), course2.getId(), student.getStudentNM());
+        assertThatThrownBy(() -> registrationService.register(requestDto))
                 .isInstanceOf(CourseTimeConflictException.class)
                 .hasMessageContaining(COURSE_TIME_CONFLICT.getDetail());
     }
@@ -299,7 +301,7 @@ class RegistrationServiceTest {
         when(studentRepository.findStudentByIdAndLock(student.getId())).thenReturn(Optional.of(student));
 
         // when
-        List<RegistrationDto> result = registrationService.getRegistration(student.getId());
+        List<RegistrationResponseDto> result = registrationService.getRegistration(student.getId());
 
         // then
         assertThat(result).size().isEqualTo(2);

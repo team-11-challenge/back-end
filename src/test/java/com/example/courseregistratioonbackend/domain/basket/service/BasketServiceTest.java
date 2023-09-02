@@ -1,20 +1,5 @@
 package com.example.courseregistratioonbackend.domain.basket.service;
 
-import static com.example.courseregistratioonbackend.global.enums.SuccessCode.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
 import com.example.courseregistratioonbackend.domain.basket.dto.CourseFromBasketResponseDto;
 import com.example.courseregistratioonbackend.domain.basket.entity.Basket;
 import com.example.courseregistratioonbackend.domain.basket.exception.AlreadyExistedInBasketException;
@@ -26,12 +11,23 @@ import com.example.courseregistratioonbackend.domain.course.repository.CourseRep
 import com.example.courseregistratioonbackend.domain.student.entity.Student;
 import com.example.courseregistratioonbackend.domain.student.repository.StudentRepository;
 import com.example.courseregistratioonbackend.global.enums.SuccessCode;
-import com.example.courseregistratioonbackend.global.parsing.entity.Belong;
-import com.example.courseregistratioonbackend.global.parsing.entity.College;
-import com.example.courseregistratioonbackend.global.parsing.entity.Department;
-import com.example.courseregistratioonbackend.global.parsing.entity.Major;
-import com.example.courseregistratioonbackend.global.parsing.entity.Professor;
-import com.example.courseregistratioonbackend.global.parsing.entity.Subject;
+import com.example.courseregistratioonbackend.global.parsing.entity.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static com.example.courseregistratioonbackend.global.enums.SuccessCode.ADD_COURSE_TO_BASKET_SUCCESS;
+import static com.example.courseregistratioonbackend.global.enums.SuccessCode.DELETE_COURSE_FROM_BASKET_SUCCESS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.*;
 
 public class BasketServiceTest {
 

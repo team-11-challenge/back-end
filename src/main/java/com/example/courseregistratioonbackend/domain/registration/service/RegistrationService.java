@@ -1,9 +1,11 @@
 package com.example.courseregistratioonbackend.domain.registration.service;
 
+
 import com.example.courseregistratioonbackend.domain.course.entity.Course;
 import com.example.courseregistratioonbackend.domain.course.exception.CourseNotFoundException;
 import com.example.courseregistratioonbackend.domain.course.repository.CourseRepository;
-import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationDto;
+import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationResponseDto;
+import com.example.courseregistratioonbackend.domain.registration.dto.RegistrationRequestDto;
 import com.example.courseregistratioonbackend.domain.registration.entity.Registration;
 import com.example.courseregistratioonbackend.domain.registration.exception.*;
 import com.example.courseregistratioonbackend.domain.registration.repository.RedisRepository;
@@ -12,7 +14,6 @@ import com.example.courseregistratioonbackend.domain.student.entity.Student;
 import com.example.courseregistratioonbackend.domain.student.execption.StudentNotFoundException;
 import com.example.courseregistratioonbackend.domain.student.repository.StudentRepository;
 import com.example.courseregistratioonbackend.global.enums.SuccessCode;
-import com.example.courseregistratioonbackend.global.exception.RequiredFieldException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,6 @@ import java.util.List;
 
 import static com.example.courseregistratioonbackend.global.enums.ErrorCode.*;
 import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_DELETE_SUCCESS;
-import static com.example.courseregistratioonbackend.global.enums.SuccessCode.REGISTRATION_SUCCESS;
 
 @RequiredArgsConstructor
 @Service
@@ -32,9 +32,9 @@ public class RegistrationService {
     private final RedisRepository redisRepository;
 
     @Transactional
-    public Course register(Long courseId, Long studentId) {
-        Student student = findStudentById(studentId);
-        Course course = findCourseById(courseId);
+    public Course register(RegistrationRequestDto requestDto) {
+        Student student = findStudentById(requestDto.getStudentId());
+        Course course = findCourseById(requestDto.getCourseId());
 
         // 신청 가능한지 여러 조건 확인
         checkIfSubjectAlreadyRegistered(student.getId(), course.getSubject().getId());
@@ -81,13 +81,12 @@ public class RegistrationService {
         return REGISTRATION_DELETE_SUCCESS;
     }
 
-    public List<RegistrationDto> getRegistration(Long studentId) {
-        Student student = studentRepository.findById(studentId).orElseThrow(
-                ()-> new StudentNotFoundException(STUDENT_NOT_FOUND)
-        );
+    public List<RegistrationResponseDto> getRegistration(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new StudentNotFoundException(STUDENT_NOT_FOUND));
         List<Registration> registrationList = getRegistrationList(student);
         return registrationList.stream()
-                .map(RegistrationDto::new)
+                .map(RegistrationResponseDto::new)
                 .toList();
     }
 
