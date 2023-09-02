@@ -6,6 +6,8 @@ import com.example.courseregistratioonbackend.global.enums.SuccessCode;
 import com.example.courseregistratioonbackend.global.responsedto.ApiResponse;
 import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsImpl;
 import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,8 @@ public class BasketController {
 
 	private final BasketService basketService;
 
+	@Operation(summary = "장바구니 목록 조회", description = "학생이 신청한 장바구니 목록 조회")
+	@Parameter(name = "userDetails", description = "조회할 학생 정보 ")
 	@GetMapping()
 	public ApiResponse<?> getCourseListFromBasket(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
@@ -33,6 +37,8 @@ public class BasketController {
 		return ResponseUtils.ok(courseListFromBasket);
 	}
 
+	@Operation(summary = "장바구니 신청(예비 수강 신청)", description = "해당 학생 장바구니 신청")
+	@Parameter(name = "courseId", description = "장바구니에 신청할 강의 ID ")
 	@PostMapping("/{courseId}")
 	public ApiResponse<?> addCourseToBasket(@PathVariable("courseId") Long courseId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -44,6 +50,8 @@ public class BasketController {
 		return ResponseUtils.ok(successCode);
 	}
 
+	@Operation(summary = "장바구니 취소(예비 수강 신청 취소)", description = "해당 학생 장바구니 신청 취소")
+	@Parameter(name = "courseId", description = "장바구니에 신청할 강의 ID ")
 	@DeleteMapping("/{basketId}")
 	public ApiResponse<?> deleteCourseFromBasket(@PathVariable("basketId") Long basketId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
