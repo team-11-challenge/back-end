@@ -27,7 +27,7 @@ public class QueueService {
     private final SimpMessageSendingOperations simpMessageSendingOperations;
     private static final long FIRST_ELEMENT = 0;
     private static final long LAST_ELEMENT = -1;
-    private static final long PUBLISH_SIZE = 100; // 1초마다 처리할 양
+    private static final long PUBLISH_SIZE = 100;
     private static final long LAST_INDEX = 1;
 
     public SuccessCode addQueue(Event event, RegistrationRequestDto requestDto) throws JsonProcessingException {
@@ -72,14 +72,10 @@ public class QueueService {
             Long rank = redisTemplate.opsForZSet().rank(event.toString(), member);
             if (rank != null) {
                 RegistrationRequestDto requestDto = objectMapper.readValue(member, RegistrationRequestDto.class);
-                log.info("'{}'님의 현재 대기열은 {}명 남았습니다.", requestDto, rank);
+                log.info("'{}'님의 현재 대기열은 {}명 남았습니다.", requestDto.getStudentId(), rank);
                 simpMessageSendingOperations.convertAndSend("/sub/order/" + requestDto.getStudentNM(), rank);
             }
         }
     }
 
-    public long getSize(Event event){
-        Long size = redisTemplate.opsForZSet().size(event.toString());
-        return (size != null) ? size : 0;
-    }
 }
