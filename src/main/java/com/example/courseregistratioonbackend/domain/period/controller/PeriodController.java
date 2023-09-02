@@ -4,6 +4,8 @@ import com.example.courseregistratioonbackend.domain.period.dto.PeriodResponseDt
 import com.example.courseregistratioonbackend.domain.period.service.PeriodService;
 import com.example.courseregistratioonbackend.global.responsedto.ApiResponse;
 import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,8 @@ import static com.example.courseregistratioonbackend.global.enums.SuccessCode.TI
 @RequiredArgsConstructor
 public class PeriodController {
     private final PeriodService periodService;
+
+    @Operation(summary = "기간 조회", description = "현재 기간 조회")
     @GetMapping("/period")
     public ApiResponse<?> getAcademicCalendar(){
         PeriodResponseDto data = periodService.getPeriod();

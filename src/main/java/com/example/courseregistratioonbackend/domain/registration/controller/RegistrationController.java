@@ -9,6 +9,8 @@ import com.example.courseregistratioonbackend.global.responsedto.ApiResponse;
 import com.example.courseregistratioonbackend.global.security.userdetails.UserDetailsImpl;
 import com.example.courseregistratioonbackend.global.utils.ResponseUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +24,8 @@ public class RegistrationController {
     private final RegistrationService registrationService;
     private final QueueService queueService;
 
+    @Operation(summary = "수강 신청", description = "해당 학생 수강 신청")
+    @Parameter(name = "courseId", description = "장바구니에 신청할 강의 ID ")
     @PostMapping("/{courseId}")
     public ApiResponse<?> register(@PathVariable Long courseId,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) throws JsonProcessingException {
@@ -30,12 +34,16 @@ public class RegistrationController {
         return ResponseUtils.ok(queueService.addQueue(Event.REGISTRATION, requestDto));
     }
 
+    @Operation(summary = "수강 신청 취소", description = "해당 학생 수강 신청 취소")
+    @Parameter(name = "courseId", description = "장바구니에 신청할 강의 ID ")
     @DeleteMapping("/{registrationId}")
     public ApiResponse<?> cancel(@PathVariable Long registrationId,
                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseUtils.ok(registrationService.cancel(registrationId, userDetails.getStudentUser().getId()));
     }
 
+    @Operation(summary = "수강 신청 목록 조회", description = "해당 학생 수강 신청 목록 조회")
+    @Parameter(name = "userDetails", description = "해당 학생 정보")
     @GetMapping
     public ApiResponse<?> getRegistration(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseUtils.ok(registrationService.getRegistration(userDetails.getStudentUser().getId()));
