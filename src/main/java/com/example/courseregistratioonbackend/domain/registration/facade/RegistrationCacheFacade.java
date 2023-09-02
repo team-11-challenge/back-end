@@ -35,8 +35,8 @@ public class RegistrationCacheFacade {
         // 실제 로직 수행
         Course course = registrationService.register(requestDto);
 
-        // 만약 캐시에 없다면 캐시에 저장해줌
         if (!redisRepository.hasLeftSeatsInRedis(requestDto.getCourseId())){
+            // 만약 캐시에 없다면 캐시에 저장해줌
             redisRepository.saveCourseToRedis(course);
         } else {
             //redis 값 변경
