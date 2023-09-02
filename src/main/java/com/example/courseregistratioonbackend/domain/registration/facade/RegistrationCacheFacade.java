@@ -38,10 +38,10 @@ public class RegistrationCacheFacade {
         // 만약 캐시에 없다면 캐시에 저장해줌
         if (!redisRepository.hasLeftSeatsInRedis(requestDto.getCourseId())){
             redisRepository.saveCourseToRedis(course);
+        } else {
+            //redis 값 변경
+            redisRepository.decrementLeftSeatInRedis(requestDto.getCourseId());
         }
-
-        //redis 값 변경
-        redisRepository.decrementLeftSeatInRedis(requestDto.getCourseId());
 
         return REGISTRATION_SUCCESS;
     }
