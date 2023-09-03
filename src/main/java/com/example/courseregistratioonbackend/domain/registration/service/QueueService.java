@@ -45,6 +45,7 @@ public class QueueService {
         final long end = PUBLISH_SIZE - LAST_INDEX;
         Set<String> queue = redisTemplate.opsForZSet().range(event.toString(), start, end);
         Objects.requireNonNull(queue).parallelStream().forEach(member -> {
+            redisTemplate.opsForZSet().remove(event.toString(), member);
             RegistrationRequestDto requestDto = null;
             String result;
             try {
@@ -58,7 +59,6 @@ public class QueueService {
                 log.error(e.getMessage());
             }
             log.info("'{}'님의 registration 요청이 성공적으로 수행되었습니다.", requestDto.getStudentId());
-            redisTemplate.opsForZSet().remove(event.toString(), member);
 
             final long now = System.currentTimeMillis();
             redisTemplate.opsForZSet().add(REGISTRATION_RESULT.toString(), requestDto.getStudentNum() + "--pt--" + result, now);
