@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Set;
 
 import static com.example.courseregistratioonbackend.domain.registration.event.Event.REGISTRATION_RESULT;
@@ -43,27 +44,47 @@ public class QueueService {
         final long start = FIRST_ELEMENT;
         final long end = PUBLISH_SIZE - LAST_INDEX;
         Set<String> queue = redisTemplate.opsForZSet().range(event.toString(), start, end);
-        for (String member : queue) {
-            RegistrationRequestDto requestDto = objectMapper.readValue(member, RegistrationRequestDto.class);
+        Objects.requireNonNull(queue).parallelStream().forEach(member -> {
+            redisTemplate.opsForZSet().remove(event.toString(), member);
+            RegistrationRequestDto requestDto = null;
             String result;
             try {
+                requestDto = objectMapper.readValue(member, RegistrationRequestDto.class);
                 SuccessCode code = registrationCacheFacade.registerByCache(requestDto);
                 result = code.getDetail();
             } catch (GlobalException e) {
                 result = e.getMessage();
             } catch (Exception e) {
                 result = "죄송합니다. 서버에 장애가 발생하였습니다.";
-                log.error(e.getMessage());
+                log.error("pt_cerror" + e.getMessage());
             }
             log.info("'{}'님의 registration 요청이 성공적으로 수행되었습니다.", requestDto.getStudentId());
-            redisTemplate.opsForZSet().remove(event.toString(), member);
-            
+
             final long now = System.currentTimeMillis();
             redisTemplate.opsForZSet().add(REGISTRATION_RESULT.toString(), requestDto.getStudentNum() + "--pt--" + result, now);
+        });
+
+//        for (String member : queue) {
+//            RegistrationRequestDto requestDto = objectMapper.readValue(member, RegistrationRequestDto.class);
+//            String result;
+//            try {
+//                SuccessCode code = registrationCacheFacade.registerByCache(requestDto);
+//                result = code.getDetail();
+//            } catch (GlobalException e) {
+//                result = e.getMessage();
+//            } catch (Exception e) {
+//                result = "죄송합니다. 서버에 장애가 발생하였습니다.";
+//                log.error(e.getMessage());
+//            }
+//            log.info("'{}'님의 registration 요청이 성공적으로 수행되었습니다.", requestDto.getStudentId());
+//            redisTemplate.opsForZSet().remove(event.toString(), member);
+//
+//            final long now = System.currentTimeMillis();
+//            redisTemplate.opsForZSet().add(REGISTRATION_RESULT.toString(), requestDto.getStudentNum() + "--pt--" + result, now);
 
 
 //            simpMessageSendingOperations.convertAndSend("/sub/result/" + requestDto.getStudentNM(), result);
-        }
+//        }
     }
 
 //    public void getOrder(Event event) throws JsonProcessingException {
