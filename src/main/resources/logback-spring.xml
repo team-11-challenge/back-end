@@ -8,6 +8,15 @@
     <!--파일 저장시 로그 형태-->
     <property name="FILE_LOG_PATTERN" value="%-5level %d{yyyy-MM-dd HH:mm:ss.SSS} ${PID:- } --- [%t] - %msg%n"/>
 
+    <property name="LOGSTASH_URL" value="ec2-54-180-80-182.ap-northeast-2.compute.amazonaws.com:5000"/>
+
+    <!--logstash 로 보낼 로그 설정-->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${LOGSTASH_URL}</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        </encoder>
+    </appender>
+
     <!--모든 로그에 대한 파일 저장 설정-->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
@@ -45,6 +54,7 @@
 
     <!--에러 레벨 이상 제어-->
     <root level="ERROR">
+        <appender-ref ref="LOGSTASH" />
         <appender-ref ref="FILE"/>
         <appender-ref ref="ERROR_FILE"/>
     </root>
