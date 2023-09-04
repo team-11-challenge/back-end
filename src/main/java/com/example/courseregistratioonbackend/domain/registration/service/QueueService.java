@@ -56,7 +56,7 @@ public class QueueService {
                 result = e.getMessage();
             } catch (Exception e) {
                 result = "죄송합니다. 서버에 장애가 발생하였습니다.";
-                log.error(e.getMessage());
+                log.error("pt_cerror" + e.getMessage());
             }
             log.info("'{}'님의 registration 요청이 성공적으로 수행되었습니다.", requestDto.getStudentId());
 
