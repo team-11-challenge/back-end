@@ -45,7 +45,7 @@ dependencies {
     implementation 'com.github.maricn:logback-slack-appender:1.6.1'
 
     // logstash
-//    implementation 'net.logstash.logback:logstash-logback-encoder:6.6'
+    implementation 'net.logstash.logback:logstash-logback-encoder:6.6'
 
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
