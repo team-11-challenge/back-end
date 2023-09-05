@@ -21,7 +21,7 @@ public class EventScheduler {
     @SchedulerLock(
         name = "scheduledLockGetOrder",
         lockAtLeastFor = "1s",
-        lockAtMostFor = "1s"
+        lockAtMostFor = "2s"
     )
     public void getOrder() throws JsonProcessingException {
         queueService.getOrder(Event.REGISTRATION);
@@ -31,7 +31,7 @@ public class EventScheduler {
     @SchedulerLock(
         name = "scheduledLockRegister",
         lockAtLeastFor = "4s",
-        lockAtMostFor = "4s"
+        lockAtMostFor = "8s"
     )
     public void registerByScheduled() throws JsonProcessingException {
         queueService.publish(Event.REGISTRATION);
