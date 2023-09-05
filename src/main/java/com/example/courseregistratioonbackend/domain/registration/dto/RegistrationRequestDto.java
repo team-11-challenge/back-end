@@ -8,5 +8,5 @@ import lombok.Getter;
 public class RegistrationRequestDto {
     private long studentId;
     private long courseId;
-    private String studentNM;
+    private String studentNum;
 }
