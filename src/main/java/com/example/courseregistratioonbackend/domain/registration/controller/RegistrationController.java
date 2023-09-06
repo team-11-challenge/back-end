@@ -30,7 +30,7 @@ public class RegistrationController {
     public ApiResponse<?> register(@PathVariable Long courseId,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) throws JsonProcessingException {
         Student student = userDetails.getStudentUser();
-        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), courseId, student.getStudentNM());
+        RegistrationRequestDto requestDto = new RegistrationRequestDto(student.getId(), courseId, student.getStudentNum());
         return ResponseUtils.ok(queueService.addQueue(Event.REGISTRATION, requestDto));
     }
 
