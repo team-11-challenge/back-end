@@ -51,7 +51,7 @@ public class BasketController {
 	}
 
 	@Operation(summary = "장바구니 취소(예비 수강 신청 취소)", description = "해당 학생 장바구니 신청 취소")
-	@Parameter(name = "courseId", description = "장바구니에 신청할 강의 ID ")
+	@Parameter(name = "basketId", description = "삭제할 basketId ")
 	@DeleteMapping("/{basketId}")
 	public ApiResponse<?> deleteCourseFromBasket(@PathVariable("basketId") Long basketId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
