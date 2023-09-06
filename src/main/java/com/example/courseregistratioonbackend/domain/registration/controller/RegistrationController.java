@@ -25,7 +25,7 @@ public class RegistrationController {
     private final QueueService queueService;
 
     @Operation(summary = "수강 신청", description = "해당 학생 수강 신청")
-    @Parameter(name = "courseId", description = "장바구니에 신청할 강의 ID ")
+    @Parameter(name = "courseId", description = "수강 신청할 강의 ID ")
     @PostMapping("/{courseId}")
     public ApiResponse<?> register(@PathVariable Long courseId,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) throws JsonProcessingException {
@@ -35,7 +35,7 @@ public class RegistrationController {
     }
 
     @Operation(summary = "수강 신청 취소", description = "해당 학생 수강 신청 취소")
-    @Parameter(name = "courseId", description = "장바구니에 신청할 강의 ID ")
+    @Parameter(name = "registrationId", description = "삭제할 registrationId ")
     @DeleteMapping("/{registrationId}")
     public ApiResponse<?> cancel(@PathVariable Long registrationId,
                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
