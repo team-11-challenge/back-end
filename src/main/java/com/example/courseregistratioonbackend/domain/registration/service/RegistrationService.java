@@ -135,14 +135,14 @@ public class RegistrationService {
                 sb.append(r.getCourse().getTimetable());
                 sb.append(",");
             }
-            int[] timetableOfCourse = makeBooleanTimetable(currentTimetable);
-            int[] timetableOfStudent = makeBooleanTimetable(sb.toString());
+            int[] timetableOfCourse = makeIntTimetable(currentTimetable);
+            int[] timetableOfStudent = makeIntTimetable(sb.toString());
             compareTimetable(timetableOfCourse, timetableOfStudent);
         }
     }
 
     // 비교할 배열로 만들기
-    private int[] makeBooleanTimetable(String rawTimetable) {
+    private int[] makeIntTimetable(String rawTimetable) {
         enum DayOfWeek { 월, 화, 수, 목, 금, 토, 일 }
         int[] timetable = new int[7];
         for (String t : rawTimetable.split(",")) {
