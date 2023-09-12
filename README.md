@@ -532,10 +532,12 @@
     
     ![오4](https://github.com/team-11-challenge/back-end/assets/95194606/762622c4-9f8e-4f12-a8cf-a918393d9d93)
 
+    보통 첫 날에 트래픽이 많이 몰리고 급격하게 줄어들기 때문에 2일 후 기본값으로 되돌아 가도록 설정했습니다.
+
+→ [🧐 레벨별 성능테스트 결과 보고서](https://github.com/team-11-challenge/back-end/wiki/%EC%84%B1%EB%8A%A5-%ED%85%8C%EC%8A%A4%ED%8A%B8)
+
 # 🛠️ 06 | 기술 스택
 
-보통 첫 날에 트래픽이 많이 몰리고 급격하게 줄어들기 때문에 2일 후 기본값으로 되돌아 가도록 설정했습니다.
-    
 | Backend | Tech | Spring Boot Spring JPA Spring Security QueryDSL  |
 | --- | --- | --- |
 |  | Platform | Ubuntu |
