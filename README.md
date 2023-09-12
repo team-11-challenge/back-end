@@ -58,6 +58,7 @@
 - [동시성 문제 해결](https://github.com/team-11-challenge/back-end/wiki/%EB%8F%99%EC%8B%9C%EC%84%B1-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0)
 - [접속자 대기열](https://github.com/team-11-challenge/back-end/wiki/%EC%A0%91%EC%86%8D%EC%9E%90-%EB%8C%80%EA%B8%B0%EC%97%B4)
 - [분산 서버로 인한 웹소켓 통신 문제](https://github.com/team-11-challenge/back-end/wiki/%EB%B6%84%EC%82%B0-%EC%84%9C%EB%B2%84%EB%A1%9C-%EC%9D%B8%ED%95%9C-%EC%9B%B9%EC%86%8C%EC%BC%93-%ED%86%B5%EC%8B%A0-%EB%AC%B8%EC%A0%9C)
+- [서버 부하 관리](https://github.com/team-11-challenge/back-end/wiki/%EC%84%9C%EB%B2%84-%EB%B6%80%ED%95%98-%EA%B4%80%EB%A6%AC)
 
 → [레벨별 성능테스트 결과 보고서](https://github.com/team-11-challenge/back-end/wiki/%EC%84%B1%EB%8A%A5-%ED%85%8C%EC%8A%A4%ED%8A%B8)
 
