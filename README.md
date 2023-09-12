@@ -18,49 +18,34 @@
 
 # 🛒 02 | 프로젝트 목표
 1️⃣ **데이터 수집 및 전처리**
-
 - 데이터 수집
     - 실제 대학의 허락을 받고 1만 건 이상의 강의 데이터 확보
     - 학생 및 코드 더미 데이터 생성
 - 데이터 전처리
     - 강의 csv 파일에서 대학, 학과, 전공, 교과목, 교수 데이터 전처리
-    - 불규칙한 시간표 데이터 전처리
-        
-        → [데이터 전처리](https://www.notion.so/bde77b4cb95d458d8588b88416f0ea2f?pvs=21) 
-        
+    - 불규칙한 시간표 데이터 전처리        
 
 2️⃣ **검색 성능 개선을 통한 빠른 검색 및 정확도 높은 검색 제공**
-
 - 검색에 대한 빠른 결과 제공
 - 다양한 필터에 대한 정확한 검색 결과 제공
-    
-    → [강의 조회 쿼리 최적화](https://www.notion.so/880708d1b8d841018cebb6e84b964c71?pvs=21) 
-    
 
 3️⃣ **4000명 이상 접속자 동시성 제어**
-
 - 비관적 락을 통한 동시성 제어
 - 분산 서버 환경에서 스케줄 락을 통한 이벤트 중복 수행 방지
-    
-    → [동시성 제어](https://www.notion.so/1551d33e51b74d0ca0cf351a51ee6bcb?pvs=21) 
-    
 
 4️⃣ **20K 이상의 트래픽에도 안정적인 서비스 제공**
-
 - 로드밸런싱 및 오토스케일링
 - 접속자 대기열 기능을 통한 대기순번 및 예상시간 제공
-    
-    → [접속자 대기열](https://www.notion.so/9bc353fe0f734d79b181a26f2033de41?pvs=21)
 
-# 03 | 아키텍쳐
-## ⚙️ 서비스 아키텍쳐
+# ⚙️ 03 | 아키텍쳐
+## 서비스 아키텍쳐
 ![서비스아키텍처](https://github.com/team-11-challenge/back-end/assets/95194606/e6521883-872a-4a6e-ad0d-2b2595fa8f90)
 
 ## ERD
 ![erd](https://github.com/team-11-challenge/back-end/assets/95194606/84c97ed6-e24e-4570-bac0-23e291c6d314)
 
 ## API 명세서 (swagger)
-[Swagger](https://professor-ticketing.store/swagger-ui/index.html#/)
+→ [REST API Reference](https://github.com/team-11-challenge/back-end/wiki/REST-API-Reference)
 
 # 04 | 성능 개선
 
@@ -73,6 +58,7 @@
 - [동시성 문제 해결](https://github.com/team-11-challenge/back-end/wiki/%EB%8F%99%EC%8B%9C%EC%84%B1-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0)
 - [접속자 대기열](https://github.com/team-11-challenge/back-end/wiki/%EC%A0%91%EC%86%8D%EC%9E%90-%EB%8C%80%EA%B8%B0%EC%97%B4)
 - [분산 서버로 인한 웹소켓 통신 문제](https://github.com/team-11-challenge/back-end/wiki/%EB%B6%84%EC%82%B0-%EC%84%9C%EB%B2%84%EB%A1%9C-%EC%9D%B8%ED%95%9C-%EC%9B%B9%EC%86%8C%EC%BC%93-%ED%86%B5%EC%8B%A0-%EB%AC%B8%EC%A0%9C)
+
 → [레벨별 성능테스트 결과 보고서](https://github.com/team-11-challenge/back-end/wiki/%EC%84%B1%EB%8A%A5-%ED%85%8C%EC%8A%A4%ED%8A%B8)
 
 # 🛠️ 06 | 기술 스택
@@ -89,6 +75,7 @@
 | Frontend | Tech | HTML CSS JavaScript Bootstrap |
 |  | CI/CD | Netlify |
 | Protocol |  | HTTPS Websocket & STOMP |
+
 → [기술적 의사 결정](https://github.com/team-11-challenge/back-end/wiki/%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90-%EB%B0%8F-%EA%B8%B0%EC%88%A0%EC%A0%81-%EC%9D%98%EC%82%AC%EA%B2%B0%EC%A0%95#%EA%B8%B0%EC%88%A0%EC%A0%81-%EC%9D%98%EC%82%AC-%EA%B2%B0%EC%A0%95)
 
 # 👨‍👩‍👧‍👦 07 | 팀원
