@@ -16,7 +16,12 @@
 - 수강 신청을 취소할 수 있습니다.
 - 신청 시 대기열 기능을 통해 나의 순서를 알 수 있습니다.
 
+→ [🎥 발표영상](https://youtu.be/eO3EtsrqU30)
+
 # 🛒 02 | 프로젝트 목표
+![ezgif com-video-to-gif (12)](https://github.com/team-11-challenge/back-end/assets/62596783/d69f4d00-d75f-457f-9a6a-e897ee508ef4)
+
+
 1️⃣ **데이터 수집 및 전처리**
 - 데이터 수집
     - 실제 대학의 허락을 받고 1만 건 이상의 강의 데이터 확보
