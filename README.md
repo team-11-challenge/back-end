@@ -87,7 +87,7 @@
 # 👨‍👩‍👧‍👦 07 | 팀원
 | 이름 | 담당 역할 | Github |
 | --- | --- | --- |
-| 정명주(팀장) | - 강의 데이터 수집 및 전처리 후 DB 적재<br>- 수강신청, 조회, 삭제 기능 구현<br> - Redis를 활용한 접속자 대기열 기능 구현<br>- AWS EC2 환경 구축<br>- Docker를 활용한 인프라 구축<br>- CI/CD(Github Actions) 적용<br>- Junit5와 Mockito를 이용한 테스트 코드 작성<br>- JMeter를 활용한 부하 테스트 수행<br>- 전체 Front-End UI 디자인 수정<br>- 접속자 대기열 Front-End 구현 <br>| https://github.com/thing-zoo/ |
+| 정명주(팀장) | - 강의 데이터 수집 및 전처리 후 DB 적재<br>- 수강신청, 조회, 삭제 기능 구현<br> - Redis와 STOMP를 활용한 접속자 대기열 기능 구현<br>- AWS EC2 환경 구축<br>- Docker를 활용한 인프라 구축<br>- CI/CD(Github Actions) 적용<br>- Junit5와 Mockito를 이용한 테스트 코드 작성<br>- JMeter를 활용한 부하 테스트 수행<br>- 전체 Front-End UI 디자인 수정<br>- 접속자 대기열 Front-End 구현 <br>| https://github.com/thing-zoo/ |
 | 장미 | - 강의 데이터 수집 및 전처리 후 DB 적재<br>- 시간표 조회 기능 구현<br>- 학생 정보, 기간 조회 구현<br>- 사간표 조회 및 강의 조회 Query 최적화<br>- 수강신청 로직에 Redis Cache 도입<br>- Swagger 적용<br>- Front-End 시간표 작업<br>- Junit5와 Mockito를 이용한 테스트 코드 작성<br>- JMeter를 활용한 부하 테스트 수행 | https://github.com/klettermi |
 | 류이환 | - Spring Security, Jwt 기반의 로그인 기능 구현<br>- 장바구니 조회, 신청, 삭제 기능 구현<br>- 동시성 제어(Lock 비교, 테스트, 적용)<br>   - 단일 서버: 비관적 락 적용<br>   - 분산 서버: 스케줄 락 적용<br>- logging 출력 최적화 및 중앙 집중형 시스템 구축<br>- Front-End 초기 설정 및 UI 작업, CI/CD 적용<br>- Junit5와 Mockito를 이용한 테스트 코드 작성<br>- JMeter를 활용한 부하 테스트 수행<br>- JMeter 전체 테스트 결과 분석 및 정리 | https://github.com/YiHwanRyu |
 | 김재익 | - Bakc-End 베이스 코드 구축 (디렉토리 구조, 공통 응답 클래스, 응답코드 ENUM 등)<br>- 강의 조회 기능 구현<br>- AWS DNS 환경 구축<br>- AWS ALB, ASG 를 이용한 로드밸런싱, 오토스케일링 구현<br>- 모니터링 기능 구현 (Grafana, Prometheus)<br>- 대기열 기능 개선 및 개편<br>- Front-End 초기 설정 및 UI 작업<br>- Junit5와 Mockito를 이용한 테스트 코드 작성<br>- JMeter를 활용한 부하 테스트 수행  | https://github.com/Eulga |
